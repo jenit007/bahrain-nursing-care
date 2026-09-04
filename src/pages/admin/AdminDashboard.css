@@ -1,0 +1,367 @@
+.admin-page {
+  min-height: 100vh;
+  background: #f4f8fa;
+}
+
+.admin-header {
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 7%;
+
+  background: white;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.admin-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-logo > span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #0f766e;
+
+  color: white;
+
+  border-radius: 10px;
+
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.admin-logo h1 {
+  font-size: 18px;
+  color: #12343b;
+
+  margin-bottom: 2px;
+}
+
+.admin-logo p {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  color: #475569;
+
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-user span:first-child {
+  color: #0f766e;
+}
+
+.admin-main {
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 45px 25px;
+}
+
+.admin-heading {
+  margin-bottom: 30px;
+}
+
+.admin-heading h2 {
+  color: #12343b;
+
+  font-size: 28px;
+
+  margin-bottom: 7px;
+}
+
+.admin-heading p {
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.admin-stats {
+  display: grid;
+
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 30px;
+}
+
+.stat-card {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  padding: 22px;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+.stat-number {
+  color: #0f766e;
+
+  font-size: 28px;
+
+  font-weight: 700;
+}
+
+.stat-label {
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.requests-section {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+}
+
+.requests-header {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  padding: 22px 25px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.requests-header h3 {
+  color: #12343b;
+
+  font-size: 18px;
+}
+
+.requests-header span {
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+.requests-list {
+  display: flex;
+
+  flex-direction: column;
+}
+
+.request-card {
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 25px;
+
+  padding: 22px 25px;
+
+  border-bottom: 1px solid #eef2f4;
+}
+
+.request-card:last-child {
+  border-bottom: none;
+}
+
+.request-info {
+  flex: 1;
+}
+
+.request-top {
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 9px;
+}
+
+.request-id {
+  color: #94a3b8;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.status-badge {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+
+  font-weight: 600;
+}
+
+.status-badge.pending-verification {
+  background: #fff4dc;
+  color: #a16207;
+}
+
+.status-badge.verified {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.status-badge.staff-appointed {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.request-info h4 {
+  color: #334155;
+
+  font-size: 16px;
+
+  margin-bottom: 4px;
+}
+
+.request-service {
+  color: #0f766e;
+
+  font-size: 13px;
+
+  margin-bottom: 12px;
+}
+
+.request-details {
+  display: flex;
+
+  gap: 8px;
+}
+
+.request-details span {
+  padding: 5px 9px;
+
+  background: #f1f5f9;
+
+  border-radius: 5px;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.request-actions {
+  flex-shrink: 0;
+}
+
+.verify-button,
+.appoint-button {
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 7px;
+
+  color: white;
+
+  font-size: 12px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.verify-button {
+  background: #0f766e;
+}
+
+.appoint-button {
+  background: #0f766e;
+}
+
+.verify-button:hover,
+.appoint-button:hover {
+  background: #115e59;
+}
+
+.completed-label {
+  color: #15803d;
+
+  font-size: 12px;
+
+  font-weight: 600;
+}
+
+@media (max-width: 800px) {
+
+  .admin-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .request-card {
+    align-items: flex-start;
+
+    flex-direction: column;
+  }
+
+  .request-actions {
+    width: 100%;
+  }
+
+  .verify-button,
+  .appoint-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 500px) {
+
+  .admin-header {
+    padding: 0 20px;
+  }
+
+  .admin-logo h1 {
+    font-size: 15px;
+  }
+
+  .admin-main {
+    padding: 35px 15px;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .requests-header {
+    padding: 18px;
+  }
+
+  .request-card {
+    padding: 20px 18px;
+  }
+}

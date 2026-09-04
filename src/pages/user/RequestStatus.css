@@ -1,0 +1,265 @@
+.status-page {
+  min-height: 100vh;
+  background: #f4f8fa;
+}
+
+.status-header {
+  height: 76px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 7%;
+
+  background: white;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.status-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.status-logo > span {
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #0f766e;
+  color: white;
+
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.status-logo h1 {
+  font-size: 18px;
+  color: #12343b;
+  margin-bottom: 2px;
+}
+
+.status-logo p {
+  font-size: 11px;
+  color: #64748b;
+}
+
+.status-services-button {
+  border: none;
+
+  background: transparent;
+
+  color: #0f766e;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.status-main {
+  max-width: 750px;
+
+  margin: 0 auto;
+
+  padding: 55px 20px;
+}
+
+.status-heading {
+  text-align: center;
+
+  margin-bottom: 35px;
+}
+
+.success-icon {
+  width: 58px;
+  height: 58px;
+
+  margin: 0 auto 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #dff5ef;
+
+  color: #0f766e;
+
+  font-size: 27px;
+  font-weight: bold;
+}
+
+.status-heading h2 {
+  color: #12343b;
+
+  font-size: 28px;
+
+  margin-bottom: 8px;
+}
+
+.status-heading p {
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.status-card {
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 16px;
+
+  padding: 35px;
+
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+}
+
+.tracker {
+  position: relative;
+}
+
+.tracker-step {
+  position: relative;
+
+  display: flex;
+
+  gap: 18px;
+
+  min-height: 100px;
+}
+
+.tracker-marker {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e2e8f0;
+
+  color: #64748b;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  position: relative;
+
+  z-index: 2;
+}
+
+.tracker-step.completed .tracker-marker {
+  background: #0f766e;
+
+  color: white;
+}
+
+.tracker-step.current .tracker-marker {
+  box-shadow: 0 0 0 5px #d9f1ee;
+}
+
+.tracker-content {
+  padding-top: 2px;
+}
+
+.tracker-content h3 {
+  font-size: 16px;
+
+  color: #334155;
+
+  margin-bottom: 6px;
+}
+
+.tracker-step.completed .tracker-content h3 {
+  color: #0f766e;
+}
+
+.tracker-content p {
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  color: #64748b;
+}
+
+.tracker-line {
+  position: absolute;
+
+  top: 40px;
+  left: 19px;
+
+  width: 2px;
+  height: 60px;
+
+  background: #e2e8f0;
+
+  z-index: 1;
+}
+
+.tracker-line.completed-line {
+  background: #0f766e;
+}
+
+.back-services-button {
+  display: block;
+
+  margin: 25px auto 0;
+
+  padding: 12px 25px;
+
+  border: 1px solid #0f766e;
+
+  border-radius: 8px;
+
+  background: white;
+
+  color: #0f766e;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.back-services-button:hover {
+  background: #eaf7f5;
+}
+
+@media (max-width: 600px) {
+
+  .status-header {
+    padding: 0 20px;
+  }
+
+  .status-logo h1 {
+    font-size: 15px;
+  }
+
+  .status-main {
+    padding: 40px 15px;
+  }
+
+  .status-card {
+    padding: 25px 20px;
+  }
+
+  .status-heading h2 {
+    font-size: 24px;
+  }
+}
+
