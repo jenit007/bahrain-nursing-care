@@ -1,148 +1,333 @@
-.status-page {
+/* =========================================
+   REQUEST STATUS PAGE
+========================================= */
+
+.request-status-page {
   min-height: 100vh;
-  background: #f4f8fa;
+  background: #f5f8fa;
+  color: #1f2937;
 }
 
+
+/* =========================================
+   HEADER
+========================================= */
+
 .status-header {
-  height: 76px;
+  width: 100%;
+  min-height: 76px;
+  padding: 0 7%;
+
+  background: #ffffff;
+
+  border-bottom: 1px solid #e5e7eb;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-
-  padding: 0 7%;
-
-  background: white;
-
-  border-bottom: 1px solid #e5e7eb;
 }
 
 .status-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
 }
 
 .status-logo > span {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
+  background: #0f766e;
+  color: #ffffff;
+
   border-radius: 10px;
 
-  background: #0f766e;
-  color: white;
-
-  font-size: 22px;
+  font-size: 23px;
   font-weight: bold;
 }
 
 .status-logo h1 {
-  font-size: 18px;
-  color: #12343b;
-  margin-bottom: 2px;
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 19px;
+  font-weight: 700;
 }
 
 .status-logo p {
-  font-size: 11px;
+  margin-top: 3px;
+
   color: #64748b;
+
+  font-size: 12px;
 }
 
-.status-services-button {
-  border: none;
+.status-user {
+  display: flex;
+  align-items: center;
+  gap: 7px;
 
-  background: transparent;
-
-  color: #0f766e;
+  color: #334155;
 
   font-size: 14px;
   font-weight: 600;
-
-  cursor: pointer;
 }
 
+.status-user span:first-child {
+  color: #0f766e;
+
+  font-size: 18px;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
 .status-main {
-  max-width: 750px;
+  width: 100%;
+  max-width: 1050px;
 
   margin: 0 auto;
 
-  padding: 55px 20px;
+  padding: 45px 25px 70px;
 }
+
+
+/* =========================================
+   PAGE HEADING
+========================================= */
 
 .status-heading {
   text-align: center;
 
-  margin-bottom: 35px;
-}
-
-.success-icon {
-  width: 58px;
-  height: 58px;
-
-  margin: 0 auto 16px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: #dff5ef;
-
-  color: #0f766e;
-
-  font-size: 27px;
-  font-weight: bold;
+  margin-bottom: 30px;
 }
 
 .status-heading h2 {
-  color: #12343b;
+  margin: 0;
 
-  font-size: 28px;
+  color: #0f172a;
 
-  margin-bottom: 8px;
+  font-size: 29px;
+  font-weight: 700;
 }
 
 .status-heading p {
+  margin-top: 7px;
+
   color: #64748b;
 
   font-size: 14px;
 }
 
-.status-card {
-  background: white;
 
-  border: 1px solid #e5e7eb;
+/* =========================================
+   REQUEST INFORMATION CARD
+========================================= */
 
-  border-radius: 16px;
+.request-info-card {
+  background: #ffffff;
 
-  padding: 35px;
+  border: 1px solid #e2e8f0;
 
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+
+  padding: 25px;
+
+  margin-bottom: 22px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.05);
 }
 
-.tracker {
-  position: relative;
+.request-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 20px;
+
+  padding-bottom: 20px;
+
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.tracker-step {
+.request-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.request-info-header h3 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 18px;
+}
+
+.request-status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 13px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+}
+
+
+/* Status colors */
+
+.request-status-badge.pending-verification {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.request-status-badge.verified {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.request-status-badge.staff-appointed {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.request-status-badge.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+
+/* =========================================
+   REQUEST INFORMATION GRID
+========================================= */
+
+.request-info-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 20px;
+
+  padding-top: 20px;
+}
+
+.request-info-grid > div {
+  min-width: 0;
+}
+
+.request-info-grid span {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+.request-info-grid strong {
+  display: block;
+
+  color: #1e293b;
+
+  font-size: 14px;
+
+  word-break: break-word;
+}
+
+
+/* =========================================
+   TRACKING CARD
+========================================= */
+
+.tracking-card {
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+
+  padding: 30px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+.tracking-title {
+  margin-bottom: 30px;
+}
+
+.tracking-title h2 {
+  margin: 0;
+
+  color: #0f172a;
+
+  font-size: 21px;
+}
+
+.tracking-title p {
+  margin-top: 5px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   TRACKING
+========================================= */
+
+.tracking {
   position: relative;
+
+  width: 100%;
+}
+
+.tracking-step {
+  position: relative;
+
+  min-height: 90px;
 
   display: flex;
 
   gap: 18px;
-
-  min-height: 100px;
 }
 
-.tracker-marker {
-  width: 40px;
-  height: 40px;
 
-  flex-shrink: 0;
+/* =========================================
+   TRACKING MARKER
+========================================= */
+
+.tracking-marker {
+  position: relative;
+
+  z-index: 2;
+
+  width: 42px;
+  height: 42px;
+
+  min-width: 42px;
 
   display: flex;
   align-items: center;
@@ -154,112 +339,647 @@
 
   color: #64748b;
 
+  border: 3px solid #f1f5f9;
+
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 700;
 
-  position: relative;
-
-  z-index: 2;
+  transition: 0.2s ease;
 }
 
-.tracker-step.completed .tracker-marker {
+
+/* Completed marker */
+
+.tracking-step.completed .tracking-marker {
   background: #0f766e;
 
-  color: white;
+  color: #ffffff;
+
+  border-color: #ccfbf1;
 }
 
-.tracker-step.current .tracker-marker {
-  box-shadow: 0 0 0 5px #d9f1ee;
+
+/* Current marker */
+
+.tracking-step.current .tracking-marker {
+  box-shadow:
+    0 0 0 5px #ccfbf1;
 }
 
-.tracker-content {
-  padding-top: 2px;
+
+/* =========================================
+   TRACKING CONTENT
+========================================= */
+
+.tracking-content {
+  padding-top: 3px;
+
+  padding-bottom: 25px;
 }
 
-.tracker-content h3 {
+.tracking-content h3 {
+  margin: 0 0 5px;
+
+  color: #64748b;
+
   font-size: 16px;
-
-  color: #334155;
-
-  margin-bottom: 6px;
+  font-weight: 600;
 }
 
-.tracker-step.completed .tracker-content h3 {
-  color: #0f766e;
-}
+.tracking-content p {
+  margin: 0;
 
-.tracker-content p {
+  color: #94a3b8;
+
   font-size: 13px;
 
   line-height: 1.5;
+}
 
+
+/* Active/completed text */
+
+.tracking-step.completed .tracking-content h3 {
+  color: #0f172a;
+}
+
+.tracking-step.completed .tracking-content p {
   color: #64748b;
 }
 
-.tracker-line {
+
+/* Current text */
+
+.tracking-step.current .tracking-content h3 {
+  color: #0f766e;
+
+  font-weight: 700;
+}
+
+
+/* =========================================
+   TRACKING LINE
+========================================= */
+
+.tracking-line {
   position: absolute;
 
-  top: 40px;
-  left: 19px;
+  left: 20px;
+
+  top: 42px;
 
   width: 2px;
-  height: 60px;
+
+  height: 48px;
 
   background: #e2e8f0;
 
   z-index: 1;
 }
 
-.tracker-line.completed-line {
+.tracking-line.completed {
   background: #0f766e;
 }
 
-.back-services-button {
-  display: block;
 
-  margin: 25px auto 0;
+/* =========================================
+   FEEDBACK REQUEST CARD
+========================================= */
 
-  padding: 12px 25px;
+.feedback-request-card {
+  margin-top: 22px;
 
-  border: 1px solid #0f766e;
+  padding: 25px;
 
-  border-radius: 8px;
+  display: flex;
+  align-items: center;
 
-  background: white;
+  gap: 18px;
 
-  color: #0f766e;
+  background: #ffffff;
+
+  border: 1px solid #ddd6fe;
+
+  border-left: 5px solid #7c3aed;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+.feedback-request-icon {
+  width: 52px;
+  height: 52px;
+
+  min-width: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #ede9fe;
+
+  color: #7c3aed;
+
+  font-size: 24px;
+}
+
+.feedback-request-content {
+  flex: 1;
+}
+
+.feedback-request-content h2 {
+  margin: 0 0 7px;
+
+  color: #1e293b;
+
+  font-size: 19px;
+}
+
+.feedback-request-content p {
+  margin: 0 0 15px;
+
+  color: #64748b;
 
   font-size: 14px;
 
+  line-height: 1.5;
+}
+
+.feedback-request-content strong {
+  color: #334155;
+}
+
+
+/* =========================================
+   GIVE FEEDBACK BUTTON
+========================================= */
+
+.give-feedback-btn {
+  padding: 11px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #7c3aed;
+
+  color: #ffffff;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.give-feedback-btn:hover {
+  background: #6d28d9;
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   FEEDBACK SUBMITTED CARD
+========================================= */
+
+.feedback-submitted-card {
+  margin-top: 22px;
+
+  padding: 25px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 18px;
+
+  background: #ffffff;
+
+  border: 1px solid #bbf7d0;
+
+  border-left: 5px solid #16a34a;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+.feedback-success-icon {
+  width: 52px;
+  height: 52px;
+
+  min-width: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #dcfce7;
+
+  color: #16a34a;
+
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.feedback-submitted-card h2 {
+  margin: 0 0 6px;
+
+  color: #166534;
+
+  font-size: 19px;
+}
+
+.feedback-submitted-card p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.submitted-rating {
+  margin-top: 12px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  color: #475569;
+
+  font-size: 13px;
+}
+
+.submitted-rating span {
+  color: #f59e0b;
+
+  font-size: 18px;
+
+  letter-spacing: 1px;
+}
+
+.submitted-rating strong {
+  color: #1e293b;
+}
+
+
+/* =========================================
+   SERVICE COMPLETED / FEEDBACK WAITING
+========================================= */
+
+.feedback-waiting-card {
+  margin-top: 22px;
+
+  padding: 22px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 17px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+}
+
+.feedback-waiting-icon {
+  width: 48px;
+  height: 48px;
+
+  min-width: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #f1f5f9;
+
+  color: #64748b;
+
+  font-size: 21px;
+}
+
+.feedback-waiting-card h3 {
+  margin: 0 0 5px;
+
+  color: #334155;
+
+  font-size: 17px;
+}
+
+.feedback-waiting-card p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   FOOTER ACTIONS
+========================================= */
+
+.status-footer-actions {
+  display: flex;
+  justify-content: center;
+
+  margin-top: 25px;
+}
+
+.back-services-btn {
+  padding: 11px 20px;
+
+  border: 1px solid #cbd5e1;
+
+  border-radius: 7px;
+
+  background: #ffffff;
+
+  color: #334155;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.back-services-btn:hover {
+  background: #f8fafc;
+
+  border-color: #94a3b8;
+}
+
+
+/* =========================================
+   NO REQUEST
+========================================= */
+
+.no-request-card {
+  max-width: 500px;
+
+  margin: 60px auto;
+
+  padding: 45px 30px;
+
+  text-align: center;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 15px rgba(15, 23, 42, 0.05);
+}
+
+.no-request-icon {
+  width: 65px;
+  height: 65px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #e6fffb;
+
+  color: #0f766e;
+
+  font-size: 27px;
+}
+
+.no-request-card h2 {
+  margin-bottom: 8px;
+
+  color: #1e293b;
+
+  font-size: 22px;
+}
+
+.no-request-card p {
+  margin-bottom: 22px;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+.no-request-card button {
+  padding: 11px 20px;
+
+  border: none;
+
+  border-radius: 7px;
+
+  background: #0f766e;
+
+  color: #ffffff;
+
+  font-size: 13px;
   font-weight: 600;
 
   cursor: pointer;
 }
 
-.back-services-button:hover {
-  background: #eaf7f5;
+.no-request-card button:hover {
+  background: #115e59;
 }
+
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+
+  .status-header {
+    padding: 0 25px;
+  }
+
+  .status-main {
+    max-width: 800px;
+
+    padding: 35px 20px 50px;
+  }
+
+  .request-info-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 600px) {
 
   .status-header {
-    padding: 0 20px;
+    min-height: 68px;
+
+    padding: 0 15px;
+  }
+
+  .status-logo > span {
+    width: 40px;
+    height: 40px;
+
+    font-size: 20px;
   }
 
   .status-logo h1 {
-    font-size: 15px;
+    font-size: 16px;
+  }
+
+  .status-logo p {
+    font-size: 10px;
+  }
+
+  .status-user {
+    font-size: 12px;
   }
 
   .status-main {
-    padding: 40px 15px;
+    padding: 28px 12px 45px;
   }
 
-  .status-card {
-    padding: 25px 20px;
+  .status-heading {
+    margin-bottom: 22px;
   }
 
   .status-heading h2 {
     font-size: 24px;
   }
+
+  .status-heading p {
+    font-size: 13px;
+  }
+
+  .request-info-card {
+    padding: 20px;
+  }
+
+  .request-info-header {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 12px;
+  }
+
+  .request-info-grid {
+    grid-template-columns: 1fr;
+
+    gap: 15px;
+  }
+
+  .tracking-card {
+    padding: 22px 18px;
+  }
+
+  .tracking-title {
+    margin-bottom: 25px;
+  }
+
+  .tracking-step {
+    min-height: 95px;
+
+    gap: 13px;
+  }
+
+  .tracking-marker {
+    width: 38px;
+    height: 38px;
+
+    min-width: 38px;
+  }
+
+  .tracking-line {
+    left: 18px;
+
+    top: 38px;
+
+    height: 57px;
+  }
+
+  .tracking-content h3 {
+    font-size: 15px;
+  }
+
+  .tracking-content p {
+    font-size: 12px;
+  }
+
+  .feedback-request-card,
+  .feedback-submitted-card,
+  .feedback-waiting-card {
+    padding: 20px;
+
+    align-items: flex-start;
+  }
+
+  .feedback-request-content h2,
+  .feedback-submitted-card h2 {
+    font-size: 17px;
+  }
+
+  .give-feedback-btn {
+    width: 100%;
+  }
+
+  .submitted-rating {
+    flex-wrap: wrap;
+  }
+
 }
 
+
+/* =========================================
+   VERY SMALL SCREENS
+========================================= */
+
+@media (max-width: 400px) {
+
+  .status-logo p {
+    display: none;
+  }
+
+  .status-user {
+    display: none;
+  }
+
+  .status-main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .tracking-card {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+}

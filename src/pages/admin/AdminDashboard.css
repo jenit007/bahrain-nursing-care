@@ -1,38 +1,45 @@
+/* =========================================
+   ADMIN PAGE
+========================================= */
+
 .admin-page {
   min-height: 100vh;
-  background: #f4f8fa;
+  background: #f5f8fa;
+  color: #1f2937;
 }
 
+
+/* =========================================
+   HEADER
+========================================= */
+
 .admin-header {
-  height: 76px;
+  width: 100%;
+  min-height: 76px;
+  padding: 0 40px;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
 
-  padding: 0 7%;
-
-  background: white;
-
-  border-bottom: 1px solid #e5e7eb;
+.admin-brand {
+  display: flex;
+  align-items: center;
+  gap: 13px;
 }
 
 .admin-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.admin-logo > span {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-  background: #0f766e;
-
+  background: #1976d2;
   color: white;
 
   border-radius: 10px;
@@ -41,16 +48,16 @@
   font-weight: bold;
 }
 
-.admin-logo h1 {
-  font-size: 18px;
-  color: #12343b;
-
-  margin-bottom: 2px;
+.admin-brand h1 {
+  font-size: 20px;
+  margin: 0;
+  color: #1e293b;
 }
 
-.admin-logo p {
-  font-size: 11px;
+.admin-brand p {
+  margin-top: 3px;
   color: #64748b;
+  font-size: 13px;
 }
 
 .admin-user {
@@ -58,310 +65,1010 @@
   align-items: center;
   gap: 8px;
 
-  color: #475569;
-
-  font-size: 14px;
   font-weight: 600;
+  color: #334155;
 }
 
-.admin-user span:first-child {
-  color: #0f766e;
+.admin-user-icon {
+  width: 35px;
+  height: 35px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  background: #eaf3ff;
+  color: #1976d2;
 }
+
+
+/* =========================================
+   MAIN
+========================================= */
 
 .admin-main {
-  max-width: 1100px;
-
+  max-width: 1400px;
   margin: 0 auto;
-
-  padding: 45px 25px;
+  padding: 35px 30px 60px;
 }
 
 .admin-heading {
-  margin-bottom: 30px;
+  margin-bottom: 25px;
 }
 
 .admin-heading h2 {
-  color: #12343b;
-
   font-size: 28px;
-
-  margin-bottom: 7px;
+  color: #1e293b;
 }
 
 .admin-heading p {
+  margin-top: 6px;
   color: #64748b;
-
-  font-size: 14px;
 }
+
+
+/* =========================================
+   STATISTICS
+========================================= */
 
 .admin-stats {
   display: grid;
+  grid-template-columns:
+    repeat(6, minmax(0, 1fr));
 
-  grid-template-columns: repeat(4, 1fr);
-
-  gap: 18px;
-
+  gap: 16px;
   margin-bottom: 30px;
 }
 
 .stat-card {
   background: white;
-
   border: 1px solid #e5e7eb;
-
   border-radius: 12px;
 
-  padding: 22px;
+  padding: 20px;
 
   display: flex;
+  align-items: center;
+  gap: 13px;
 
-  flex-direction: column;
-
-  gap: 6px;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
-.stat-number {
-  color: #0f766e;
+.stat-icon {
+  width: 43px;
+  height: 43px;
+  min-width: 43px;
 
-  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-  font-weight: 700;
+  border-radius: 9px;
+
+  background: #eef6ff;
+  color: #1976d2;
+
+  font-size: 20px;
 }
 
-.stat-label {
+.stat-content {
+  min-width: 0;
+}
+
+.stat-content span {
+  display: block;
+
   color: #64748b;
+  font-size: 12px;
 
-  font-size: 13px;
+  margin-bottom: 5px;
 }
+
+.stat-content strong {
+  display: block;
+
+  color: #1e293b;
+  font-size: 24px;
+}
+
+
+/* =========================================
+   REQUEST SECTION
+========================================= */
 
 .requests-section {
   background: white;
-
   border: 1px solid #e5e7eb;
-
   border-radius: 14px;
 
   overflow: hidden;
+
+  box-shadow:
+    0 3px 12px rgba(0, 0, 0, 0.04);
 }
 
-.requests-header {
+.section-heading {
+  padding: 24px;
+
   display: flex;
-
   align-items: center;
-
   justify-content: space-between;
-
-  padding: 22px 25px;
 
   border-bottom: 1px solid #e5e7eb;
 }
 
-.requests-header h3 {
-  color: #12343b;
-
-  font-size: 18px;
+.section-heading h2 {
+  font-size: 21px;
 }
 
-.requests-header span {
+.section-heading p {
+  margin-top: 5px;
   color: #64748b;
+  font-size: 14px;
+}
+
+.request-count {
+  padding: 8px 13px;
+
+  border-radius: 20px;
+
+  background: #eef6ff;
+  color: #1976d2;
 
   font-size: 13px;
-}
-
-.requests-list {
-  display: flex;
-
-  flex-direction: column;
-}
-
-.request-card {
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  gap: 25px;
-
-  padding: 22px 25px;
-
-  border-bottom: 1px solid #eef2f4;
-}
-
-.request-card:last-child {
-  border-bottom: none;
-}
-
-.request-info {
-  flex: 1;
-}
-
-.request-top {
-  display: flex;
-
-  align-items: center;
-
-  gap: 10px;
-
-  margin-bottom: 9px;
-}
-
-.request-id {
-  color: #94a3b8;
-
-  font-size: 11px;
-
   font-weight: 600;
 }
 
+
+/* =========================================
+   REQUEST TABLE
+========================================= */
+
+.requests-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.requests-table {
+  width: 100%;
+  min-width: 1100px;
+
+  border-collapse: collapse;
+}
+
+.requests-table th {
+  padding: 15px 18px;
+
+  text-align: left;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.requests-table td {
+  padding: 16px 18px;
+
+  border-bottom: 1px solid #f1f5f9;
+
+  font-size: 14px;
+
+  vertical-align: middle;
+}
+
+.requests-table tbody tr:hover {
+  background: #fafcff;
+}
+
+.requests-table td strong {
+  color: #1e293b;
+}
+
+
+/* =========================================
+   STATUS BADGES
+========================================= */
+
 .status-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.pending-verification {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.verified {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.staff-appointed {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.completed {
+  background: #dcfce7;
+  color: #166534;
+}
+
+
+/* =========================================
+   REQUEST ACTIONS
+========================================= */
+
+.request-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  flex-wrap: wrap;
+}
+
+.request-actions button {
+  border: none;
+  border-radius: 6px;
+
+  padding: 8px 11px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.request-actions button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   VIEW BUTTON
+========================================= */
+
+.view-btn {
+  background: #e2e8f0;
+  color: #334155;
+}
+
+.view-btn:hover {
+  background: #cbd5e1;
+}
+
+
+/* =========================================
+   VERIFY BUTTON
+========================================= */
+
+.verify-btn {
+  background: #16a34a;
+  color: white;
+}
+
+.verify-btn:hover {
+  background: #15803d;
+}
+
+
+/* =========================================
+   APPOINT BUTTON
+========================================= */
+
+.appoint-btn {
+  background: #1976d2;
+  color: white;
+}
+
+.appoint-btn:hover {
+  background: #1565c0;
+}
+
+
+/* =========================================
+   COMPLETE BUTTON
+========================================= */
+
+.complete-btn {
+  background: #0f766e;
+  color: white;
+}
+
+.complete-btn:hover {
+  background: #115e59;
+}
+
+
+/* =========================================
+   FEEDBACK REQUEST BUTTON
+========================================= */
+
+.feedback-request-btn {
+  padding: 9px 14px !important;
+
+  border: none;
+  border-radius: 7px;
+
+  background: #7c3aed;
+  color: white;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.feedback-request-btn:hover {
+  background: #6d28d9;
+}
+
+.feedback-request-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   FEEDBACK TABLE STATUS
+========================================= */
+
+.feedback-received {
+  display: inline-flex;
+  align-items: center;
 
   padding: 5px 9px;
 
   border-radius: 20px;
 
-  font-size: 11px;
-
-  font-weight: 600;
-}
-
-.status-badge.pending-verification {
-  background: #fff4dc;
-  color: #a16207;
-}
-
-.status-badge.verified {
-  background: #e0f2fe;
-  color: #0369a1;
-}
-
-.status-badge.staff-appointed {
   background: #dcfce7;
-  color: #15803d;
+  color: #166534;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
 }
 
-.request-info h4 {
-  color: #334155;
+.feedback-waiting {
+  display: inline-flex;
+  align-items: center;
 
-  font-size: 16px;
-
-  margin-bottom: 4px;
-}
-
-.request-service {
-  color: #0f766e;
-
-  font-size: 13px;
-
-  margin-bottom: 12px;
-}
-
-.request-details {
-  display: flex;
-
-  gap: 8px;
-}
-
-.request-details span {
   padding: 5px 9px;
 
-  background: #f1f5f9;
+  border-radius: 20px;
 
-  border-radius: 5px;
+  background: #fef3c7;
+  color: #92400e;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+.feedback-not-requested {
+  display: inline-flex;
+  align-items: center;
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #f1f5f9;
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   NO REQUESTS
+========================================= */
+
+.no-requests {
+  padding: 70px 20px;
+
+  text-align: center;
+}
+
+.no-requests-icon {
+  width: 65px;
+  height: 65px;
+
+  margin: 0 auto 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: #eef6ff;
+  color: #1976d2;
+
+  font-size: 28px;
+}
+
+.no-requests h3 {
+  font-size: 19px;
+  margin-bottom: 7px;
+}
+
+.no-requests p {
+  color: #64748b;
+}
+
+
+/* =========================================
+   MODAL OVERLAY
+========================================= */
+
+.modal-overlay {
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 1000;
+
+  padding: 30px 20px;
+
+  background: rgba(15, 23, 42, 0.55);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow-y: auto;
+}
+
+
+/* =========================================
+   DETAILS MODAL
+========================================= */
+
+.details-modal {
+  width: 100%;
+  max-width: 900px;
+
+  max-height: 92vh;
+
+  overflow-y: auto;
+
+  background: white;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================================
+   MODAL HEADER
+========================================= */
+
+.modal-header {
+  position: sticky;
+  top: 0;
+
+  z-index: 2;
+
+  padding: 22px 25px;
+
+  background: white;
+
+  border-bottom: 1px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-header h2 {
+  font-size: 22px;
+}
+
+.modal-header p {
+  margin-top: 4px;
 
   color: #64748b;
 
-  font-size: 11px;
+  font-size: 13px;
 }
 
-.request-actions {
-  flex-shrink: 0;
-}
+.close-modal-btn {
+  width: 36px;
+  height: 36px;
 
-.verify-button,
-.appoint-button {
   border: none;
 
-  padding: 10px 16px;
+  border-radius: 50%;
+
+  background: #f1f5f9;
+
+  color: #475569;
+
+  font-size: 25px;
+
+  cursor: pointer;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-modal-btn:hover {
+  background: #e2e8f0;
+}
+
+
+/* =========================================
+   DETAILS SECTION
+========================================= */
+
+.details-section {
+  padding: 23px 25px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.details-section h3 {
+  margin-bottom: 18px;
+
+  font-size: 17px;
+
+  color: #1e293b;
+}
+
+
+/* =========================================
+   DETAILS GRID
+========================================= */
+
+.details-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.detail-item {
+  min-width: 0;
+}
+
+.detail-item label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.detail-item span {
+  display: block;
+
+  color: #1e293b;
+
+  font-size: 14px;
+
+  word-break: break-word;
+}
+
+
+/* =========================================
+   GPS
+========================================= */
+
+.gps-details {
+  width: 100%;
+}
+
+.map-link {
+  display: inline-flex;
+
+  margin-top: 18px;
+
+  padding: 10px 15px;
 
   border-radius: 7px;
 
+  background: #1976d2;
   color: white;
 
-  font-size: 12px;
+  text-decoration: none;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.map-link:hover {
+  background: #1565c0;
+}
+
+.no-location {
+  color: #64748b;
+  font-size: 14px;
+}
+
+
+/* =========================================
+   CUSTOMER FEEDBACK
+========================================= */
+
+.feedback-pending {
+  padding: 17px;
+
+  background: #fefce8;
+
+  border: 1px solid #fde68a;
+
+  border-radius: 9px;
+
+  color: #854d0e;
+}
+
+.feedback-pending strong {
+  display: block;
+
+  margin-bottom: 6px;
+}
+
+.feedback-pending p {
+  margin: 0;
+
+  color: #92400e;
+
+  line-height: 1.5;
+}
+
+
+.feedback-result {
+  padding: 20px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e2e8f0;
+
+  border-radius: 10px;
+}
+
+
+/* =========================================
+   FEEDBACK RATING
+========================================= */
+
+.feedback-rating {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+
+  flex-wrap: wrap;
+}
+
+.feedback-rating span {
+  color: #f59e0b;
+
+  font-size: 24px;
+
+  letter-spacing: 2px;
+}
+
+
+/* =========================================
+   FEEDBACK ANSWERS
+========================================= */
+
+.feedback-answers {
+  margin-bottom: 20px;
+}
+
+.feedback-answers h4 {
+  margin-bottom: 12px;
+
+  color: #334155;
+
+  font-size: 14px;
+}
+
+.feedback-answer {
+  padding: 11px 13px;
+
+  margin-bottom: 8px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 7px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  gap: 15px;
+}
+
+.feedback-answer span {
+  color: #475569;
+
+  font-size: 13px;
+}
+
+.feedback-answer strong {
+  color: #1976d2;
+
+  white-space: nowrap;
+}
+
+
+/* =========================================
+   FEEDBACK COMMENTS
+========================================= */
+
+.feedback-comments {
+  margin-top: 10px;
+}
+
+.feedback-comments strong {
+  display: block;
+
+  margin-bottom: 8px;
+}
+
+.feedback-comments p {
+  margin: 0;
+
+  padding: 14px;
+
+  background: white;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  color: #475569;
+
+  line-height: 1.6;
+
+  white-space: pre-wrap;
+}
+
+
+/* =========================================
+   FEEDBACK DATE
+========================================= */
+
+.feedback-date {
+  margin-top: 15px;
+
+  color: #64748b;
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   MODAL ACTIONS
+========================================= */
+
+.modal-actions {
+  position: sticky;
+  bottom: 0;
+
+  padding: 18px 25px;
+
+  background: white;
+
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: flex-end;
+
+  gap: 10px;
+
+  flex-wrap: wrap;
+}
+
+.modal-actions button {
+  border: none;
+
+  border-radius: 7px;
+
+  padding: 10px 16px;
+
+  font-size: 13px;
 
   font-weight: 600;
 
   cursor: pointer;
 }
 
-.verify-button {
-  background: #0f766e;
+.modal-actions .feedback-request-btn {
+  color: white;
 }
 
-.appoint-button {
-  background: #0f766e;
+.close-btn {
+  background: #e2e8f0;
+
+  color: #334155;
 }
 
-.verify-button:hover,
-.appoint-button:hover {
-  background: #115e59;
+.close-btn:hover {
+  background: #cbd5e1;
 }
 
-.completed-label {
-  color: #15803d;
 
-  font-size: 12px;
+/* =========================================
+   RESPONSIVE
+========================================= */
 
-  font-weight: 600;
-}
-
-@media (max-width: 800px) {
+@media (max-width: 1200px) {
 
   .admin-stats {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:
+      repeat(3, minmax(0, 1fr));
   }
 
-  .request-card {
+}
+
+
+@media (max-width: 768px) {
+
+  .admin-header {
+    padding: 0 18px;
+  }
+
+  .admin-brand h1 {
+    font-size: 17px;
+  }
+
+  .admin-brand p {
+    display: none;
+  }
+
+  .admin-main {
+    padding: 25px 15px 40px;
+  }
+
+  .admin-heading h2 {
+    font-size: 23px;
+  }
+
+  .admin-stats {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .stat-card {
+    padding: 15px;
+  }
+
+  .stat-content strong {
+    font-size: 21px;
+  }
+
+  .section-heading {
+    padding: 18px;
+
     align-items: flex-start;
+
+    gap: 12px;
 
     flex-direction: column;
   }
 
-  .request-actions {
-    width: 100%;
+  .details-grid {
+    grid-template-columns: 1fr;
   }
 
-  .verify-button,
-  .appoint-button {
-    width: 100%;
+  .modal-overlay {
+    padding: 10px;
   }
+
+  .details-modal {
+    max-height: 95vh;
+    border-radius: 12px;
+  }
+
+  .details-section {
+    padding: 20px;
+  }
+
+  .modal-header {
+    padding: 18px 20px;
+  }
+
+  .modal-actions {
+    padding: 15px 20px;
+  }
+
 }
+
 
 @media (max-width: 500px) {
 
-  .admin-header {
-    padding: 0 20px;
-  }
-
-  .admin-logo h1 {
-    font-size: 15px;
-  }
-
-  .admin-main {
-    padding: 35px 15px;
+  .admin-user span:last-child {
+    display: none;
   }
 
   .admin-stats {
     grid-template-columns: 1fr;
   }
 
-  .requests-header {
-    padding: 18px;
+  .request-actions {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .request-card {
-    padding: 20px 18px;
+  .request-actions button {
+    width: 100%;
   }
+
+  .feedback-rating {
+    align-items: flex-start;
+
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+  .feedback-answer {
+    flex-direction: column;
+
+    gap: 6px;
+  }
+
+  .modal-actions {
+    align-items: stretch;
+
+    flex-direction: column;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+
 }

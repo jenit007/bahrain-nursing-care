@@ -1,27 +1,38 @@
+/* =========================================
+   PAGE
+========================================= */
+
 .care-form-page {
   min-height: 100vh;
-  background: #f4f8fa;
+  background: #f5f8fa;
 }
 
+
+/* =========================================
+   HEADER
+========================================= */
+
 .care-form-header {
-  height: 76px;
+  width: 100%;
+  padding: 18px 6%;
+  background: white;
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 7%;
-
-  background: white;
-
   border-bottom: 1px solid #e5e7eb;
 }
+
 
 .care-form-logo {
   display: flex;
   align-items: center;
   gap: 12px;
+
+  cursor: pointer;
 }
+
 
 .care-form-logo > span {
   width: 42px;
@@ -31,45 +42,72 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 10px;
-
   background: #0f766e;
   color: white;
 
-  font-size: 22px;
+  border-radius: 10px;
+
+  font-size: 23px;
   font-weight: bold;
 }
 
+
 .care-form-logo h1 {
-  font-size: 18px;
-  color: #12343b;
-  margin-bottom: 2px;
+  font-size: 20px;
+  color: #0f172a;
 }
 
+
 .care-form-logo p {
-  font-size: 11px;
+  margin-top: 3px;
+
   color: #64748b;
+
+  font-size: 12px;
 }
+
+
+/* =========================================
+   BACK BUTTON
+========================================= */
 
 .back-button {
   border: none;
+
   background: transparent;
 
   color: #0f766e;
 
   font-size: 14px;
+
   font-weight: 600;
 
   cursor: pointer;
 }
 
+
+.back-button:hover {
+  color: #115e59;
+}
+
+
+/* =========================================
+   MAIN
+========================================= */
+
 .care-form-main {
-  max-width: 720px;
+  width: 100%;
+  max-width: 850px;
 
   margin: 0 auto;
 
-  padding: 55px 20px;
+  padding: 45px 20px 70px;
 }
+
+
+/* =========================================
+   HEADING
+========================================= */
 
 .care-form-heading {
   text-align: center;
@@ -77,35 +115,48 @@
   margin-bottom: 30px;
 }
 
-.care-form-heading h2 {
-  color: #12343b;
 
+.care-form-heading h2 {
   font-size: 30px;
+
+  color: #0f172a;
 
   margin-bottom: 8px;
 }
 
+
 .care-form-heading p {
   color: #64748b;
 
-  font-size: 14px;
+  font-size: 15px;
 }
+
+
+/* =========================================
+   FORM CARD
+========================================= */
 
 .care-form-card {
   background: white;
 
-  padding: 35px;
+  padding: 32px;
 
   border-radius: 16px;
 
-  border: 1px solid #e5e7eb;
-
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 8px 30px
+    rgba(15, 23, 42, 0.07);
 }
+
+
+/* =========================================
+   FORM GROUP
+========================================= */
 
 .form-group {
   margin-bottom: 22px;
 }
+
 
 .form-group > label {
   display: block;
@@ -119,118 +170,304 @@
   font-weight: 600;
 }
 
-.form-group input[type="text"],
-.form-group input[type="tel"],
-.form-group input[type="email"] {
+
+/* =========================================
+   NORMAL INPUTS
+========================================= */
+
+.form-group > input {
   width: 100%;
 
   padding: 13px 14px;
 
-  border: 1px solid #dbe3e8;
+  border: 1px solid #d1d5db;
+
+  border-radius: 9px;
+
+  font-size: 14px;
+
+  outline: none;
+
+  transition: 0.2s;
+}
+
+
+.form-group > input:focus {
+  border-color: #0f766e;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(15, 118, 110, 0.08);
+}
+
+
+/* =========================================
+   LOCATION
+========================================= */
+
+.location-box {
+  width: 100%;
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 12px;
+}
+
+
+/* =========================================
+   CURRENT LOCATION BUTTON
+========================================= */
+
+.location-btn {
+  width: 100%;
+
+  padding: 13px 16px;
+
+  border: none;
+
+  border-radius: 9px;
+
+  background: #0f766e;
+
+  color: white;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+
+.location-btn:hover {
+  background: #115e59;
+}
+
+
+.location-btn:disabled {
+  opacity: 0.65;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================================
+   ERROR
+========================================= */
+
+.location-error {
+  margin: 0;
+
+  padding: 11px 13px;
+
+  background: #fef2f2;
+
+  color: #b91c1c;
+
+  border: 1px solid #fecaca;
+
+  border-radius: 8px;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+}
+
+
+/* =========================================
+   ADDRESS GRID
+========================================= */
+
+.address-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 14px;
+
+  margin-top: 5px;
+}
+
+
+.address-field {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 6px;
+}
+
+
+.address-field label {
+  color: #475569;
+
+  font-size: 13px;
+
+  font-weight: 600;
+}
+
+
+.address-field input {
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 1px solid #d1d5db;
 
   border-radius: 8px;
 
   font-size: 14px;
 
   outline: none;
+
+  transition: 0.2s;
 }
 
-.form-group input:focus {
+
+.address-field input:focus {
   border-color: #0f766e;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(15, 118, 110, 0.07);
 }
 
-.form-group input::placeholder {
+
+/* =========================================
+   MAP
+========================================= */
+
+.map-container {
+  width: 100%;
+
+  height: 300px;
+
+  margin-top: 4px;
+
+  overflow: hidden;
+
+  border-radius: 12px;
+
+  border: 1px solid #dbe3e8;
+}
+
+
+/* =========================================
+   LOCATION DETAILS
+========================================= */
+
+.location-details {
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 4px;
+
+  padding: 12px;
+
+  background: #f8fafc;
+
+  border-radius: 8px;
+}
+
+
+.location-details strong {
+  color: #334155;
+
+  font-size: 13px;
+}
+
+
+.location-details small {
+  color: #64748b;
+
+  font-size: 12px;
+}
+
+
+/* =========================================
+   MAP HELP
+========================================= */
+
+.map-help {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 12px;
+
+  line-height: 1.5;
+}
+
+
+.map-attribution {
+  margin: 0;
+
   color: #94a3b8;
+
+  font-size: 10px;
 }
 
-.checkbox-group {
+
+/* =========================================
+   RADIO BUTTONS
+========================================= */
+
+.radio-group {
   display: flex;
 
   flex-wrap: wrap;
 
-  gap: 12px;
+  gap: 10px;
 }
 
-.checkbox-option {
+
+.radio-option {
   display: flex;
 
   align-items: center;
-
-  gap: 8px;
-
-  padding: 11px 15px;
-
-  border: 1px solid #dbe3e8;
-
-  border-radius: 8px;
-
-  cursor: pointer;
-
-  font-size: 14px;
-
-  color: #475569;
-}
-
-.checkbox-option:has(input:checked) {
-  border-color: #0f766e;
-
-  background: #eaf7f5;
-
-  color: #0f766e;
-}
-
-.checkbox-option input {
-  accent-color: #0f766e;
-}
-
-.shift-group {
-  display: flex;
-
-  gap: 12px;
-}
-
-.shift-option {
-  flex: 1;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
 
   gap: 7px;
 
-  padding: 12px;
+  padding: 10px 14px;
 
-  border: 1px solid #dbe3e8;
+  border: 1px solid #d1d5db;
 
   border-radius: 8px;
 
   cursor: pointer;
 
-  color: #475569;
-
   font-size: 14px;
+
+  color: #475569;
 }
 
-.shift-option:has(input:checked) {
+
+.radio-option:hover {
   border-color: #0f766e;
-
-  background: #eaf7f5;
-
-  color: #0f766e;
 }
 
-.shift-option input {
+
+.radio-option input {
   accent-color: #0f766e;
 }
+
+
+/* =========================================
+   SUBMIT
+========================================= */
 
 .submit-request-button {
   width: 100%;
 
-  padding: 14px;
+  margin-top: 10px;
 
-  margin-top: 8px;
+  padding: 14px;
 
   border: none;
 
@@ -242,78 +479,213 @@
 
   font-size: 15px;
 
-  font-weight: 600;
+  font-weight: 700;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
+
 
 .submit-request-button:hover {
   background: #115e59;
 }
 
-.invalid-service {
-  min-height: 100vh;
 
-  display: flex;
+/* =========================================
+   MOBILE
+========================================= */
 
-  flex-direction: column;
-
-  align-items: center;
-
-  justify-content: center;
-
-  gap: 20px;
-}
-
-.invalid-service button {
-  padding: 12px 20px;
-
-  border: none;
-
-  border-radius: 8px;
-
-  background: #0f766e;
-
-  color: white;
-
-  cursor: pointer;
-}
-
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 
   .care-form-header {
-    padding: 0 20px;
+    padding: 15px 20px;
   }
+
 
   .care-form-logo h1 {
-    font-size: 15px;
+    font-size: 17px;
   }
+
+
+  .care-form-logo p {
+    font-size: 11px;
+  }
+
+
+  .back-button {
+    font-size: 12px;
+  }
+
 
   .care-form-main {
-    padding: 40px 15px;
+    padding:
+      30px 14px 50px;
   }
 
-  .care-form-card {
-    padding: 25px 20px;
-  }
 
   .care-form-heading h2 {
     font-size: 25px;
   }
 
-  .checkbox-group {
+
+  .care-form-card {
+    padding: 20px 16px;
+  }
+
+
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .map-container {
+    height: 280px;
+  }
+
+
+  .radio-group {
     flex-direction: column;
   }
 
-  .checkbox-option {
+
+  .radio-option {
     width: 100%;
   }
+  .location-box {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  .shift-group {
-    flex-direction: column;
-  }
+.location-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 2px;
+}
 
-  .shift-option {
-    width: 100%;
+.location-heading strong {
+  color: #1f2937;
+  font-size: 15px;
+}
+
+.location-heading span {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.location-btn {
+  width: 100%;
+  padding: 13px 16px;
+  border: none;
+  border-radius: 9px;
+  background: #0f766e;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.location-btn:hover {
+  background: #115e59;
+}
+
+.location-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.location-error {
+  margin: 0;
+  padding: 11px 13px;
+  background: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.address-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.address-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.address-field label {
+  color: #475569;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.address-field input,
+.address-field select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  color: #1f2937;
+  font-size: 14px;
+  outline: none;
+}
+
+.address-field input:focus,
+.address-field select:focus {
+  border-color: #0f766e;
+}
+
+.map-container {
+  width: 100%;
+  height: 300px;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid #dbe3e8;
+}
+
+.location-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px;
+  background: #f8fafc;
+  border-radius: 8px;
+}
+
+.location-details strong {
+  color: #334155;
+  font-size: 13px;
+}
+
+.location-details small {
+  color: #64748b;
+  font-size: 12px;
+}
+
+.map-help {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.map-attribution {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 10px;
+}
+
+@media (max-width: 700px) {
+  .address-grid {
+    grid-template-columns: 1fr;
   }
+}
+
 }
