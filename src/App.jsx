@@ -6,6 +6,7 @@ import CareForm from "./pages/user/CareForm";
 import RequestStatus from "./pages/user/RequestStatus";
 import Feedback from "./pages/user/Feedback";
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import "./responsive.css";
 
 function App() {
   return (

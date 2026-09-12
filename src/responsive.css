@@ -1,0 +1,834 @@
+
+/* =========================================================
+   RESPONSIVE SYSTEM
+   Optimized for phones, tablets, laptops and large desktops
+========================================================= */
+
+:root {
+  --page-padding-desktop: 32px;
+  --page-padding-tablet: 24px;
+  --page-padding-mobile: 16px;
+}
+
+/* Safer sizing and media defaults */
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   LARGE DESKTOP
+========================= */
+@media (min-width: 1201px) {
+  .services-main,
+  .status-main {
+    max-width: 1120px;
+  }
+
+  .care-form-main {
+    max-width: 920px;
+  }
+
+  .feedback-card {
+    max-width: 850px;
+  }
+
+  .admin-main {
+    max-width: 1440px;
+  }
+}
+
+/* =========================
+   TABLET / SMALL LAPTOP
+========================= */
+@media (max-width: 1024px) {
+  .services-header,
+  .status-header,
+  .care-form-header,
+  .admin-header {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .services-main,
+  .status-main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .care-form-main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .services-grid {
+    gap: 18px;
+  }
+
+  .service-card {
+    padding: 26px;
+  }
+
+  .admin-main {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .requests-table {
+    min-width: 1000px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 767px) {
+  html,
+  body,
+  #root {
+    width: 100%;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  /* ---------- Common headers ---------- */
+  .services-header,
+  .status-header,
+  .care-form-header,
+  .admin-header {
+    min-height: 68px;
+    height: auto;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .services-logo,
+  .status-logo,
+  .care-form-logo,
+  .admin-brand {
+    min-width: 0;
+    gap: 9px;
+  }
+
+  .services-logo > span,
+  .status-logo > span,
+  .care-form-logo > span,
+  .admin-logo {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 9px;
+    font-size: 20px;
+  }
+
+  .services-logo h1,
+  .status-logo h1,
+  .care-form-logo h1,
+  .admin-brand h1 {
+    font-size: 15px;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  .services-logo p,
+  .status-logo p,
+  .care-form-logo p,
+  .admin-brand p {
+    font-size: 10px;
+    line-height: 1.3;
+  }
+
+  .user-section,
+  .status-user,
+  .admin-user {
+    flex-shrink: 0;
+    font-size: 12px;
+  }
+
+  /* ---------- Services ---------- */
+  .services-main {
+    width: 100%;
+    padding: 34px 16px 50px;
+  }
+
+  .services-heading {
+    margin-bottom: 28px;
+  }
+
+  .services-heading h2 {
+    font-size: clamp(24px, 7vw, 29px);
+    line-height: 1.2;
+  }
+
+  .services-heading p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .services-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .service-card {
+    padding: 22px 18px;
+    border-radius: 14px;
+  }
+
+  .service-icon {
+    width: 54px;
+    height: 54px;
+    margin-bottom: 14px;
+    border-radius: 13px;
+  }
+
+  .service-card h3 {
+    font-size: 18px;
+  }
+
+  .service-card p {
+    min-height: 0;
+    margin-bottom: 18px;
+    font-size: 13px;
+  }
+
+  .service-card button {
+    min-height: 46px;
+  }
+
+  /* ---------- Care form ---------- */
+  .care-form-main {
+    width: 100%;
+    padding: 30px 12px 48px;
+  }
+
+  .care-form-heading {
+    margin-bottom: 22px;
+    padding: 0 4px;
+  }
+
+  .care-form-heading h2 {
+    font-size: clamp(23px, 7vw, 28px);
+    line-height: 1.2;
+  }
+
+  .care-form-heading p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .care-form-card {
+    padding: 20px 15px;
+    border-radius: 14px;
+  }
+
+  .form-group {
+    margin-bottom: 18px;
+  }
+
+  .form-group > label,
+  .form-group label {
+    font-size: 13px;
+  }
+
+  .form-group > input,
+  .form-group input,
+  .address-field input,
+  .address-field select {
+    min-height: 46px;
+    padding: 12px 13px;
+    font-size: 16px;
+  }
+
+  .radio-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+  }
+
+  .radio-option {
+    width: 100%;
+    min-height: 46px;
+    padding: 10px 11px;
+    justify-content: flex-start;
+    font-size: 13px;
+  }
+
+  .address-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .address-field {
+    gap: 5px;
+  }
+
+  .location-heading strong {
+    font-size: 14px;
+  }
+
+  .location-heading span,
+  .map-help {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .location-btn,
+  .submit-request-button {
+    min-height: 48px;
+    font-size: 14px;
+  }
+
+  .map-container {
+    height: 260px;
+    border-radius: 10px;
+  }
+
+  .map-container .leaflet-container {
+    height: 100% !important;
+    width: 100% !important;
+  }
+
+  .location-details {
+    padding: 11px;
+  }
+
+  /* ---------- Request status ---------- */
+  .status-main {
+    width: 100%;
+    padding: 30px 12px 50px;
+  }
+
+  .status-heading {
+    margin-bottom: 22px;
+    padding: 0 4px;
+  }
+
+  .status-heading h2 {
+    font-size: clamp(24px, 7vw, 28px);
+    line-height: 1.2;
+  }
+
+  .status-heading p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .request-info-card,
+  .tracking-card {
+    padding: 18px 15px;
+    border-radius: 13px;
+  }
+
+  .request-info-header {
+    padding-bottom: 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .request-info-header h3 {
+    font-size: 16px;
+    overflow-wrap: anywhere;
+  }
+
+  .request-status-badge {
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .request-info-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px 12px;
+    padding-top: 17px;
+  }
+
+  .request-info-grid strong {
+    font-size: 13px;
+  }
+
+  .tracking-title {
+    margin-bottom: 22px;
+  }
+
+  .tracking-title h2 {
+    font-size: 19px;
+  }
+
+  .tracking-step {
+    min-height: 96px;
+    gap: 12px;
+  }
+
+  .tracking-marker {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    font-size: 13px;
+  }
+
+  .tracking-line {
+    left: 18px;
+    top: 38px;
+    height: 58px;
+  }
+
+  .tracking-content {
+    padding-bottom: 23px;
+  }
+
+  .tracking-content h3 {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  .tracking-content p {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .feedback-request-card,
+  .feedback-submitted-card,
+  .feedback-waiting-card {
+    padding: 18px 15px;
+    gap: 13px;
+    align-items: flex-start;
+    border-radius: 13px;
+  }
+
+  .feedback-request-icon,
+  .feedback-success-icon,
+  .feedback-waiting-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 20px;
+  }
+
+  .feedback-request-content h2,
+  .feedback-submitted-card h2 {
+    font-size: 17px;
+    line-height: 1.3;
+  }
+
+  .feedback-request-content p,
+  .feedback-submitted-card p,
+  .feedback-waiting-card p {
+    font-size: 13px;
+  }
+
+  .give-feedback-btn,
+  .back-services-btn {
+    min-height: 46px;
+    width: 100%;
+  }
+
+  .status-footer-actions {
+    width: 100%;
+  }
+
+  /* ---------- Feedback ---------- */
+  .feedback-page {
+    min-height: 100svh;
+    padding: 20px 12px 35px;
+  }
+
+  .feedback-card {
+    width: 100%;
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .feedback-header {
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .feedback-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    font-size: 21px;
+  }
+
+  .feedback-header h1 {
+    font-size: 21px;
+    line-height: 1.25;
+  }
+
+  .feedback-header p {
+    font-size: 13px;
+  }
+
+  .feedback-request {
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  .feedback-section {
+    padding: 18px 0;
+  }
+
+  .feedback-section h3 {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .feedback-section p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .stars {
+    gap: 4px;
+  }
+
+  .star {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 0;
+    font-size: 32px;
+  }
+
+  .answer-options {
+    justify-content: space-between;
+    gap: 5px;
+    margin-top: 15px;
+  }
+
+  .answer-options span {
+    width: 42px;
+    height: 42px;
+  }
+
+  .scale-labels {
+    font-size: 11px;
+  }
+
+  .feedback-section textarea {
+    min-height: 120px;
+    font-size: 16px;
+  }
+
+  .submit-feedback {
+    min-height: 48px;
+    margin-top: 20px;
+  }
+
+  /* ---------- Admin ---------- */
+  .admin-main {
+    width: 100%;
+    padding: 25px 12px 45px;
+  }
+
+  .admin-heading {
+    margin-bottom: 20px;
+  }
+
+  .admin-heading h2 {
+    font-size: 23px;
+    line-height: 1.25;
+  }
+
+  .admin-heading p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .stat-card {
+    min-width: 0;
+    padding: 13px 11px;
+    gap: 9px;
+    border-radius: 10px;
+  }
+
+  .stat-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 17px;
+  }
+
+  .stat-content span {
+    font-size: 10px;
+    line-height: 1.25;
+  }
+
+  .stat-content strong {
+    font-size: 20px;
+  }
+
+  .requests-section {
+    border-radius: 12px;
+  }
+
+  .section-heading {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .section-heading h2 {
+    font-size: 18px;
+  }
+
+  .section-heading p {
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .request-count {
+    font-size: 11px;
+    padding: 6px 9px;
+  }
+
+  .requests-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .requests-table {
+    min-width: 920px;
+  }
+
+  .requests-table th,
+  .requests-table td {
+    padding: 12px 13px;
+  }
+
+  .requests-table th {
+    font-size: 10px;
+  }
+
+  .requests-table td {
+    font-size: 12px;
+  }
+
+  .request-actions {
+    gap: 6px;
+  }
+
+  .request-actions button {
+    min-height: 38px;
+    padding: 8px 10px;
+  }
+
+  /* ---------- Admin modal ---------- */
+  .modal-overlay {
+    padding: 8px;
+    align-items: flex-start;
+  }
+
+  .details-modal {
+    width: 100%;
+    max-height: calc(100svh - 16px);
+    margin: 0;
+    border-radius: 12px;
+  }
+
+  .modal-header {
+    padding: 15px 16px;
+  }
+
+  .modal-header h2 {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  .modal-header p {
+    font-size: 11px;
+  }
+
+  .close-modal-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+  }
+
+  .details-section {
+    padding: 18px 16px;
+  }
+
+  .details-section h3 {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .detail-item span {
+    font-size: 13px;
+  }
+
+  .feedback-result {
+    padding: 15px;
+  }
+
+  .feedback-rating {
+    gap: 7px;
+  }
+
+  .feedback-rating span {
+    font-size: 20px;
+    letter-spacing: 1px;
+  }
+
+  .feedback-answer {
+    padding: 10px 11px;
+  }
+
+  .modal-actions {
+    padding: 13px 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-actions button {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .map-link {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  /* ---------- No request ---------- */
+  .no-request-card {
+    margin: 30px auto;
+    padding: 35px 20px;
+  }
+
+  .no-request-card h2 {
+    font-size: 20px;
+  }
+
+  .no-request-card button {
+    width: 100%;
+    min-height: 46px;
+  }
+}
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+@media (max-width: 380px) {
+  .services-header,
+  .status-header,
+  .care-form-header,
+  .admin-header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .services-logo h1,
+  .status-logo h1,
+  .care-form-logo h1,
+  .admin-brand h1 {
+    font-size: 13px;
+  }
+
+  .services-logo p,
+  .status-logo p,
+  .care-form-logo p {
+    display: none;
+  }
+
+  .services-main,
+  .status-main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .care-form-main,
+  .admin-main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .request-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .radio-group {
+    grid-template-columns: 1fr;
+  }
+
+  .answer-options span {
+    width: 39px;
+    height: 39px;
+  }
+
+  .star {
+    min-width: 40px;
+    font-size: 29px;
+  }
+
+  .admin-stats {
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 11px 9px;
+  }
+
+  .stat-content strong {
+    font-size: 18px;
+  }
+}
+
+/* =========================
+   ACCESSIBILITY / TOUCH
+========================= */
+@media (hover: none) and (pointer: coarse) {
+  button,
+  a,
+  label {
+    touch-action: manipulation;
+  }
+
+  button {
+    min-height: 44px;
+  }
+
+  .service-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
