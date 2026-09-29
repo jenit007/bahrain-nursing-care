@@ -1,0 +1,842 @@
+
+/* =========================================================
+   ELDER CARE PAGE
+   ========================================================= */
+
+.elder-care-page {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+.elder-container {
+  width: min(1180px, 92%);
+  margin: 0 auto;
+}
+
+
+/* =========================================================
+   TOP BAR
+   ========================================================= */
+
+.elder-topbar {
+  background: #03045e;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+.elder-topbar-inner {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.elder-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+
+/* =========================================================
+   NAVBAR
+   ========================================================= */
+
+.elder-navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e8eef2;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.elder-nav-inner {
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+.elder-logo {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  line-height: 1;
+  min-width: 190px;
+}
+
+.elder-logo-main {
+  color: #03045e;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.elder-logo-sub {
+  color: #0077b6;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-top: 6px;
+}
+
+.elder-nav-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+
+.elder-nav-links a {
+  color: #253047;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.25s ease;
+}
+
+.elder-nav-links a:hover,
+.elder-nav-links a.active {
+  color: #0077b6;
+}
+
+.elder-login-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100px;
+  padding: 12px 22px;
+  border-radius: 5px;
+  background: #f9242b;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+
+.elder-login-btn:hover {
+  background: #d71920;
+  transform: translateY(-1px);
+}
+
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
+.elder-hero {
+  background:
+    linear-gradient(
+      115deg,
+      #03045e 0%,
+      #0077b6 65%,
+      #00b4d8 100%
+    );
+
+  position: relative;
+  overflow: hidden;
+}
+
+.elder-hero::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  right: -150px;
+  top: -150px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50%;
+}
+
+.elder-hero-content {
+  min-height: 470px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+  padding: 70px 0;
+}
+
+.elder-eyebrow {
+  color: #90e0ef;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+
+.elder-hero h1 {
+  color: #ffffff;
+  font-size: clamp(44px, 6vw, 70px);
+  line-height: 1.05;
+  letter-spacing: -2px;
+  margin-bottom: 24px;
+}
+
+.elder-hero-description {
+  max-width: 700px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 34px;
+}
+
+.elder-hero-buttons {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.elder-primary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9242b;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 14px 25px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease;
+}
+
+.elder-primary-btn:hover {
+  background: #d71920;
+  transform: translateY(-2px);
+}
+
+.elder-secondary-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 13px 24px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  transition:
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.elder-secondary-btn:hover {
+  background: #ffffff;
+  color: #03045e;
+}
+
+
+/* =========================================================
+   SECTION LABEL
+   ========================================================= */
+
+.elder-section-label {
+  color: #0077b6;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+}
+
+
+/* =========================================================
+   OVERVIEW
+   ========================================================= */
+
+.elder-overview {
+  padding: 90px 0;
+  background: #ffffff;
+}
+
+.elder-two-column {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.elder-overview-text h2 {
+  color: #03045e;
+  font-size: clamp(32px, 4vw, 46px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin-bottom: 24px;
+}
+
+.elder-overview-text p:not(.elder-section-label) {
+  color: #5b6575;
+  font-size: 16px;
+  line-height: 1.85;
+  margin-bottom: 18px;
+}
+
+.elder-overview-card {
+  background: #caf0f8;
+  padding: 42px;
+  border-radius: 12px;
+  border-left: 5px solid #0077b6;
+}
+
+.elder-overview-icon {
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0077b6;
+  color: #ffffff;
+  border-radius: 50%;
+  font-size: 22px;
+  margin-bottom: 25px;
+}
+
+.elder-overview-card h3 {
+  color: #03045e;
+  font-size: 23px;
+  margin-bottom: 12px;
+}
+
+.elder-overview-card p {
+  color: #425466;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   CARE OPTIONS
+   ========================================================= */
+
+.elder-options {
+  padding: 90px 0;
+  background: #f5f8fa;
+}
+
+.elder-section-heading {
+  max-width: 720px;
+  margin-bottom: 45px;
+}
+
+.elder-section-heading h2 {
+  color: #03045e;
+  font-size: clamp(30px, 4vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin-bottom: 15px;
+}
+
+.elder-section-heading > p:last-child {
+  color: #667085;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.elder-options-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.elder-option-card {
+  background: #ffffff;
+  padding: 30px;
+  border: 1px solid #e1e9ee;
+  border-radius: 9px;
+  min-height: 220px;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.elder-option-card:hover {
+  transform: translateY(-5px);
+  border-color: #90e0ef;
+  box-shadow: 0 15px 35px rgba(3, 4, 94, 0.08);
+}
+
+.elder-option-number {
+  color: #00b4d8;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 18px;
+}
+
+.elder-option-card h3 {
+  color: #03045e;
+  font-size: 20px;
+  margin-bottom: 13px;
+}
+
+.elder-option-card p {
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+
+/* =========================================================
+   SUPPORT
+   ========================================================= */
+
+.elder-support {
+  padding: 90px 0;
+  background: #ffffff;
+}
+
+.elder-support-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.elder-support-item {
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  padding: 25px;
+  border: 1px solid #e5ebef;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.elder-check {
+  flex: 0 0 auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #caf0f8;
+  color: #0077b6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.elder-support-item h3 {
+  color: #03045e;
+  font-size: 17px;
+  margin-bottom: 7px;
+}
+
+.elder-support-item p {
+  color: #667085;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+
+/* =========================================================
+   SHIFTS
+   ========================================================= */
+
+.elder-shifts {
+  padding: 80px 0;
+  background: #03045e;
+  color: #ffffff;
+}
+
+.elder-shifts-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: center;
+}
+
+.elder-shifts .elder-section-label {
+  color: #90e0ef;
+}
+
+.elder-shifts-text h2 {
+  color: #ffffff;
+  font-size: clamp(30px, 4vw, 43px);
+  line-height: 1.15;
+  margin-bottom: 18px;
+}
+
+.elder-shifts-text > p:last-child {
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.75;
+  font-size: 15px;
+}
+
+.elder-shift-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+.elder-shift-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 25px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 7px;
+}
+
+.elder-shift-card strong {
+  color: #ffffff;
+  font-size: 17px;
+}
+
+.elder-shift-card span {
+  color: #90e0ef;
+  font-size: 13px;
+}
+
+
+/* =========================================================
+   CTA
+   ========================================================= */
+
+.elder-cta {
+  padding: 75px 0;
+  background: #caf0f8;
+}
+
+.elder-cta-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.elder-cta h2 {
+  color: #03045e;
+  font-size: clamp(29px, 4vw, 42px);
+  line-height: 1.15;
+  margin-bottom: 14px;
+}
+
+.elder-cta p:not(.elder-section-label) {
+  max-width: 650px;
+  color: #506070;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.elder-footer {
+  background: #02033f;
+  color: #ffffff;
+}
+
+.elder-footer-grid {
+  padding: 65px 0 50px;
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 45px;
+}
+
+.elder-footer-logo {
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 18px;
+}
+
+.elder-footer-logo span {
+  color: #90e0ef;
+  font-size: 8px;
+  letter-spacing: 2px;
+  margin-top: 7px;
+}
+
+.elder-footer-grid > div:first-child p {
+  max-width: 300px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.elder-footer-grid h4 {
+  color: #ffffff;
+  font-size: 15px;
+  margin-bottom: 18px;
+}
+
+.elder-footer-grid a:not(.elder-footer-logo) {
+  display: block;
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: none;
+  font-size: 13px;
+  margin-bottom: 11px;
+  transition: color 0.2s ease;
+}
+
+.elder-footer-grid a:not(.elder-footer-logo):hover {
+  color: #90e0ef;
+}
+
+.elder-footer-grid p {
+  color: rgba(255, 255, 255, 0.68);
+  font-size: 13px;
+  margin-bottom: 11px;
+}
+
+.elder-footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 18px 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+  .elder-nav-links {
+    gap: 16px;
+  }
+
+  .elder-nav-links a {
+    font-size: 13px;
+  }
+
+  .elder-two-column {
+    gap: 45px;
+  }
+
+  .elder-shifts-content {
+    gap: 40px;
+  }
+
+  .elder-footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+  .elder-topbar-inner {
+    min-height: 34px;
+    font-size: 11px;
+  }
+
+  .elder-topbar-right {
+    gap: 7px;
+  }
+
+  .elder-nav-inner {
+    min-height: 70px;
+  }
+
+  .elder-logo {
+    min-width: auto;
+  }
+
+  .elder-logo-main {
+    font-size: 22px;
+  }
+
+  .elder-logo-sub {
+    font-size: 7px;
+    letter-spacing: 1.4px;
+  }
+
+  .elder-nav-links {
+    display: none;
+  }
+
+  .elder-login-btn {
+    min-width: 82px;
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+
+  .elder-hero-content {
+    min-height: 430px;
+    padding: 60px 0;
+  }
+
+  .elder-hero h1 {
+    font-size: 46px;
+    letter-spacing: -1.5px;
+  }
+
+  .elder-hero-description {
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .elder-overview,
+  .elder-options,
+  .elder-support {
+    padding: 65px 0;
+  }
+
+  .elder-two-column {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .elder-overview-card {
+    padding: 30px;
+  }
+
+  .elder-options-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .elder-support-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .elder-shifts {
+    padding: 65px 0;
+  }
+
+  .elder-shifts-content {
+    grid-template-columns: 1fr;
+    gap: 35px;
+  }
+
+  .elder-cta {
+    padding: 60px 0;
+  }
+
+  .elder-cta-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .elder-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 50px 0 40px;
+  }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+  .elder-container {
+    width: min(92%, 400px);
+  }
+
+  .elder-topbar-inner {
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 0;
+  }
+
+  .elder-topbar-right {
+    font-size: 10px;
+  }
+
+  .elder-navbar {
+    position: relative;
+  }
+
+  .elder-nav-inner {
+    gap: 10px;
+  }
+
+  .elder-login-btn {
+    min-width: 70px;
+    padding: 9px 12px;
+  }
+
+  .elder-hero-content {
+    min-height: 410px;
+    padding: 50px 0;
+  }
+
+  .elder-eyebrow {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+  }
+
+  .elder-hero h1 {
+    font-size: 40px;
+  }
+
+  .elder-hero-description {
+    font-size: 14px;
+  }
+
+  .elder-hero-buttons {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .elder-primary-btn,
+  .elder-secondary-btn {
+    width: 100%;
+  }
+
+  .elder-overview-text h2,
+  .elder-section-heading h2,
+  .elder-shifts-text h2,
+  .elder-cta h2 {
+    font-size: 30px;
+  }
+
+  .elder-option-card {
+    padding: 25px;
+  }
+
+  .elder-support-item {
+    padding: 20px;
+  }
+
+  .elder-shift-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+  }
+
+  .elder-footer-bottom {
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+}
