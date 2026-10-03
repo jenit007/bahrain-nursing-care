@@ -1,7 +1,7 @@
 .newborn-care-page {
   min-height: 100vh;
   background: #ffffff;
-  color: #1f2937;
+  color: #FC3A93;
 }
 
 .newborn-container {
@@ -10,7 +10,7 @@
 }
 
 .newborn-topbar {
-  background: #03045e;
+  background: #FC3A93;
   color: #ffffff;
   font-size: 13px;
 }
@@ -31,7 +31,7 @@
 
 .newborn-navbar {
   background: #ffffff;
-  border-bottom: 1px solid #e8eef2;
+  border-bottom: 1px solid #E4EAE6;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -54,14 +54,14 @@
 }
 
 .newborn-logo-main {
-  color: #03045e;
+  color: #FC3A93;
   font-size: 27px;
   font-weight: 800;
   letter-spacing: -0.8px;
 }
 
 .newborn-logo-sub {
-  color: #0077b6;
+  color: #FC3A93;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -82,7 +82,7 @@
 }
 
 .newborn-nav-links a:hover {
-  color: #0077b6;
+  color: #FC3A93;
 }
 
 .newborn-login-btn,
@@ -90,7 +90,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #f9242b;
+  background: #FC3A93;
   color: #ffffff;
   text-decoration: none;
   padding: 13px 24px;
@@ -106,12 +106,12 @@
 
 .newborn-login-btn:hover,
 .newborn-primary-btn:hover {
-  background: #d71920;
+  background: #FC3A93;
   transform: translateY(-2px);
 }
 
 .newborn-hero {
-  background: linear-gradient(115deg, #03045e, #0077b6 65%, #00b4d8);
+  background: linear-gradient(115deg, #FC3A93, #FC3A93 65%, #FC3A93);
   position: relative;
   overflow: hidden;
 }
@@ -140,7 +140,7 @@
 
 .newborn-eyebrow,
 .newborn-section-label {
-  color: #0077b6;
+  color: #FC3A93;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 2px;
@@ -148,7 +148,7 @@
 }
 
 .newborn-eyebrow {
-  color: #90e0ef;
+  color: #92C553;
   font-size: 13px;
   margin-bottom: 18px;
 }
@@ -190,7 +190,7 @@
 
 .newborn-secondary-btn:hover {
   background: #ffffff;
-  color: #03045e;
+  color: #FC3A93;
 }
 
 .newborn-overview,
@@ -209,7 +209,7 @@
 .newborn-section-heading h2,
 .newborn-shifts-text h2,
 .newborn-cta h2 {
-  color: #03045e;
+  color: #FC3A93;
   font-size: clamp(30px, 4vw, 44px);
   line-height: 1.15;
   letter-spacing: -1px;
@@ -225,10 +225,10 @@
 }
 
 .newborn-overview-card {
-  background: #caf0f8;
+  background: #FEFEFE;
   padding: 42px;
   border-radius: 12px;
-  border-left: 5px solid #0077b6;
+  border-left: 5px solid #FC3A93;
 }
 
 .newborn-overview-icon {
@@ -237,7 +237,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0077b6;
+  background: #FC3A93;
   color: #ffffff;
   border-radius: 50%;
   margin-bottom: 25px;
@@ -245,19 +245,19 @@
 }
 
 .newborn-overview-card h3 {
-  color: #03045e;
+  color: #FC3A93;
   font-size: 23px;
   margin-bottom: 12px;
 }
 
 .newborn-overview-card p {
-  color: #425466;
+  color: #64748B;
   line-height: 1.7;
 }
 
 .newborn-options {
   padding: 90px 0;
-  background: #f5f8fa;
+  background: #FEFEFE;
 }
 
 .newborn-section-heading {
@@ -280,7 +280,7 @@
 .newborn-option-card,
 .newborn-support-item {
   background: #ffffff;
-  border: 1px solid #e1e9ee;
+  border: 1px solid #E2E8E4;
   border-radius: 9px;
   padding: 30px;
   transition: 0.25s ease;
@@ -288,12 +288,12 @@
 
 .newborn-option-card:hover {
   transform: translateY(-5px);
-  border-color: #90e0ef;
-  box-shadow: 0 15px 35px rgba(3, 4, 94, 0.08);
+  border-color: #92C553;
+  box-shadow: 0 15px 35px rgba(37, 48, 71, 0.08);
 }
 
 .newborn-option-number {
-  color: #00b4d8;
+  color: #FC3A93;
   font-size: 13px;
   font-weight: 800;
   margin-bottom: 18px;
@@ -301,7 +301,7 @@
 
 .newborn-option-card h3,
 .newborn-support-item h3 {
-  color: #03045e;
+  color: #FC3A93;
   margin-bottom: 10px;
 }
 
@@ -328,8 +328,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #caf0f8;
-  color: #0077b6;
+  background: #FEFEFE;
+  color: #FC3A93;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -338,7 +338,7 @@
 
 .newborn-shifts {
   padding: 80px 0;
-  background: #03045e;
+  background: #FC3A93;
 }
 
 .newborn-shifts-content {
@@ -349,7 +349,7 @@
 }
 
 .newborn-shifts .newborn-section-label {
-  color: #90e0ef;
+  color: #92C553;
 }
 
 .newborn-shifts-text h2 {
@@ -382,13 +382,13 @@
 }
 
 .newborn-shift-card span {
-  color: #90e0ef;
+  color: #92C553;
   font-size: 13px;
 }
 
 .newborn-cta {
   padding: 75px 0;
-  background: #caf0f8;
+  background: #FEFEFE;
 }
 
 .newborn-cta-inner {
@@ -403,7 +403,7 @@
 }
 
 .newborn-footer {
-  background: #02033f;
+  background: #253047;
   color: #ffffff;
 }
 
@@ -426,7 +426,7 @@
 }
 
 .newborn-footer-logo span {
-  color: #90e0ef;
+  color: #92C553;
   font-size: 8px;
   letter-spacing: 2px;
   margin-top: 7px;
@@ -447,7 +447,7 @@
 }
 
 .newborn-footer-grid a:hover {
-  color: #90e0ef;
+  color: #92C553;
 }
 
 .newborn-footer-bottom {

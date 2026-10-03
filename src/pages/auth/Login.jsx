@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoMark from "../../assets/noor-al-afiya-mark.png";
 import "./Login.css";
 
 function Login() {
@@ -28,7 +29,7 @@ function Login() {
         <div className="login-container login-topbar-inner">
 
           <span>
-            Bahrain Home Nursing Care
+            NOOR AL AFIYA
           </span>
 
           <div className="login-top-links">
@@ -46,16 +47,11 @@ function Login() {
 
         <div className="login-container login-nav-inner">
 
-          <Link
-            to="/"
-            className="login-logo"
-          >
-            <span className="login-logo-main">
-              Bahrain
-            </span>
-
-            <span className="login-logo-sub">
-              HOME NURSING CARE
+          <Link to="/" className="home-brand">
+            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <span>
+              <strong>NOOR AL AFIYA</strong>
+              <small>Home Health Care WLL</small>
             </span>
           </Link>
 
@@ -114,7 +110,7 @@ function Login() {
             </h1>
 
             <p className="login-description">
-              Access your Bahrain Home Nursing Care account
+              Access your NOOR AL AFIYA account
               to explore services, submit care requests and
               track your request status.
             </p>
@@ -321,105 +317,59 @@ function Login() {
       <footer className="login-footer">
 
         <div className="login-container login-footer-grid">
-
           <div>
-
             <Link
+              className="home-brand"
               to="/"
-              className="login-footer-logo"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              Bahrain
-
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
               <span>
-                HOME NURSING CARE
+                <strong>NOOR AL AFIYA</strong>
+                <small>Home Health Care WLL</small>
               </span>
             </Link>
 
             <p>
-              Professional home nursing care support
-              designed around individuals and families
-              in Bahrain.
+              Compassionate home-care services for families in Bahrain.
             </p>
-
           </div>
 
           <div>
-
-            <h4>
-              Quick Links
-            </h4>
-
-            <Link to="/">
-              Home
-            </Link>
-
-            <Link to="/about">
-              About Us
-            </Link>
-
-            <Link to="/services">
-              Our Services
-            </Link>
-
-            <Link to="/why-us">
-              Why Choose Us
-            </Link>
-
+            <h4>Quick Links</h4>
+            <Link to="/">Home</Link>
+            <Link to="/about">About Us</Link>
+            <Link to="/services">Our Services</Link>
+            <Link to="/why-us">Why Choose Us</Link>
+            <Link to="/contact">Contact Us</Link>
+            <Link to="/careers">Job Opportunities</Link>
           </div>
 
           <div>
-
-            <h4>
-              Services
-            </h4>
-
-            <Link to="/services/patient">
-              Patient Care
-            </Link>
-
-            <Link to="/services/elder">
-              Elder Care
-            </Link>
-
-            <Link to="/services/newborn">
-              Newborn Care
-            </Link>
-
-            <Link to="/services/children">
-              Children's Care
-            </Link>
-
+            <h4>Services</h4>
+            <Link to="/care/patient">Patient Care</Link>
+            <Link to="/care/elder">Elder Care</Link>
+            <Link to="/care/newborn">Newborn Care</Link>
+            <Link to="/care/children">Children's Care</Link>
           </div>
 
           <div>
-
-            <h4>
-              Contact
-            </h4>
-
-            <p>
-              Bahrain
-            </p>
-
-            <p>
-              24/7 Home Care Support
-            </p>
-
-            <Link to="/contact">
-              Contact Us →
-            </Link>
-
+            <h4>Contact</h4>
+            <a href="tel:+97300000000">+973 0000 0000</a>
+            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <span>Bahrain</span>
           </div>
-
         </div>
 
         <div className="login-footer-bottom">
-
-          <div className="login-container">
-            © 2026 Bahrain Home Nursing Care.
-            All rights reserved.
+          <div className="login-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
+            <span>Home Nursing • Bahrain</span>
           </div>
-
         </div>
 
       </footer>

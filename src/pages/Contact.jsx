@@ -1,78 +1,54 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import logoMark from "../assets/noor-al-afiya-mark.png";
+import "./Home.css";
 import "./Contact.css";
 
 function Contact() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <div className="contact-page">
 
-      {/* ================= TOP BAR ================= */}
-
-      <div className="contact-topbar">
-        <div className="contact-container contact-topbar-inner">
-          <div>
-            Bahrain Home Nursing Care
-          </div>
-
-          <div className="contact-top-links">
-            <span>24/7 Home Care Support</span>
+      <div className="top-strip">
+        <div className="home-container top-strip-inner">
+          <span>Professional home nursing care in Bahrain</span>
+          <div className="top-contact">
+            <a href="tel:+97300000000">+973 0000 0000</a>
             <span>•</span>
-            <span>Bahrain</span>
+            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
           </div>
         </div>
       </div>
 
-      {/* ================= NAVBAR ================= */}
-
-      <header className="contact-navbar">
-        <div className="contact-container contact-nav-inner">
-
-          <Link
-            to="/"
-            className="contact-logo"
-          >
-            <span className="contact-logo-main">
-              Bahrain
-            </span>
-
-            <span className="contact-logo-sub">
-              HOME NURSING CARE
+      <header className="home-nav-wrap">
+        <div className="home-container home-nav">
+          <Link className="home-brand" to="/" onClick={() => setMenuOpen(false)}>
+            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <span>
+              <strong>NOOR AL AFIYA</strong>
+              <small>Home Health Care WLL</small>
             </span>
           </Link>
 
-          <nav className="contact-nav-links">
+          <button
+            className={`nav-toggle ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen((value) => !value)}
+            aria-label="Toggle navigation"
+            type="button"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
 
-            <Link to="/">
-              Home
-            </Link>
-
-            <Link to="/about">
-              About Us
-            </Link>
-
-            <Link to="/services">
-              Our Services
-            </Link>
-
-            <Link to="/why-us">
-              Why Choose Us
-            </Link>
-
-            <Link
-              to="/contact"
-              className="active"
-            >
-              Contact Us
-            </Link>
-
+          <nav className={`home-nav-links ${menuOpen ? "show" : ""}`}>
+            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+            <Link to="/services" onClick={() => setMenuOpen(false)}>Our Services</Link>
+            <Link to="/why-us" onClick={() => setMenuOpen(false)}>Why Choose Us</Link>
+            <Link to="/contact" onClick={() => setMenuOpen(false)} className="active">Contact Us</Link>
+            <Link to="/careers" onClick={() => setMenuOpen(false)}>Job Opportunities</Link>
           </nav>
-
-          <Link
-            to="/login"
-            className="contact-login-btn"
-          >
-            Login
-          </Link>
-
         </div>
       </header>
 
@@ -397,52 +373,6 @@ function Contact() {
 
       </section>
 
-      {/* ================= SERVICE CTA ================= */}
-
-      <section className="contact-service-cta">
-
-        <div className="contact-container contact-service-inner">
-
-          <div>
-
-            <p className="contact-section-label">
-              HOME NURSING CARE
-            </p>
-
-            <h2>
-              Looking for care
-              <span> for your family?</span>
-            </h2>
-
-            <p>
-              Explore our home nursing care options and
-              submit your requirements online.
-            </p>
-
-          </div>
-
-          <div className="contact-service-buttons">
-
-            <Link
-              to="/services"
-              className="contact-primary-btn"
-            >
-              View Our Services
-            </Link>
-
-            <Link
-              to="/login"
-              className="contact-outline-btn"
-            >
-              Submit a Request
-            </Link>
-
-          </div>
-
-        </div>
-
-      </section>
-
       {/* ================= FOOTER ================= */}
 
       <footer className="contact-footer">
@@ -450,103 +380,59 @@ function Contact() {
         <div className="contact-container contact-footer-grid">
 
           <div>
-
             <Link
+              className="home-brand"
               to="/"
-              className="contact-footer-logo"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              Bahrain
-
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
               <span>
-                HOME NURSING CARE
+                <strong>NOOR AL AFIYA</strong>
+                <small>Home Health Care WLL</small>
               </span>
             </Link>
 
             <p>
-              Professional home nursing care support
-              designed around individuals and families
-              in Bahrain.
+              Compassionate home-care services for families in Bahrain.
             </p>
-
           </div>
 
           <div>
-
-            <h4>
-              Quick Links
-            </h4>
-
-            <Link to="/">
-              Home
-            </Link>
-
-            <Link to="/about">
-              About Us
-            </Link>
-
-            <Link to="/services">
-              Our Services
-            </Link>
-
-            <Link to="/why-us">
-              Why Choose Us
-            </Link>
-
+            <h4>Quick Links</h4>
+            <Link to="/">Home</Link>
+            <Link to="/about">About Us</Link>
+            <Link to="/services">Our Services</Link>
+            <Link to="/why-us">Why Choose Us</Link>
+            <Link to="/contact">Contact Us</Link>
+            <Link to="/careers">Job Opportunities</Link>
           </div>
 
           <div>
-
-            <h4>
-              Services
-            </h4>
-
-            <Link to="/services/patient">
-              Patient Care
-            </Link>
-
-            <Link to="/services/elder">
-              Elder Care
-            </Link>
-
-            <Link to="/services/newborn">
-              Newborn Care
-            </Link>
-
-            <Link to="/services/children">
-              Children's Care
-            </Link>
-
+            <h4>Services</h4>
+            <Link to="/care/patient">Patient Care</Link>
+            <Link to="/care/elder">Elder Care</Link>
+            <Link to="/care/newborn">Newborn Care</Link>
+            <Link to="/care/children">Children's Care</Link>
           </div>
 
           <div>
-
-            <h4>
-              Contact
-            </h4>
-
-            <p>
-              Bahrain
-            </p>
-
-            <p>
-              24/7 Home Care Support
-            </p>
-
-            <a href="mailto:info@example.com">
-              info@example.com
-            </a>
-
+            <h4>Contact</h4>
+            <a href="tel:+97300000000">+973 0000 0000</a>
+            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <span>Bahrain</span>
           </div>
 
         </div>
 
         <div className="contact-footer-bottom">
-
-          <div className="contact-container">
-            © 2026 Bahrain Home Nursing Care.
-            All rights reserved.
+          <div className="contact-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
+            <span>Home Nursing • Bahrain</span>
           </div>
-
         </div>
 
       </footer>

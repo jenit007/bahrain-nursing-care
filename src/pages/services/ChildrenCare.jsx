@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoMark from "../../assets/noor-al-afiya-mark.png";
 import "./ChildrenCare.css";
 
 function ChildrenCare() {
@@ -6,7 +7,7 @@ function ChildrenCare() {
     <div className="children-care-page">
       <div className="children-topbar">
         <div className="children-container children-topbar-inner">
-          <span>Bahrain Home Nursing Care</span>
+          <span>NOOR AL AFIYA</span>
           <div className="children-topbar-right">
             <span>24/7 Home Care Support</span>
             <span>•</span>
@@ -17,9 +18,12 @@ function ChildrenCare() {
 
       <header className="children-navbar">
         <div className="children-container children-nav-inner">
-          <Link to="/" className="children-logo">
-            <span className="children-logo-main">Bahrain</span>
-            <span className="children-logo-sub">HOME NURSING CARE</span>
+          <Link to="/" className="home-brand">
+            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <span>
+              <strong>NOOR AL AFIYA</strong>
+              <small>Home Health Care WLL</small>
+            </span>
           </Link>
 
           <nav className="children-nav-links">
@@ -29,10 +33,6 @@ function ChildrenCare() {
             <Link to="/why-us">Why Choose Us</Link>
             <Link to="/contact">Contact Us</Link>
           </nav>
-
-          <Link to="/login" className="children-login-btn">
-            Login
-          </Link>
         </div>
       </header>
 
@@ -255,13 +255,24 @@ function ChildrenCare() {
       <footer className="children-footer">
         <div className="children-container children-footer-grid">
           <div>
-            <Link to="/" className="children-footer-logo">
-              Bahrain
-              <span>HOME NURSING CARE</span>
+            <Link
+              className="home-brand"
+              to="/"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            >
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
+              <span>
+                <strong>NOOR AL AFIYA</strong>
+                <small>Home Health Care WLL</small>
+              </span>
             </Link>
+
             <p>
-              Professional home nursing care support designed around
-              individuals and families in Bahrain.
+              Compassionate home-care services for families in Bahrain.
             </p>
           </div>
 
@@ -271,27 +282,30 @@ function ChildrenCare() {
             <Link to="/about">About Us</Link>
             <Link to="/services">Our Services</Link>
             <Link to="/why-us">Why Choose Us</Link>
+            <Link to="/contact">Contact Us</Link>
+            <Link to="/careers">Job Opportunities</Link>
           </div>
 
           <div>
             <h4>Services</h4>
-            <Link to="/services/patient">Patient Care</Link>
-            <Link to="/services/elder">Elder Care</Link>
-            <Link to="/services/newborn">Newborn Care</Link>
-            <Link to="/services/children">Children's Care</Link>
+            <Link to="/care/patient">Patient Care</Link>
+            <Link to="/care/elder">Elder Care</Link>
+            <Link to="/care/newborn">Newborn Care</Link>
+            <Link to="/care/children">Children's Care</Link>
           </div>
 
           <div>
             <h4>Contact</h4>
-            <p>Bahrain</p>
-            <p>24/7 Home Care Support</p>
-            <Link to="/contact">Contact Us →</Link>
+            <a href="tel:+97300000000">+973 0000 0000</a>
+            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <span>Bahrain</span>
           </div>
         </div>
 
         <div className="children-footer-bottom">
-          <div className="children-container">
-            © 2026 Bahrain Home Nursing Care. All rights reserved.
+          <div className="children-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
+            <span>Home Nursing • Bahrain</span>
           </div>
         </div>
       </footer>

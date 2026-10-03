@@ -1,0 +1,407 @@
+/* =========================================================
+   BAHRAIN HOME HEALTH CARE SERVICE — PROFESSIONAL THEME
+   Brand: Pink + Green + White
+   ========================================================= */
+
+:root {
+  --theme-pink: #FF3A94;
+  --theme-pink-dark: #E82F83;
+  --theme-pink-soft: #FFF0F7;
+
+  --theme-green: #96C855;
+  --theme-green-dark: #719E3D;
+  --theme-green-soft: #F3F9EA;
+
+  --theme-hero-bg: #FFF8FC;
+  --theme-white: #FFFFFF;
+  --theme-surface: #FFFFFF;
+  --theme-page: #FFFFFF;
+
+  --theme-text: #55708F;
+  --theme-text-strong: #151B2E;
+  --theme-muted: #55708F;
+  --theme-border: #E1E8E3;
+  --theme-footer-bg: #16121A;
+  --theme-footer-secondary: #9AA5B6;
+
+  --theme-shadow: 0 16px 45px rgba(37, 48, 71, 0.08);
+  --theme-shadow-soft: 0 8px 24px rgba(37, 48, 71, 0.06);
+
+  --theme-radius-sm: 8px;
+  --theme-radius-md: 12px;
+  --theme-radius-lg: 18px;
+}
+
+/* Professional defaults */
+body {
+  background: var(--theme-page);
+  color: var(--theme-text);
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================================================
+   PRIMARY ACTIONS — PINK (CAREERS THEME SOURCE OF TRUTH)
+   ========================================================= */
+
+.nav-login,
+.primary-cta,
+.primary-button,
+.primary-btn,
+.hero-btn,
+.hero-button,
+.service-card-button,
+.service-select-button,
+.about-primary-button,
+.about-login-button,
+.contact-primary-button,
+.contact-submit-btn,
+.contact-login-btn,
+.services-primary-button,
+.services-login-button,
+.why-primary-btn,
+.why-login-btn,
+.patient-primary-btn,
+.patient-login-btn,
+.elder-primary-btn,
+.elder-login-btn,
+.newborn-primary-btn,
+.newborn-login-btn,
+.children-primary-btn,
+.children-login-btn,
+.login-nav-btn,
+.login-submit,
+.care-form-login-btn,
+.care-primary-btn,
+.location-btn,
+.status-login-btn,
+.status-primary-btn,
+.feedback-submit,
+.submit-feedback,
+.submit-request-button,
+.admin-primary-btn,
+.admin-action-btn,
+.give-feedback-btn {
+  background: var(--theme-pink) !important;
+  border-color: var(--theme-pink) !important;
+  color: var(--theme-white) !important;
+  box-shadow: 0 8px 20px rgba(255, 58, 148, 0.20) !important;
+}
+
+.nav-login:hover,
+.primary-cta:hover,
+.primary-button:hover,
+.primary-btn:hover,
+.hero-btn:hover,
+.hero-button:hover,
+.service-card-button:hover,
+.service-select-button:hover,
+.about-primary-button:hover,
+.about-login-button:hover,
+.contact-primary-button:hover,
+.contact-submit-btn:hover,
+.contact-login-btn:hover,
+.services-primary-button:hover,
+.services-login-button:hover,
+.why-primary-btn:hover,
+.why-login-btn:hover,
+.patient-primary-btn:hover,
+.patient-login-btn:hover,
+.elder-primary-btn:hover,
+.elder-login-btn:hover,
+.newborn-primary-btn:hover,
+.newborn-login-btn:hover,
+.children-primary-btn:hover,
+.children-login-btn:hover,
+.login-nav-btn:hover,
+.login-submit:hover,
+.care-form-login-btn:hover,
+.care-primary-btn:hover,
+.location-btn:hover,
+.status-login-btn:hover,
+.status-primary-btn:hover,
+.feedback-submit:hover,
+.submit-feedback:hover,
+.submit-request-button:hover,
+.admin-primary-btn:hover,
+.admin-action-btn:hover,
+.give-feedback-btn:hover {
+  background: var(--theme-pink-dark) !important;
+  border-color: var(--theme-pink-dark) !important;
+  color: var(--theme-white) !important;
+}
+
+/* =========================================================
+   SECONDARY / OUTLINE ACTIONS — PINK OUTLINE / SOFT PINK HOVER
+   ========================================================= */
+
+.outline-cta,
+.secondary-cta,
+.contact-outline-btn,
+.why-outline-btn,
+.why-secondary-btn,
+.patient-secondary-btn,
+.elder-secondary-btn,
+.newborn-secondary-btn,
+.children-secondary-btn,
+.status-secondary-btn,
+.back-services-btn,
+.care-back-link {
+  background: var(--theme-white) !important;
+  border: 1px solid var(--theme-pink) !important;
+  color: var(--theme-pink) !important;
+}
+
+.outline-cta:hover,
+.secondary-cta:hover,
+.contact-outline-btn:hover,
+.why-outline-btn:hover,
+.why-secondary-btn:hover,
+.patient-secondary-btn:hover,
+.elder-secondary-btn:hover,
+.newborn-secondary-btn:hover,
+.children-secondary-btn:hover,
+.status-secondary-btn:hover,
+.back-services-btn:hover,
+.care-back-link:hover {
+  background: var(--theme-pink-soft) !important;
+  border-color: var(--theme-pink) !important;
+  color: var(--theme-pink-dark) !important;
+}
+
+/* =========================================================
+   FORM FOCUS — GREEN
+   ========================================================= */
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--theme-green) !important;
+  box-shadow: 0 0 0 3px rgba(146, 197, 83, 0.16) !important;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+  accent-color: var(--theme-green);
+}
+
+/* =========================================================
+   BRAND ACCENTS — PINK
+   ========================================================= */
+
+.login-logo-main,
+.login-logo-sub,
+.login-footer-logo,
+.care-form-logo-main,
+.care-form-logo-sub,
+.status-logo span,
+.status-logo small,
+.status-footer-logo,
+.home-brand,
+.about-logo-main,
+.about-logo-sub,
+.services-logo-main,
+.services-logo-sub,
+.why-logo-main,
+.why-logo-sub,
+.contact-logo-main,
+.contact-logo-sub {
+  color: var(--theme-pink);
+}
+
+/* =========================================================
+   GREEN STATUS / POSITIVE ELEMENTS
+   ========================================================= */
+
+.status-step.completed .status-step-marker,
+.status-step.current .status-step-marker,
+.status-progress-bar span {
+  background: var(--theme-green) !important;
+  border-color: var(--theme-green) !important;
+}
+
+.status-badge {
+  background: var(--theme-green-soft) !important;
+  border-color: rgba(146, 197, 83, 0.35) !important;
+  color: var(--theme-green-dark) !important;
+}
+
+/* =========================================================
+   COMMON GREEN HIGHLIGHT
+   ========================================================= */
+
+.care-choice-card:hover {
+  border-color: var(--theme-green) !important;
+  background: var(--theme-green-soft) !important;
+}
+
+.care-choice-card.selected {
+  border-color: var(--theme-green) !important;
+  background: var(--theme-green-soft) !important;
+  color: var(--theme-green-dark) !important;
+  box-shadow: inset 0 0 0 1px var(--theme-green) !important;
+}
+
+.care-choice-card.selected .care-choice-radio {
+  border-color: var(--theme-green) !important;
+}
+
+.care-choice-card.selected .care-choice-radio:after {
+  background: var(--theme-green) !important;
+}
+
+/* =========================================================
+   MOBILE ACTIONS
+   ========================================================= */
+
+@media (max-width: 700px) {
+  .nav-login,
+  .primary-cta,
+  .primary-button,
+  .primary-btn,
+  .hero-btn,
+  .hero-button,
+  .service-card-button,
+  .service-select-button,
+  .login-submit,
+  .care-primary-btn,
+  .status-primary-btn,
+  .feedback-submit,
+  .submit-feedback,
+  .submit-request-button {
+    width: 100%;
+  }
+}
+
+
+/* =========================================================
+   NOOR AL AFIYA BRANDING
+   Supplied logo + professional pink/green visual system
+   ========================================================= */
+
+.brand-mark,
+.about-brand-mark,
+.services-brand-mark,
+.why-brand-mark,
+.contact-brand-mark,
+.admin-logo {
+  background-image: url("./assets/noor-al-afiya-mark.png") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: contain !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  flex: 0 0 auto;
+}
+
+.brand-mark,
+.about-brand-mark,
+.services-brand-mark,
+.why-brand-mark,
+.contact-brand-mark {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #FEFEFE !important;
+  box-shadow: 0 8px 22px rgba(252, 58, 147, 0.14);
+}
+
+.admin-logo {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background-color: #FEFEFE !important;
+  box-shadow: 0 8px 22px rgba(252, 58, 147, 0.14);
+}
+
+.home-brand strong,
+.about-brand-text strong,
+.services-brand-text strong,
+.why-brand-text strong,
+.contact-brand-text strong,
+.admin-brand h1 {
+  color: #FF3A94 !important;
+  letter-spacing: -0.02em;
+}
+
+.home-brand small,
+.about-brand-text small,
+.services-brand-text small,
+.why-brand-text small,
+.contact-brand-text small,
+.admin-brand p {
+  color: #55708F !important;
+}
+
+/* Footer / standalone logo areas */
+.login-footer-logo,
+.care-footer-logo,
+.status-footer-logo,
+.feedback-logo,
+.feedback-footer-logo,
+.patient-footer-logo,
+.elder-footer-logo,
+.newborn-footer-logo,
+.children-footer-logo,
+.why-footer-logo,
+.contact-footer-logo {
+  color: #FF3A94 !important;
+}
+
+/* The supplied full logo can be used wherever a large brand lockup is needed. */
+.noor-al-afiya-full-logo {
+  display: block;
+  width: min(320px, 80vw);
+  height: auto;
+  object-fit: contain;
+}
+
+/* Unified Footer Text Logo Styles */
+.home-footer-logo,
+.about-footer-logo,
+.services-footer-logo,
+.why-footer-logo,
+.contact-footer-logo,
+.career-footer-logo,
+.patient-footer-logo,
+.elder-footer-logo,
+.newborn-footer-logo,
+.children-footer-logo,
+.care-footer-logo,
+.status-footer-logo,
+.feedback-footer-logo,
+.login-footer-logo {
+  font-size: 28px !important;
+  font-weight: 900 !important;
+  color: #FF3A94 !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  margin-bottom: 15px !important;
+  line-height: 1.1 !important;
+}
+
+.home-footer-logo span,
+.about-footer-logo span,
+.services-footer-logo span,
+.why-footer-logo span,
+.contact-footer-logo span,
+.career-footer-logo span,
+.patient-footer-logo span,
+.elder-footer-logo span,
+.newborn-footer-logo span,
+.children-footer-logo span,
+.care-footer-logo span,
+.status-footer-logo span,
+.feedback-footer-logo span,
+.login-footer-logo span {
+  display: block !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  letter-spacing: 2px !important;
+  color: #8995a7 !important;
+  margin-top: 4px !important;
+  text-transform: uppercase !important;
+}

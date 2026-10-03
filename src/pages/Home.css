@@ -4,18 +4,18 @@
    ========================================================= */
 
 .home-page {
-  --navy: #03045e;
-  --blue: #0077b6;
-  --cyan: #00b4d8;
-  --sky: #90e0ef;
-  --pale: #caf0f8;
+  --navy: #151B2E;
+  --blue: #96C855;
+  --cyan: #FF3A94;
+  --sky: #96C855;
+  --pale: #FFF0F7;
 
   /* ALL BUTTONS */
-  --button: #f9242b;
-  --button-hover: #d71920;
+  --button: #FF3A94;
+  --button-hover: #E82F83;
 
   background: #ffffff;
-  color: #123;
+  color: #55708F;
   overflow: hidden;
 }
 
@@ -35,7 +35,7 @@
    ========================================================= */
 
 .top-strip {
-  background: var(--navy);
+  background: #FC3A93;
   color: #ffffff;
   font-size: 12px;
 }
@@ -78,7 +78,7 @@
 
   border-bottom: 1px solid #e4f2f6;
 
-  box-shadow: 0 4px 18px rgba(3, 4, 94, 0.05);
+  box-shadow: 0 4px 18px rgba(37, 48, 71, 0.05);
 }
 
 .home-nav {
@@ -100,7 +100,7 @@
 
   gap: 12px;
 
-  color: var(--navy);
+  color: #FC3A93;
 
   text-decoration: none;
 
@@ -142,7 +142,7 @@
   font-size: 23px;
 
   box-shadow:
-    0 8px 22px rgba(0, 119, 182, 0.22);
+    0 8px 22px rgba(146,197,83,0.22);
 }
 
 
@@ -156,7 +156,7 @@
 }
 
 .home-nav-links a {
-  color: #243746;
+  color: #253047;
 
   text-decoration: none;
 
@@ -168,6 +168,10 @@
 
 .home-nav-links a:hover {
   color: var(--blue);
+}
+
+.home-nav-links a.active {
+  color: #FC3A93;
 }
 
 
@@ -203,7 +207,7 @@
   font-weight: 800;
 
   box-shadow:
-    0 7px 18px rgba(249, 36, 43, 0.22);
+    0 7px 18px rgba(146,197,83,0.22);
 
   transition:
     background 0.2s ease,
@@ -217,7 +221,7 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 10px 22px rgba(249, 36, 43, 0.28);
+    0 10px 22px rgba(146,197,83,0.28);
 }
 
 
@@ -245,7 +249,7 @@
 
   height: 2px;
 
-  background: var(--navy);
+  background: #FC3A93;
 
   margin: 6px 0;
 
@@ -272,9 +276,9 @@
   background:
     linear-gradient(
       100deg,
-      rgba(247, 253, 255, 0.98) 0%,
-      rgba(202, 240, 248, 0.90) 45%,
-      rgba(144, 224, 239, 0.12) 78%
+      rgba(252,253,252,0.98) 0%,
+      rgba(255, 240, 247, 0.90) 45%,
+      rgba(146,197,83,0.12) 78%
     ),
     url("../assets/home-hero.png");
 
@@ -292,12 +296,12 @@
 
   background-image:
     linear-gradient(
-      rgba(3, 4, 94, 0.035) 1px,
+      rgba(37, 48, 71, 0.035) 1px,
       transparent 1px
     ),
     linear-gradient(
       90deg,
-      rgba(3, 4, 94, 0.035) 1px,
+      rgba(37, 48, 71, 0.035) 1px,
       transparent 1px
     );
 
@@ -407,7 +411,7 @@
   border-radius: 9px;
 
   box-shadow:
-    0 10px 24px rgba(249, 36, 43, 0.24);
+    0 10px 24px rgba(146,197,83,0.24);
 
   transition:
     background 0.2s ease,
@@ -421,7 +425,7 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 14px 28px rgba(249, 36, 43, 0.28);
+    0 14px 28px rgba(146,197,83,0.28);
 }
 
 .primary-cta span,
@@ -437,7 +441,7 @@
 .secondary-cta {
   padding: 14px 21px;
 
-  border: 1px solid #5abbd6;
+  border: 1px solid #FF3A94;
 
   border-radius: 9px;
 
@@ -558,14 +562,14 @@
 .service-card {
   padding: 30px 25px;
 
-  border: 1px solid #dceff5;
+  border: 1px solid #E7EEE2;
 
   border-radius: 17px;
 
   background: #ffffff;
 
   box-shadow:
-    0 14px 40px rgba(3, 4, 94, 0.06);
+    0 14px 40px rgba(37, 48, 71, 0.06);
 
   transition:
     transform 0.25s ease,
@@ -579,9 +583,9 @@
   transform: translateY(-6px);
 
   box-shadow:
-    0 20px 48px rgba(3, 4, 94, 0.11);
+    0 20px 48px rgba(37, 48, 71, 0.11);
 
-  border-color: #b9e8f2;
+  border-color: #FF3A94;
 }
 
 .service-card-icon {
@@ -635,6 +639,8 @@
 
   padding: 10px 16px;
 
+  min-width: 150px;
+
   border-radius: 8px;
 
   background: var(--button);
@@ -657,7 +663,7 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 8px 18px rgba(249, 36, 43, 0.20);
+    0 8px 18px rgba(146,197,83,0.20);
 }
 
 
@@ -666,7 +672,7 @@
    ========================================================= */
 
 .why-section {
-  background: #f5fcfe;
+  background: #FAFCF8;
 }
 
 .why-grid {
@@ -714,7 +720,7 @@
   font-weight: 900;
 
   box-shadow:
-    0 6px 18px rgba(3, 4, 94, 0.07);
+    0 6px 18px rgba(37, 48, 71, 0.07);
 }
 
 .benefit h3 {
@@ -759,7 +765,19 @@
   overflow: hidden;
 
   box-shadow:
-    0 25px 60px rgba(3, 4, 94, 0.18);
+    0 25px 60px rgba(37, 48, 71, 0.18);
+}
+
+.why-visual-bg-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 1;
+  display: block;
+  border-radius: 30px;
 }
 
 .why-visual::before {
@@ -916,7 +934,7 @@
   overflow: hidden;
 
   box-shadow:
-    0 24px 55px rgba(3, 4, 94, 0.14);
+    0 24px 55px rgba(37, 48, 71, 0.14);
 
   background: var(--pale);
 }
@@ -972,7 +990,7 @@
   transform: translateY(-2px);
 
   box-shadow:
-    0 8px 20px rgba(249, 36, 43, 0.22);
+    0 8px 20px rgba(146,197,83,0.22);
 }
 
 
@@ -1031,9 +1049,9 @@
    ========================================================= */
 
 .home-footer {
-  background: #02043f;
+  background: #16121A;
 
-  color: #c7e0e8;
+  color: #8995A7;
 
   padding-top: 60px;
 }
@@ -1056,14 +1074,16 @@
   font-size: 13px;
 
   margin-top: 18px;
+
+  color: #8995A7;
 }
 
 .home-footer .home-brand {
-  color: #ffffff;
+  color: #FF3A94;
 }
 
 .home-footer .home-brand small {
-  color: #a8cad4;
+  color: #8995A7;
 }
 
 .home-footer h3 {
@@ -1079,7 +1099,7 @@
 .home-footer span {
   display: block;
 
-  color: #a9cbd4;
+  color: #9AA5B6;
 
   text-decoration: none;
 
@@ -1162,14 +1182,14 @@
 
     background: #ffffff;
 
-    border: 1px solid #dceff5;
+    border: 1px solid #E7EEE2;
 
     border-radius: 14px;
 
     padding: 15px;
 
     box-shadow:
-      0 20px 40px rgba(3, 4, 94, 0.14);
+      0 20px 40px rgba(37, 48, 71, 0.14);
 
     flex-direction: column;
 
@@ -1319,7 +1339,7 @@
         180deg,
         rgba(247, 253, 255, 0.97) 0%,
         rgba(202, 240, 248, 0.94) 47%,
-        rgba(144, 224, 239, 0.18) 100%
+        rgba(146,197,83,0.18) 100%
       ),
       url("../assets/home-hero.png");
   }
@@ -1596,4 +1616,358 @@
     transform: none;
     transition: none;
   }
+}
+
+/* =========================================================
+   NHRA APPROVAL HIGHLIGHT
+   ========================================================= */
+
+.hero-approval {
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translateX(370px);
+}
+
+.hero-approval-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: fit-content;
+  max-width: 100%;
+  min-height: 72px;
+  padding: 9px 14px 9px 12px;
+  border: 1px solid rgba(146, 197, 83, 0.28);
+  border-radius: 14px;
+  background: rgba(254, 254, 254, 0.94);
+  box-shadow: 0 12px 30px rgba(37, 48, 71, 0.10);
+  backdrop-filter: blur(10px);
+}
+
+.hero-approval-dot {
+  width: 10px;
+  height: 10px;
+  flex: 0 0 10px;
+  border-radius: 50%;
+  background: #92C553;
+  box-shadow: 0 0 0 5px rgba(146, 197, 83, 0.12);
+}
+
+.hero-approval-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 118px;
+}
+
+.hero-approval-copy strong {
+  color: #253047;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  line-height: 1.2;
+}
+
+.hero-approval-copy span {
+  color: #687984;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.hero-approval-badge img {
+  display: block;
+  width: 205px;
+  max-width: 45vw;
+  height: auto;
+  object-fit: contain;
+  border-radius: 6px;
+  background: #FEFEFE;
+}
+
+@media (max-width: 600px) {
+  .hero-approval {
+    width: 100%;
+  }
+
+  .hero-approval-badge {
+    width: 100%;
+    padding: 10px 11px;
+    gap: 9px;
+  }
+
+  .hero-approval-copy {
+    min-width: 100px;
+  }
+
+  .hero-approval-copy strong {
+    font-size: 10px;
+  }
+
+  .hero-approval-copy span {
+    font-size: 9px;
+  }
+
+  .hero-approval-badge img {
+    width: min(185px, 48vw);
+    max-width: 48vw;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-approval-badge {
+    gap: 7px;
+    padding: 9px;
+  }
+
+  .hero-approval-dot {
+    width: 8px;
+    height: 8px;
+    flex-basis: 8px;
+  }
+
+  .hero-approval-copy {
+    min-width: 82px;
+  }
+
+  .hero-approval-copy strong {
+    font-size: 9px;
+  }
+
+  .hero-approval-copy span {
+    font-size: 8px;
+  }
+
+  .hero-approval-badge img {
+    width: 145px;
+    max-width: 43vw;
+  }
+}
+
+
+/* =========================================================
+   NHRA APPROVED BADGE — CENTERED & MORE VISIBLE
+   Keeps the existing vertical position while centering it
+   horizontally within the hero content.
+   ========================================================= */
+
+.hero-approval {
+  margin-top: 24px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-approval-badge {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+
+  width: min(430px, 100%);
+  min-height: 78px;
+  padding: 10px 16px;
+
+  border: 2px solid #92C553;
+  border-radius: 16px;
+
+  background: rgba(254, 254, 254, 0.98);
+
+  box-shadow:
+    0 14px 34px rgba(37, 48, 71, 0.14),
+    0 0 0 5px rgba(146, 197, 83, 0.10);
+
+  backdrop-filter: blur(12px);
+
+  overflow: visible;
+  z-index: 10;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+/* Pink brand accent at the top of the approval card */
+.hero-approval-badge::before {
+  content: "NHRA APPROVED";
+
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 4px 13px;
+
+  background: #FC3A93;
+  color: #FEFEFE;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  line-height: 1.2;
+  white-space: nowrap;
+
+  box-shadow: 0 6px 16px rgba(252, 58, 147, 0.25);
+}
+
+.hero-approval-badge:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 18px 40px rgba(37, 48, 71, 0.17),
+    0 0 0 7px rgba(146, 197, 83, 0.13);
+}
+
+.hero-approval-dot {
+  width: 11px;
+  height: 11px;
+  flex: 0 0 11px;
+
+  border-radius: 50%;
+  background: #92C553;
+
+  box-shadow:
+    0 0 0 5px rgba(146, 197, 83, 0.14),
+    0 0 14px rgba(146, 197, 83, 0.35);
+}
+
+.hero-approval-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  min-width: 118px;
+}
+
+.hero-approval-copy strong {
+  color: #FC3A93;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  line-height: 1.2;
+}
+
+.hero-approval-copy span {
+  color: #687984;
+  font-size: 10px;
+  line-height: 1.3;
+}
+
+.hero-approval-badge img {
+  display: block;
+
+  width: 210px;
+  max-width: 48vw;
+  height: auto;
+
+  object-fit: contain;
+  border-radius: 6px;
+  background: #FEFEFE;
+}
+
+@media (max-width: 600px) {
+  .hero-approval {
+    width: 100%;
+  }
+
+  .hero-approval-badge {
+    width: min(430px, calc(100% - 10px));
+    min-height: 72px;
+    padding: 10px 12px;
+    gap: 9px;
+  }
+
+  .hero-approval-badge img {
+    width: min(190px, 48vw);
+    max-width: 48vw;
+  }
+
+  .hero-approval-copy {
+    min-width: 92px;
+  }
+
+  .hero-approval-copy strong {
+    font-size: 10px;
+  }
+
+  .hero-approval-copy span {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-approval-badge {
+    width: calc(100% - 6px);
+    min-height: 66px;
+    padding: 9px;
+    gap: 7px;
+  }
+
+  .hero-approval-dot {
+    width: 8px;
+    height: 8px;
+    flex-basis: 8px;
+  }
+
+  .hero-approval-copy {
+    min-width: 78px;
+  }
+
+  .hero-approval-copy strong {
+    font-size: 9px;
+  }
+
+  .hero-approval-copy span {
+    font-size: 8px;
+  }
+
+  .hero-approval-badge img {
+    width: min(155px, 44vw);
+    max-width: 44vw;
+  }
+
+  .hero-approval-badge::before {
+    font-size: 8px;
+    padding: 3px 9px;
+    top: -10px;
+  }
+}
+
+/* Position the NHRA approval badge in the hero image area on desktop.
+   Keep it centered on smaller screens for responsive safety. */
+@media (max-width: 1100px) {
+  .hero-approval {
+    transform: translateX(250px);
+  }
+}
+
+@media (max-width: 900px) {
+  .hero-approval {
+    transform: translateX(120px);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-approval {
+    transform: translateX(0);
+  }
+}
+
+
+/* Official header mark — matches the NOOR AL AFIYA home header */
+.brand-mark-image {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  display: block;
+  flex-shrink: 0;
+}
+@media (max-width: 700px) {
+  .brand-mark-image { width: 38px; height: 38px; }
 }

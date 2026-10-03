@@ -1,15 +1,12 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoMark from "../assets/noor-al-afiya-mark.png";
 import "./About.css";
+import aboutCarePhoto from "../assets/about-care-photo.png";
 
 function About() {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const goToLogin = () => {
-    setMenuOpen(false);
-    navigate("/login");
-  };
 
   return (
     <div className="about-page">
@@ -51,26 +48,22 @@ function About() {
 
           <Link
             to="/"
-            className="about-brand"
+            className="home-brand"
             onClick={() => setMenuOpen(false)}
           >
-
-            <span className="about-brand-mark">
-              ✚
-            </span>
-
-            <span className="about-brand-text">
-
+            <img
+              src={logoMark}
+              alt="NOOR AL AFIYA"
+              className="brand-mark-image"
+            />
+            <span>
               <strong>
-                Bahrain Nursing Care
+                NOOR AL AFIYA
               </strong>
-
               <small>
-                Professional Care at Home
+                Home Health Care WLL
               </small>
-
             </span>
-
           </Link>
 
 
@@ -134,13 +127,12 @@ function About() {
               Contact Us
             </Link>
 
-            <button
-              type="button"
-              className="about-login-button"
-              onClick={goToLogin}
+            <Link
+              to="/careers"
+              onClick={() => setMenuOpen(false)}
             >
-              Login
-            </button>
+              Job Opportunities
+            </Link>
 
           </nav>
 
@@ -205,24 +197,11 @@ function About() {
 
             <div className="about-intro-image">
 
-              <div className="about-image-decoration" />
-
-              <div className="about-image-card">
-
-                <div className="about-image-icon">
-                  ♡
-                </div>
-
-                <strong>
-                  Care at Home
-                </strong>
-
-                <span>
-                  Comfort, dignity and
-                  family-focused support.
-                </span>
-
-              </div>
+              <img
+                src={aboutCarePhoto}
+                alt="Professional nurse providing home care"
+                className="about-intro-bg-img"
+              />
 
             </div>
 
@@ -239,7 +218,7 @@ function About() {
               </h2>
 
               <p>
-                Bahrain Nursing Care is a home-care
+                NOOR AL AFIYA is a home-care
                 service platform designed to make it
                 easier for families to request the care
                 support they need.
@@ -501,45 +480,6 @@ function About() {
         </section>
 
 
-        {/* ================= CTA ================= */}
-
-        <section className="about-cta">
-
-          <div className="about-container about-cta-inner">
-
-            <div>
-
-              <span className="about-eyebrow">
-                GET STARTED
-              </span>
-
-              <h2>
-                Looking for care at home?
-              </h2>
-
-              <p>
-                Choose a service and begin your
-                care request today.
-              </p>
-
-            </div>
-
-
-            <button
-              type="button"
-              className="about-primary-button about-cta-button"
-              onClick={goToLogin}
-            >
-              Book a Care Service
-              <span>
-                →
-              </span>
-            </button>
-
-          </div>
-
-        </section>
-
       </main>
 
 
@@ -551,40 +491,32 @@ function About() {
 
 
           <div className="about-footer-brand">
-
             <Link
               to="/"
-              className="about-brand"
+              className="home-brand"
             >
-
-              <span className="about-brand-mark">
-                ✚
-              </span>
-
-              <span className="about-brand-text">
-
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
+              <span>
                 <strong>
-                  Bahrain Nursing Care
+                  NOOR AL AFIYA
                 </strong>
-
                 <small>
-                  Professional Care at Home
+                  Home Health Care WLL
                 </small>
-
               </span>
-
             </Link>
 
             <p>
               Compassionate home-care services
               for families in Bahrain.
             </p>
-
           </div>
 
-
           <div>
-
             <h3>
               Quick Links
             </h3>
@@ -609,6 +541,9 @@ function About() {
               Contact Us
             </Link>
 
+            <Link to="/careers">
+              Job Opportunities
+            </Link>
           </div>
 
 
@@ -618,19 +553,19 @@ function About() {
               Care Services
             </h3>
 
-            <Link to="/services/patient">
+            <Link to="/care/patient">
               Patient Care
             </Link>
 
-            <Link to="/services/elder">
+            <Link to="/care/elder">
               Elder Care
             </Link>
 
-            <Link to="/services/newborn">
+            <Link to="/care/newborn">
               Newborn Care
             </Link>
 
-            <Link to="/services/children">
+            <Link to="/care/children">
               Children's Care
             </Link>
 
@@ -663,7 +598,7 @@ function About() {
         <div className="about-container about-footer-bottom">
 
           <span>
-            © 2026 Bahrain Nursing Care.
+            © 2026 NOOR AL AFIYA.
             All rights reserved.
           </span>
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoMark from "../../assets/noor-al-afiya-mark.png";
 
 import patientCareImage from "../../assets/services/patient-care.jpg";
 import elderCareImage from "../../assets/services/elder-care.jpg";
@@ -84,14 +85,9 @@ function Services() {
 
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const goToLogin = () => {
-    setMenuOpen(false);
-    navigate("/login");
-  };
-
   const selectService = (serviceId) => {
     setMenuOpen(false);
-    navigate(`/services/${serviceId}`);
+    navigate(`/care/${serviceId}`);
   };
 
   return (
@@ -138,26 +134,22 @@ function Services() {
 
           <Link
             to="/"
-            className="services-brand"
+            className="home-brand"
             onClick={() => setMenuOpen(false)}
           >
-
-            <span className="services-brand-mark">
-              ✚
-            </span>
-
-            <span className="services-brand-text">
-
+            <img
+              src={logoMark}
+              alt="NOOR AL AFIYA"
+              className="brand-mark-image"
+            />
+            <span>
               <strong>
-                Bahrain Nursing Care
+                NOOR AL AFIYA
               </strong>
-
               <small>
-                Professional Care at Home
+                Home Health Care WLL
               </small>
-
             </span>
-
           </Link>
 
 
@@ -221,13 +213,12 @@ function Services() {
               Contact Us
             </Link>
 
-            <button
-              type="button"
-              className="services-login-button"
-              onClick={goToLogin}
+            <Link
+              to="/careers"
+              onClick={() => setMenuOpen(false)}
             >
-              Login
-            </button>
+              Job Opportunities
+            </Link>
 
           </nav>
 
@@ -305,8 +296,8 @@ function Services() {
               </h2>
 
               <p>
-                Select a service below to learn more
-                and begin your care request.
+                Select a service below to book an appointment
+                and submit your care request.
               </p>
 
             </div>
@@ -395,7 +386,7 @@ function Services() {
                       selectService(service.id)
                     }
                   >
-                    {`View ${service.title}`}
+                    Book Appointment
 
                     <span>
                       →
@@ -612,50 +603,6 @@ function Services() {
         </section>
 
 
-        {/* =====================================================
-            CTA
-        ===================================================== */}
-
-        <section className="services-cta">
-
-          <div className="services-container services-cta-inner">
-
-            <div>
-
-              <span className="services-eyebrow">
-                READY TO GET STARTED?
-              </span>
-
-              <h2>
-                Find the right care
-                for your family.
-              </h2>
-
-              <p>
-                Sign in and submit your care request
-                through our simple booking process.
-              </p>
-
-            </div>
-
-
-            <button
-              type="button"
-              className="services-primary-button"
-              onClick={goToLogin}
-            >
-              Book a Care Service
-
-              <span>
-                →
-              </span>
-
-            </button>
-
-          </div>
-
-        </section>
-
       </main>
 
 
@@ -669,40 +616,32 @@ function Services() {
 
 
           <div className="services-footer-brand">
-
             <Link
               to="/"
-              className="services-brand"
+              className="home-brand"
             >
-
-              <span className="services-brand-mark">
-                ✚
-              </span>
-
-              <span className="services-brand-text">
-
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
+              <span>
                 <strong>
-                  Bahrain Nursing Care
+                  NOOR AL AFIYA
                 </strong>
-
                 <small>
-                  Professional Care at Home
+                  Home Health Care WLL
                 </small>
-
               </span>
-
             </Link>
 
             <p>
               Compassionate home-care services
               for families in Bahrain.
             </p>
-
           </div>
 
-
           <div>
-
             <h3>
               Quick Links
             </h3>
@@ -727,6 +666,9 @@ function Services() {
               Contact Us
             </Link>
 
+            <Link to="/careers">
+              Job Opportunities
+            </Link>
           </div>
 
 
@@ -736,20 +678,19 @@ function Services() {
               Care Services
             </h3>
 
-            {/* Patient Care now opens details page */}
-            <Link to="/services/patient">
+            <Link to="/care/patient">
               Patient Care
             </Link>
 
-            <Link to="/services/elder">
+            <Link to="/care/elder">
               Elder Care
             </Link>
 
-            <Link to="/services/newborn">
+            <Link to="/care/newborn">
               Newborn Care
             </Link>
 
-            <Link to="/services/children">
+            <Link to="/care/children">
               Children's Care
             </Link>
 
@@ -782,7 +723,7 @@ function Services() {
         <div className="services-container services-footer-bottom">
 
           <span>
-            © 2026 Bahrain Nursing Care.
+            © 2026 NOOR AL AFIYA.
             All rights reserved.
           </span>
 

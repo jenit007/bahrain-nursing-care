@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoMark from "../assets/noor-al-afiya-mark.png";
 import "./Home.css";
 import heroImage from "../assets/home-hero.png";
 import aboutCareImage from "../assets/about-care.png";
@@ -7,6 +8,8 @@ import patientCareImage from "../assets/services/patient-care.jpg";
 import elderCareImage from "../assets/services/elder-care.jpg";
 import newbornCareImage from "../assets/services/newborn-care.jpg";
 import childrenCareImage from "../assets/services/children-care.jpg";
+import nhraApprovedImage from "../assets/nhra-approved.png";
+import homeCareSupportPhoto from "../assets/home-care-support-photo.png";
 
 const services = [
   {
@@ -160,14 +163,9 @@ function Home() {
     };
   }, []);
 
-  const goToLogin = () => {
-    setMenuOpen(false);
-    navigate("/login");
-  };
-
   const goToService = (serviceId) => {
     setMenuOpen(false);
-    navigate(`/services/${serviceId}`);
+    navigate(`/care/${serviceId}`);
   };
 
   return (
@@ -214,18 +212,20 @@ function Home() {
             onClick={() => setMenuOpen(false)}
           >
 
-            <span className="brand-mark">
-              ✚
-            </span>
+            <img
+              src={logoMark}
+              alt="NOOR AL AFIYA"
+              className="brand-mark-image"
+            />
 
             <span>
 
               <strong>
-                Bahrain Nursing Care
+                NOOR AL AFIYA
               </strong>
 
               <small>
-                Professional Care at Home
+                Home Health Care WLL
               </small>
 
             </span>
@@ -296,13 +296,12 @@ function Home() {
               Contact Us
             </Link>
 
-            <button
-              className="nav-login"
-              onClick={goToLogin}
-              type="button"
+            <Link
+              to="/careers"
+              onClick={() => setMenuOpen(false)}
             >
-              Login
-            </button>
+              Job Opportunities
+            </Link>
 
           </nav>
 
@@ -345,10 +344,10 @@ function Home() {
 
                 <button
                   className="primary-cta"
-                  onClick={goToLogin}
+                  onClick={() => navigate("/services")}
                   type="button"
                 >
-                  Book a Care Service
+                  Choose a Care Service
                   <span>→</span>
                 </button>
 
@@ -361,6 +360,24 @@ function Home() {
 
               </div>
 
+
+              <div className="hero-approval">
+
+                <div className="hero-approval-badge">
+                  <span className="hero-approval-dot" aria-hidden="true" />
+
+                  <div className="hero-approval-copy">
+                    <strong>NHRA APPROVED</strong>
+                    <span>Approval mark</span>
+                  </div>
+
+                  <img
+                    src={nhraApprovedImage}
+                    alt="NHRA Bahrain approved"
+                  />
+                </div>
+
+              </div>
 
               <div className="hero-trust">
 
@@ -443,7 +460,7 @@ function Home() {
                     }
                     type="button"
                   >
-                    Learn More
+                    Book Appointment
                     <span>→</span>
                   </button>
 
@@ -520,26 +537,11 @@ function Home() {
 
             <div className="why-visual">
 
-              <div className="visual-card large">
-
-                <div className="visual-number">
-                  24/7
-                </div>
-
-                <strong>
-                  Home-care support
-                </strong>
-
-                <span>
-                  Built for comfort, continuity
-                  and family peace of mind.
-                </span>
-
-              </div>
-
-              <div className="visual-orb orb-one" />
-
-              <div className="visual-orb orb-two" />
+              <img
+                src={homeCareSupportPhoto}
+                alt="24/7 Home-care support"
+                className="why-visual-bg-img"
+              />
 
             </div>
 
@@ -658,43 +660,6 @@ function Home() {
         </section>
 
 
-        {/* ================= CTA ================= */}
-
-        <section className="cta-section home-scroll-reveal home-scroll-delay-2">
-
-          <div className="home-container cta-inner">
-
-            <div>
-
-              <span className="eyebrow">
-                NEED HOME CARE?
-              </span>
-
-              <h2>
-                Let's make care feel easier.
-              </h2>
-
-              <p>
-                Choose a service and submit your
-                care requirements in a few simple steps.
-              </p>
-
-            </div>
-
-
-            <button
-              className="primary-cta light"
-              onClick={goToLogin}
-              type="button"
-            >
-              Book a Care Service
-              <span>→</span>
-            </button>
-
-          </div>
-
-        </section>
-
       </main>
 
 
@@ -712,20 +677,23 @@ function Home() {
             <Link
               className="home-brand"
               to="/"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
 
-              <span className="brand-mark">
-                ✚
-              </span>
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
 
               <span>
 
                 <strong>
-                  Bahrain Nursing Care
+                  NOOR AL AFIYA
                 </strong>
 
                 <small>
-                  Professional Care at Home
+                  Home Health Care WLL
                 </small>
 
               </span>
@@ -766,6 +734,10 @@ function Home() {
 
             <Link to="/contact">
               Contact Us
+            </Link>
+
+            <Link to="/careers">
+              Job Opportunities
             </Link>
 
           </div>
@@ -824,7 +796,7 @@ function Home() {
         <div className="home-container footer-bottom">
 
           <span>
-            © 2026 Bahrain Nursing Care.
+            © 2026 NOOR AL AFIYA.
             All rights reserved.
           </span>
 

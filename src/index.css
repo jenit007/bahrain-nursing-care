@@ -1,1 +1,2 @@
-*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}html,body,#root{width:100%;min-height:100%}body{font-family:Arial,Helvetica,sans-serif;background:#f5f8fa;color:#1f2937;-webkit-font-smoothing:antialiased}button,input,textarea,select{font:inherit}img{max-width:100%}
+@import "./theme.css";
+*{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}html,body,#root{width:100%;min-height:100%}body{font-family:Arial,Helvetica,sans-serif;background:#FFFFFF;color:#55708F;-webkit-font-smoothing:antialiased}button,input,textarea,select{font:inherit}img{max-width:100%}

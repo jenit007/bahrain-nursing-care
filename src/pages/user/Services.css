@@ -4,17 +4,17 @@
    ========================================================= */
 
 .services-page-new {
-  --navy: #03045e;
-  --blue: #0077b6;
-  --cyan: #00b4d8;
-  --sky: #90e0ef;
-  --pale: #caf0f8;
+  --navy: #151B2E;
+  --blue: #96C855;
+  --cyan: #FF3A94;
+  --sky: #96C855;
+  --pale: #FFF0F7;
 
-  --button: #f9242b;
-  --button-hover: #d71920;
+  --button: #FF3A94;
+  --button-hover: #E82F83;
 
   background: #ffffff;
-  color: #18333e;
+  color: #55708F;
 
   overflow: hidden;
 }
@@ -35,7 +35,7 @@
    ========================================================= */
 
 .services-top-strip {
-  background: var(--navy);
+  background: #FF3A94;
   color: #ffffff;
   font-size: 12px;
 }
@@ -72,8 +72,8 @@
   position: relative;
   z-index: 1000;
   background: #ffffff;
-  border-bottom: 1px solid #e2f0f4;
-  box-shadow: 0 4px 18px rgba(3, 4, 94, 0.05);
+  border-bottom: 1px solid #E7EEE2;
+  box-shadow: 0 4px 18px rgba(37, 48, 71, 0.05);
 }
 
 .services-nav {
@@ -121,7 +121,7 @@
   background: var(--blue);
   color: #ffffff;
   font-size: 23px;
-  box-shadow: 0 8px 22px rgba(0, 119, 182, 0.22);
+  box-shadow: 0 8px 22px rgba(146,197,83,0.22);
 }
 
 
@@ -134,7 +134,7 @@
 }
 
 .services-nav-links a {
-  color: #243746;
+  color: #253047;
   text-decoration: none;
   font-size: 14px;
   font-weight: 600;
@@ -158,7 +158,7 @@
   font: inherit;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 7px 18px rgba(249, 36, 43, 0.22);
+  box-shadow: 0 7px 18px rgba(146,197,83,0.22);
   transition:
     background 0.2s ease,
     transform 0.2s ease;
@@ -203,8 +203,8 @@
   background:
     linear-gradient(
       105deg,
-      rgba(247, 253, 255, 0.98),
-      rgba(202, 240, 248, 0.91)
+      rgba(252,253,252,0.98),
+      rgba(243,249,234,0.91)
     );
   overflow: hidden;
 }
@@ -220,7 +220,7 @@
   background:
     radial-gradient(
       circle,
-      rgba(0, 180, 216, 0.18),
+      rgba(146,197,83,0.18),
       transparent 68%
     );
 }
@@ -269,7 +269,7 @@
 
 .services-hero-copy > p {
   max-width: 650px;
-  color: #526b77;
+  color: #64748B;
   font-size: 17px;
   line-height: 1.75;
 }
@@ -289,7 +289,7 @@
 }
 
 .services-breadcrumb span {
-  color: #77929d;
+  color: #7B8794;
 }
 
 .services-breadcrumb strong {
@@ -321,7 +321,7 @@
 }
 
 .services-section-heading p {
-  color: #657c86;
+  color: #64748B;
   line-height: 1.7;
   margin: 0;
 }
@@ -340,10 +340,10 @@
 .new-service-card {
   position: relative;
   padding: 18px 18px 28px;
-  border: 1px solid #dceff5;
+  border: 1px solid #E7EEE2;
   border-radius: 19px;
   background: #ffffff;
-  box-shadow: 0 14px 38px rgba(3, 4, 94, 0.055);
+  box-shadow: 0 14px 38px rgba(37, 48, 71, 0.055);
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -366,7 +366,7 @@
 .new-service-card:hover {
   transform: translateY(-6px);
   border-color: #b5e4ef;
-  box-shadow: 0 22px 50px rgba(3, 4, 94, 0.10);
+  box-shadow: 0 22px 50px rgba(37, 48, 71, 0.10);
 }
 
 
@@ -413,7 +413,7 @@
 }
 
 .service-number {
-  color: #b7dce6;
+  color: #FF3A94;
   font-size: 13px;
   font-weight: 900;
 }
@@ -440,7 +440,7 @@
 .service-short-text {
   position: relative;
   z-index: 2;
-  color: #647984;
+  color: #55708F;
   font-size: 14px;
   line-height: 1.75;
   margin: 0 0 20px;
@@ -503,11 +503,12 @@
   background: var(--button);
   color: #ffffff;
   padding: 13px 19px;
+  min-width: 170px;
   font: inherit;
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 8px 20px rgba(249, 36, 43, 0.20);
+  box-shadow: 0 8px 20px rgba(146,197,83,0.20);
   transition:
     background 0.2s ease,
     transform 0.2s ease,
@@ -517,7 +518,7 @@
 .service-select-button:hover {
   background: var(--button-hover);
   transform: translateY(-2px);
-  box-shadow: 0 12px 25px rgba(249, 36, 43, 0.25);
+  box-shadow: 0 12px 25px rgba(146,197,83,0.25);
 }
 
 .service-select-button span {
@@ -531,7 +532,7 @@
 
 .services-process {
   padding: 95px 0;
-  background: #f4fcfe;
+  background: #FAFCF8;
 }
 
 .process-grid {
@@ -548,7 +549,7 @@
 }
 
 .process-number {
-  color: #b6dce6;
+  color: #FF3A94;
   font-size: 12px;
   font-weight: 900;
   margin-bottom: 10px;
@@ -564,7 +565,7 @@
   background: #ffffff;
   color: var(--blue);
   font-size: 25px;
-  box-shadow: 0 10px 28px rgba(3, 4, 94, 0.07);
+  box-shadow: 0 10px 28px rgba(37, 48, 71, 0.07);
 }
 
 .process-step h3 {
@@ -574,7 +575,7 @@
 }
 
 .process-step p {
-  color: #6a808a;
+  color: #64748B;
   font-size: 12px;
   line-height: 1.7;
   margin: 0;
@@ -630,7 +631,7 @@
   grid-template-columns: 45px 1fr;
   column-gap: 14px;
   padding: 18px;
-  border: 1px solid #dceff5;
+  border: 1px solid #E7EEE2;
   border-radius: 13px;
   background: #ffffff;
 }
@@ -684,7 +685,7 @@
 }
 
 .services-cta .services-eyebrow {
-  color: #dffaff;
+  color: #EEF7E2;
 }
 
 .services-cta h2 {
@@ -715,7 +716,7 @@
   font-weight: 800;
   cursor: pointer;
   white-space: nowrap;
-  box-shadow: 0 10px 25px rgba(249, 36, 43, 0.24);
+  box-shadow: 0 10px 25px rgba(146,197,83,0.24);
   transition:
     background 0.2s ease,
     transform 0.2s ease;
@@ -736,8 +737,8 @@
    ========================================================= */
 
 .services-footer {
-  background: #02043f;
-  color: #b5d2da;
+  background: #16121A;
+  color: #DCE3ED;
   padding-top: 58px;
 }
 
@@ -750,18 +751,18 @@
 
 .services-footer-brand p {
   max-width: 300px;
-  color: #9fc2cc;
+  color: #8995A7;
   font-size: 13px;
   line-height: 1.7;
   margin-top: 18px;
 }
 
 .services-footer .services-brand {
-  color: #ffffff;
+  color: #FF3A94;
 }
 
 .services-footer .services-brand-text small {
-  color: #9fc2cc;
+  color: #8995A7;
 }
 
 .services-footer h3 {
@@ -773,7 +774,7 @@
 .services-footer a,
 .services-footer span {
   display: block;
-  color: #9fc2cc;
+  color: #9AA5B6;
   text-decoration: none;
   font-size: 13px;
   line-height: 2.05;
@@ -826,9 +827,9 @@
     align-items: stretch;
     gap: 4px;
     background: #ffffff;
-    border: 1px solid #dceff5;
+    border: 1px solid #E7EEE2;
     border-radius: 14px;
-    box-shadow: 0 20px 40px rgba(3, 4, 94, 0.14);
+    box-shadow: 0 20px 40px rgba(37, 48, 71, 0.14);
   }
 
   .services-nav-links.show {

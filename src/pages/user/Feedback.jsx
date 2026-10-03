@@ -40,11 +40,10 @@ function Feedback() {
 
   return (
     <div className="feedback-page">
-      <div className="feedback-topbar"><div className="feedback-shell"><span>Bahrain Home Nursing Care</span><span>24/7 Home Care Support • Bahrain</span></div></div>
+      <div className="feedback-topbar"><div className="feedback-shell"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain</span></div></div>
       <header className="feedback-navbar">
         <div className="feedback-shell">
-          <Link to="/" className="feedback-logo"><strong>Bahrain</strong><span>HOME NURSING CARE</span></Link>
-          <Link to="/login" className="feedback-login">Login</Link>
+          <Link to="/" className="feedback-logo"><strong>Bahrain</strong><span>HOME HEALTH CARE SERVICE</span></Link>
         </div>
       </header>
 
@@ -101,7 +100,7 @@ function Feedback() {
         </div>
       </main>
 
-      <footer className="feedback-footer">© 2026 Bahrain Home Nursing Care. All rights reserved.</footer>
+      <footer className="feedback-footer">© 2026 NOOR AL AFIYA. All rights reserved.</footer>
     </div>
   );
 }

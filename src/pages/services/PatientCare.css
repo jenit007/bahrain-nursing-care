@@ -5,7 +5,7 @@
 .patient-care-page {
   min-height: 100vh;
   background: #ffffff;
-  color: #1f2937;
+  color: #FF3A94;
 }
 
 
@@ -24,7 +24,7 @@
    ========================================================= */
 
 .patient-topbar {
-  background: #03045e;
+  background: #FC3A93;
   color: #ffffff;
   font-size: 13px;
 }
@@ -51,7 +51,7 @@
 
 .patient-navbar {
   background: #ffffff;
-  border-bottom: 1px solid #e8eef2;
+  border-bottom: 1px solid #E4EAE6;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -74,14 +74,14 @@
 }
 
 .patient-logo-main {
-  color: #03045e;
+  color: #FF3A94;
   font-size: 27px;
   font-weight: 800;
   letter-spacing: -0.8px;
 }
 
 .patient-logo-sub {
-  color: #0077b6;
+  color: #FF3A94;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 2px;
@@ -104,7 +104,7 @@
 }
 
 .patient-nav-links a:hover {
-  color: #0077b6;
+  color: #FF3A94;
 }
 
 .patient-login-btn {
@@ -114,7 +114,7 @@
   min-width: 100px;
   padding: 12px 22px;
   border-radius: 5px;
-  background: #f9242b;
+  background: #FC3A93;
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
@@ -123,7 +123,7 @@
 }
 
 .patient-login-btn:hover {
-  background: #d71920;
+  background: #FC3A93;
   transform: translateY(-1px);
 }
 
@@ -136,9 +136,9 @@
   background:
     linear-gradient(
       115deg,
-      #03045e 0%,
-      #0077b6 65%,
-      #00b4d8 100%
+      #FC3A93 0%,
+      #FC3A93 65%,
+      #FC3A93 100%
     );
 
   position: relative;
@@ -168,7 +168,7 @@
 }
 
 .patient-eyebrow {
-  color: #90e0ef;
+  color: #92C553;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 2px;
@@ -207,7 +207,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #f9242b;
+  background: #FC3A93;
   color: #ffffff;
   text-decoration: none;
   padding: 14px 25px;
@@ -220,7 +220,7 @@
 }
 
 .patient-primary-btn:hover {
-  background: #d71920;
+  background: #FC3A93;
   transform: translateY(-2px);
 }
 
@@ -243,7 +243,7 @@
 
 .patient-secondary-btn:hover {
   background: #ffffff;
-  color: #03045e;
+  color: #FF3A94;
 }
 
 
@@ -252,7 +252,7 @@
    ========================================================= */
 
 .patient-section-label {
-  color: #0077b6;
+  color: #FF3A94;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 2px;
@@ -277,7 +277,7 @@
 }
 
 .patient-overview-text h2 {
-  color: #03045e;
+  color: #FF3A94;
   font-size: clamp(32px, 4vw, 46px);
   line-height: 1.15;
   letter-spacing: -1px;
@@ -292,10 +292,10 @@
 }
 
 .patient-overview-card {
-  background: #caf0f8;
+  background: #FEFEFE;
   padding: 42px;
   border-radius: 12px;
-  border-left: 5px solid #0077b6;
+  border-left: 5px solid #FC3A93;
 }
 
 .patient-overview-icon {
@@ -304,7 +304,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0077b6;
+  background: #FC3A93;
   color: #ffffff;
   border-radius: 50%;
   font-size: 30px;
@@ -313,13 +313,13 @@
 }
 
 .patient-overview-card h3 {
-  color: #03045e;
+  color: #FF3A94;
   font-size: 23px;
   margin-bottom: 12px;
 }
 
 .patient-overview-card p {
-  color: #425466;
+  color: #64748B;
   font-size: 15px;
   line-height: 1.7;
 }
@@ -331,7 +331,7 @@
 
 .patient-options {
   padding: 90px 0;
-  background: #f5f8fa;
+  background: #FEFEFE;
 }
 
 .patient-section-heading {
@@ -340,7 +340,7 @@
 }
 
 .patient-section-heading h2 {
-  color: #03045e;
+  color: #FF3A94;
   font-size: clamp(30px, 4vw, 44px);
   line-height: 1.15;
   letter-spacing: -1px;
@@ -362,7 +362,7 @@
 .patient-option-card {
   background: #ffffff;
   padding: 30px;
-  border: 1px solid #e1e9ee;
+  border: 1px solid #E2E8E4;
   border-radius: 9px;
   min-height: 230px;
   transition:
@@ -373,12 +373,12 @@
 
 .patient-option-card:hover {
   transform: translateY(-5px);
-  border-color: #90e0ef;
-  box-shadow: 0 15px 35px rgba(3, 4, 94, 0.08);
+  border-color: #92C553;
+  box-shadow: 0 15px 35px rgba(37, 48, 71, 0.08);
 }
 
 .patient-option-number {
-  color: #00b4d8;
+  color: #FF3A94;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 1px;
@@ -386,7 +386,7 @@
 }
 
 .patient-option-card h3 {
-  color: #03045e;
+  color: #FF3A94;
   font-size: 20px;
   margin-bottom: 13px;
 }
@@ -418,7 +418,7 @@
   gap: 18px;
   align-items: flex-start;
   padding: 25px;
-  border: 1px solid #e5ebef;
+  border: 1px solid #E2E8E4;
   border-radius: 8px;
   background: #ffffff;
 }
@@ -428,8 +428,8 @@
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #caf0f8;
-  color: #0077b6;
+  background: #FEFEFE;
+  color: #FF3A94;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -438,7 +438,7 @@
 }
 
 .patient-support-item h3 {
-  color: #03045e;
+  color: #FF3A94;
   font-size: 17px;
   margin-bottom: 7px;
 }
@@ -456,7 +456,7 @@
 
 .patient-shifts {
   padding: 80px 0;
-  background: #03045e;
+  background: #FC3A93;
   color: #ffffff;
 }
 
@@ -468,7 +468,7 @@
 }
 
 .patient-shifts .patient-section-label {
-  color: #90e0ef;
+  color: #92C553;
 }
 
 .patient-shifts-text h2 {
@@ -507,7 +507,7 @@
 }
 
 .patient-shift-card span {
-  color: #90e0ef;
+  color: #92C553;
   font-size: 13px;
 }
 
@@ -518,7 +518,7 @@
 
 .patient-cta {
   padding: 75px 0;
-  background: #caf0f8;
+  background: #FEFEFE;
 }
 
 .patient-cta-inner {
@@ -529,7 +529,7 @@
 }
 
 .patient-cta h2 {
-  color: #03045e;
+  color: #FF3A94;
   font-size: clamp(29px, 4vw, 42px);
   line-height: 1.15;
   margin-bottom: 14px;
@@ -537,7 +537,7 @@
 
 .patient-cta p:not(.patient-section-label) {
   max-width: 650px;
-  color: #506070;
+  color: #64748B;
   font-size: 15px;
   line-height: 1.7;
 }
@@ -548,7 +548,7 @@
    ========================================================= */
 
 .patient-footer {
-  background: #02033f;
+  background: #253047;
   color: #ffffff;
 }
 
@@ -572,7 +572,7 @@
 }
 
 .patient-footer-logo span {
-  color: #90e0ef;
+  color: #92C553;
   font-size: 8px;
   letter-spacing: 2px;
   margin-top: 7px;
@@ -601,7 +601,7 @@
 }
 
 .patient-footer-grid a:not(.patient-footer-logo):hover {
-  color: #90e0ef;
+  color: #92C553;
 }
 
 .patient-footer-grid p {

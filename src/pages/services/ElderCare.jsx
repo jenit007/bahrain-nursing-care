@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logoMark from "../../assets/noor-al-afiya-mark.png";
 import "./ElderCare.css";
 
 function ElderCare() {
@@ -11,7 +12,7 @@ function ElderCare() {
         <div className="elder-container elder-topbar-inner">
 
           <span>
-            Bahrain Home Nursing Care
+            NOOR AL AFIYA
           </span>
 
           <div className="elder-topbar-right">
@@ -30,16 +31,11 @@ function ElderCare() {
 
         <div className="elder-container elder-nav-inner">
 
-          <Link
-            to="/"
-            className="elder-logo"
-          >
-            <span className="elder-logo-main">
-              Bahrain
-            </span>
-
-            <span className="elder-logo-sub">
-              HOME NURSING CARE
+          <Link to="/" className="home-brand">
+            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <span>
+              <strong>NOOR AL AFIYA</strong>
+              <small>Home Health Care WLL</small>
             </span>
           </Link>
 
@@ -70,14 +66,6 @@ function ElderCare() {
             </Link>
 
           </nav>
-
-
-          <Link
-            to="/login"
-            className="elder-login-btn"
-          >
-            Login
-          </Link>
 
         </div>
 
@@ -575,109 +563,59 @@ function ElderCare() {
       <footer className="elder-footer">
 
         <div className="elder-container elder-footer-grid">
-
           <div>
-
             <Link
+              className="home-brand"
               to="/"
-              className="elder-footer-logo"
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
-              Bahrain
-
+              <img
+                src={logoMark}
+                alt="NOOR AL AFIYA"
+                className="brand-mark-image"
+              />
               <span>
-                HOME NURSING CARE
+                <strong>NOOR AL AFIYA</strong>
+                <small>Home Health Care WLL</small>
               </span>
-
             </Link>
 
             <p>
-              Professional home nursing care support designed
-              around individuals and families in Bahrain.
+              Compassionate home-care services for families in Bahrain.
             </p>
-
           </div>
-
 
           <div>
-
-            <h4>
-              Quick Links
-            </h4>
-
-            <Link to="/">
-              Home
-            </Link>
-
-            <Link to="/about">
-              About Us
-            </Link>
-
-            <Link to="/services">
-              Our Services
-            </Link>
-
-            <Link to="/why-us">
-              Why Choose Us
-            </Link>
-
+            <h4>Quick Links</h4>
+            <Link to="/">Home</Link>
+            <Link to="/about">About Us</Link>
+            <Link to="/services">Our Services</Link>
+            <Link to="/why-us">Why Choose Us</Link>
+            <Link to="/contact">Contact Us</Link>
+            <Link to="/careers">Job Opportunities</Link>
           </div>
-
 
           <div>
-
-            <h4>
-              Services
-            </h4>
-
-            <Link to="/services/patient">
-              Patient Care
-            </Link>
-
-            <Link to="/services/elder">
-              Elder Care
-            </Link>
-
-            <Link to="/services/newborn">
-              Newborn Care
-            </Link>
-
-            <Link to="/services/children">
-              Children's Care
-            </Link>
-
+            <h4>Services</h4>
+            <Link to="/care/patient">Patient Care</Link>
+            <Link to="/care/elder">Elder Care</Link>
+            <Link to="/care/newborn">Newborn Care</Link>
+            <Link to="/care/children">Children's Care</Link>
           </div>
-
 
           <div>
-
-            <h4>
-              Contact
-            </h4>
-
-            <p>
-              Bahrain
-            </p>
-
-            <p>
-              24/7 Home Care Support
-            </p>
-
-            <Link to="/contact">
-              Contact Us →
-            </Link>
-
+            <h4>Contact</h4>
+            <a href="tel:+97300000000">+973 0000 0000</a>
+            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <span>Bahrain</span>
           </div>
-
         </div>
 
-
         <div className="elder-footer-bottom">
-
-          <div className="elder-container">
-            © 2026 Bahrain Home Nursing Care.
-            All rights reserved.
+          <div className="elder-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
+            <span>Home Nursing • Bahrain</span>
           </div>
-
         </div>
 
       </footer>

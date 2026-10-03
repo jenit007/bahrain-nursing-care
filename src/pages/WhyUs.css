@@ -1,7 +1,7 @@
 .why-page {
   min-height: 100vh;
   background: #ffffff;
-  color: #03045e;
+  color: #151B2E;
 }
 
 .why-container {
@@ -12,7 +12,7 @@
 /* ================= TOP BAR ================= */
 
 .why-topbar {
-  background: #03045e;
+  background: #FF3A94;
   color: #ffffff;
   font-size: 13px;
 }
@@ -36,7 +36,7 @@
 
 .why-navbar {
   background: #ffffff;
-  border-bottom: 1px solid #e7f5f9;
+  border-bottom: 1px solid #E4EAE6;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -60,7 +60,7 @@
 .why-logo-main {
   font-size: 25px;
   font-weight: 800;
-  color: #03045e;
+  color: #FF3A94;
 }
 
 .why-logo-sub {
@@ -68,7 +68,7 @@
   font-size: 9px;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #0077b6;
+  color: #FF3A94;
 }
 
 .why-nav-links {
@@ -81,7 +81,7 @@
 
 .why-nav-links a {
   text-decoration: none;
-  color: #334155;
+  color: #55708F;
   font-size: 14px;
   font-weight: 600;
   transition: 0.25s;
@@ -90,7 +90,7 @@
 
 .why-nav-links a:hover,
 .why-nav-links a.active {
-  color: #0077b6;
+  color: #FF3A94;
 }
 
 .why-nav-links a.active::after {
@@ -100,12 +100,12 @@
   right: 0;
   bottom: -9px;
   height: 2px;
-  background: #f9242b;
+  background: #FF3A94;
 }
 
 .why-login-btn {
   text-decoration: none;
-  background: #f9242b;
+  background: #FF3A94;
   color: #ffffff;
   padding: 12px 23px;
   border-radius: 6px;
@@ -116,7 +116,7 @@
 }
 
 .why-login-btn:hover {
-  background: #d71920;
+  background: #E82F83;
   transform: translateY(-1px);
 }
 
@@ -128,11 +128,12 @@
   align-items: center;
   background:
     linear-gradient(
-      110deg,
-      rgba(3, 4, 94, 0.97),
-      rgba(0, 119, 182, 0.88)
+      115deg,
+      #ffffff 0%,
+      #FFF8FC 58%,
+      #FFF0F7 100%
     );
-  color: #ffffff;
+  color: #151B2E;
   position: relative;
   overflow: hidden;
 }
@@ -143,7 +144,7 @@
   width: 430px;
   height: 430px;
   border-radius: 50%;
-  background: rgba(144, 224, 239, 0.16);
+  background: rgba(255, 58, 148, 0.08);
   right: -110px;
   top: -120px;
 }
@@ -167,7 +168,7 @@
 
 .why-hero-label,
 .why-section-label {
-  color: #00b4d8;
+  color: #FF3A94;
   font-size: 12px;
   letter-spacing: 2px;
   font-weight: 800;
@@ -175,7 +176,7 @@
 }
 
 .why-hero-label {
-  color: #90e0ef;
+  color: #FF3A94;
 }
 
 .why-hero h1 {
@@ -184,15 +185,16 @@
   max-width: 850px;
   margin-bottom: 23px;
   letter-spacing: -1.5px;
+  color: #151B2E;
 }
 
 .why-hero h1 span {
-  color: #90e0ef;
+  color: #96C855;
 }
 
 .why-hero p {
   max-width: 680px;
-  color: #e9fbff;
+  color: #55708F;
   font-size: 17px;
   line-height: 1.75;
 }
@@ -220,12 +222,12 @@
 }
 
 .why-primary-btn {
-  background: #f9242b;
+  background: #FF3A94;
   color: #ffffff;
 }
 
 .why-primary-btn:hover {
-  background: #d71920;
+  background: #E82F83;
   transform: translateY(-2px);
 }
 
@@ -237,7 +239,7 @@
 
 .why-secondary-btn:hover {
   background: #ffffff;
-  color: #03045e;
+  color: #FC3A93;
 }
 
 /* ================= INTRO ================= */
@@ -255,10 +257,11 @@
 }
 
 .why-intro-left h2,
+.why-intro-left h2,
 .why-heading h2,
 .why-process-header h2,
 .why-cta h2 {
-  color: #03045e;
+  color: #151B2E;
   font-size: clamp(31px, 4vw, 47px);
   line-height: 1.12;
   letter-spacing: -1px;
@@ -266,9 +269,8 @@
 
 .why-intro-left h2 span,
 .why-heading h2 span,
-.why-process-header h2 span,
-.why-cta h2 span {
-  color: #0077b6;
+.why-process-header h2 span {
+  color: #96C855;
 }
 
 .why-intro-right {
@@ -278,7 +280,7 @@
 }
 
 .why-intro-right p {
-  color: #64748b;
+  color: #55708F;
   line-height: 1.8;
   font-size: 16px;
 }
@@ -287,7 +289,7 @@
 
 .why-reasons {
   padding: 90px 0;
-  background: #caf0f8;
+  background: #FFFFFF;
 }
 
 .why-heading {
@@ -296,7 +298,7 @@
 }
 
 .why-heading > p:last-child {
-  color: #64748b;
+  color: #55708F;
   line-height: 1.7;
   margin-top: 17px;
 }
@@ -315,7 +317,7 @@
 
 .why-reason-card {
   background: #ffffff;
-  border: 1px solid #d9f2f7;
+  border: 1px solid #E1E8E3;
   border-radius: 12px;
   padding: 30px;
   display: flex;
@@ -326,24 +328,24 @@
 
 .why-reason-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 15px 35px rgba(3, 4, 94, 0.08);
+  box-shadow: 0 15px 35px rgba(37, 48, 71, 0.08);
 }
 
 .why-reason-number {
   font-size: 15px;
   font-weight: 800;
-  color: #00b4d8;
+  color: #FF3A94;
   min-width: 30px;
 }
 
 .why-reason-card h3 {
-  color: #03045e;
+  color: #151B2E;
   font-size: 19px;
   margin-bottom: 12px;
 }
 
 .why-reason-card p {
-  color: #64748b;
+  color: #55708F;
   line-height: 1.7;
   font-size: 14px;
 }
@@ -362,7 +364,7 @@
 }
 
 .why-care-card {
-  border: 1px solid #dceff4;
+  border: 1px solid #E7EEE2;
   border-radius: 12px;
   padding: 30px 25px;
   background: #ffffff;
@@ -371,8 +373,8 @@
 
 .why-care-card:hover {
   transform: translateY(-5px);
-  border-color: #90e0ef;
-  box-shadow: 0 15px 35px rgba(3, 4, 94, 0.07);
+  border-color: #FF3A94;
+  box-shadow: 0 15px 35px rgba(37, 48, 71, 0.07);
 }
 
 .why-care-icon {
@@ -381,8 +383,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #caf0f8;
-  color: #0077b6;
+  background: #FFF0F7;
+  color: #FF3A94;
   border-radius: 50%;
   font-size: 21px;
   font-weight: 800;
@@ -390,13 +392,13 @@
 }
 
 .why-care-card h3 {
-  color: #03045e;
+  color: #151B2E;
   font-size: 19px;
   margin-bottom: 12px;
 }
 
 .why-care-card p {
-  color: #64748b;
+  color: #55708F;
   line-height: 1.7;
   font-size: 14px;
   min-height: 96px;
@@ -405,21 +407,21 @@
 .why-care-card a {
   display: inline-block;
   margin-top: 18px;
-  color: #0077b6;
+  color: #FF3A94;
   font-size: 14px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .why-care-card a:hover {
-  color: #f9242b;
+  color: #E82F83;
 }
 
 /* ================= PROCESS ================= */
 
 .why-process {
   padding: 90px 0;
-  background: #f5fbfd;
+  background: #FFF0F7;
 }
 
 .why-process-header {
@@ -431,7 +433,7 @@
 }
 
 .why-process-header > p {
-  color: #64748b;
+  color: #55708F;
   line-height: 1.8;
   font-size: 15px;
 }
@@ -447,11 +449,11 @@
   background: #ffffff;
   padding: 32px 27px;
   border-radius: 12px;
-  border: 1px solid #e2f1f5;
+  border: 1px solid #E1E8E3;
 }
 
 .why-process-card span {
-  color: #00b4d8;
+  color: #FF3A94;
   font-size: 13px;
   font-weight: 800;
 }
@@ -459,12 +461,12 @@
 .why-process-card h3 {
   margin-top: 22px;
   margin-bottom: 12px;
-  color: #03045e;
+  color: #151B2E;
   font-size: 18px;
 }
 
 .why-process-card p {
-  color: #64748b;
+  color: #55708F;
   font-size: 14px;
   line-height: 1.7;
 }
@@ -473,7 +475,7 @@
 
 .why-cta {
   padding: 75px 0;
-  background: #03045e;
+  background: linear-gradient(135deg, #FF3A94 0%, #E82F83 100%);
   color: #ffffff;
 }
 
@@ -490,16 +492,16 @@
 }
 
 .why-cta h2 span {
-  color: #90e0ef;
+  color: #96C855;
 }
 
 .why-cta .why-section-label {
-  color: #90e0ef;
+  color: #ffffff;
 }
 
 .why-cta p:last-child {
   margin-top: 17px;
-  color: #d8f5fb;
+  color: #EEF7E2;
   line-height: 1.7;
 }
 
@@ -517,14 +519,14 @@
 
 .why-outline-btn:hover {
   background: #ffffff;
-  color: #03045e;
+  color: #FF3A94;
 }
 
 /* ================= FOOTER ================= */
 
 .why-footer {
-  background: #02104f;
-  color: #ffffff;
+  background: #16121A;
+  color: #DCE3ED;
 }
 
 .why-footer-grid {
@@ -536,7 +538,7 @@
 
 .why-footer-logo {
   text-decoration: none;
-  color: #ffffff;
+  color: #FF3A94;
   font-size: 25px;
   font-weight: 800;
   display: flex;
@@ -545,7 +547,7 @@
 
 .why-footer-logo span {
   margin-top: 6px;
-  color: #90e0ef;
+  color: #8995A7;
   font-size: 8px;
   letter-spacing: 2px;
 }
@@ -553,7 +555,7 @@
 .why-footer-grid > div:first-child p {
   margin-top: 18px;
   max-width: 330px;
-  color: #b8d8e1;
+  color: #8995A7;
   line-height: 1.7;
   font-size: 14px;
 }
@@ -566,7 +568,7 @@
 
 .why-footer-grid a:not(.why-footer-logo) {
   display: block;
-  color: #b8d8e1;
+  color: #9AA5B6;
   text-decoration: none;
   margin-bottom: 11px;
   font-size: 14px;
@@ -578,7 +580,7 @@
 }
 
 .why-footer-grid p {
-  color: #b8d8e1;
+  color: #8995A7;
   font-size: 14px;
   line-height: 1.7;
   margin-bottom: 7px;
@@ -587,7 +589,7 @@
 .why-footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px 0;
-  color: #8db7c2;
+  color: #BFCBC3;
   font-size: 12px;
 }
 
@@ -738,4 +740,74 @@
     padding: 24px;
   }
 
+}
+/* Brand logo: use the official NOOR AL AFIYA artwork instead of text branding. */
+.why-logo {
+  min-width: 185px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+}
+
+.why-logo-image {
+  width: 178px;
+  max-height: 58px;
+  object-fit: contain;
+  object-position: left center;
+  display: block;
+}
+
+
+@media (max-width: 700px) {
+  .why-logo-image { width: 158px; max-height: 52px; }
+}
+
+
+/* Shared NOOR AL AFIYA header branding — matches the Home page */
+.why-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 225px;
+  height: 52px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.why-logo-mark {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  display: block;
+  flex-shrink: 0;
+}
+
+.why-logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.why-logo-text strong {
+  color: #FC3A93;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0;
+}
+
+.why-logo-text small {
+  margin-top: 3px;
+  color: #64808c;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+}
+
+@media (max-width: 700px) {
+  .why-logo { min-width: 0; gap: 9px; }
+  .why-logo-mark { width: 38px; height: 38px; }
+  .why-logo-text strong { font-size: 14px; }
+  .why-logo-text small { font-size: 8px; }
 }

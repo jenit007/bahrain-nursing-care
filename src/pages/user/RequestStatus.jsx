@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logoMark from "../../assets/noor-al-afiya-mark.png";
 import { getLatestRequest, getRequests } from "../../utils/requestStorage";
 import "./RequestStatus.css";
 
@@ -57,7 +58,6 @@ function RequestStatus() {
   }
 
   const currentIndex = getStatusIndex(request.status);
-  const handleFeedback = () => navigate("/feedback", { state: { request } });
   const address = request.address || {};
 
   return (
@@ -84,10 +84,12 @@ function RequestStatus() {
             </div>
             <div className="status-request-grid">
               <InfoItem label="Service" value={request.service} />
-              <InfoItem label="Name" value={request.name} />
-              <InfoItem label="Condition" value={request.condition} />
-              <InfoItem label="Shift" value={request.shift} />
+              <InfoItem label="Full Name" value={request.name} />
+              <InfoItem label="Email" value={request.email} />
               <InfoItem label="Phone" value={request.phone} />
+              <InfoItem label="Preferred Date" value={request.preferredDate ? new Date(`${request.preferredDate}T00:00:00`).toLocaleDateString() : "N/A"} />
+              <InfoItem label="Condition" value={request.condition} />
+              <InfoItem label="Shift" value={request.shift === "Other" && request.shiftOther ? request.shiftOther : request.shift} />
               <InfoItem label="Submitted" value={request.createdAt ? new Date(request.createdAt).toLocaleString() : "N/A"} />
             </div>
           </div>
@@ -125,38 +127,34 @@ function RequestStatus() {
 
           <section className="status-details-grid">
             <div className="status-detail-card">
-              <p className="status-section-label">CARE LOCATION</p>
+              <p className="status-section-label">SERVICE ADDRESS</p>
               <h3>Bahrain service address</h3>
               <div className="status-address">
-                {address.flatVilla && <span>Unit: {address.flatVilla}</span>}
-                <span>Building: {address.buildingNumber || "—"}</span>
-                <span>Road: {address.roadNumber || "—"}</span>
-                <span>Block: {address.blockNumber || "—"}</span>
+                <span>Flat No.: {address.flatNo || address.flatVilla || "—"}</span>
+                <span>Building No.: {address.buildingNo || address.buildingNumber || "—"}</span>
                 <span>Area: {address.area || "—"}</span>
                 <span>Governorate: {address.governorate || "—"}</span>
-                {address.poBox && <span>P.O. Box: {address.poBox}</span>}
                 <span>Country: Bahrain</span>
               </div>
-              {request.latitude && request.longitude && (
-                <a className="status-map-link" href={`https://www.google.com/maps?q=${request.latitude},${request.longitude}`} target="_blank" rel="noreferrer">Open GPS Location ↗</a>
-              )}
+            </div>
+
+            <div className="status-detail-card">
+              <p className="status-section-label">ADDITIONAL NOTES</p>
+              <h3>Information shared with our team</h3>
+              <p className="status-next-text">{request.notes || "No additional notes were provided."}</p>
             </div>
 
             <div className="status-detail-card">
               <p className="status-section-label">NEXT STEP</p>
               <h3>{request.status === "Completed" ? "Your request is complete" : "Keep your request details available"}</h3>
               <p className="status-next-text">
-                {request.status === "Completed" ? "Thank you for choosing Bahrain Home Nursing Care. You can share feedback about your service." : "Your request status can be updated by the admin dashboard. This page checks for updates automatically."}
+                {request.status === "Completed" ? "Thank you for choosing NOOR AL AFIYA Home Health Care." : "Your request status can be updated by the admin dashboard. This page checks for updates automatically."}
               </p>
-              {request.feedbackRequested && !request.feedbackSubmitted && (
-                <button className="status-primary-btn" onClick={handleFeedback}>Give Feedback <span>→</span></button>
-              )}
-              {request.feedbackSubmitted && <div className="status-success-note">✓ Feedback submitted successfully</div>}
             </div>
           </section>
 
-          {!request.feedbackRequested && request.status === "Completed" && (
-            <div className="status-complete-note"><span>✓</span><div><strong>Service completed</strong><p>Thank you for choosing Bahrain Home Nursing Care. You may receive a feedback request from our admin.</p></div></div>
+          {request.status === "Completed" && (
+            <div className="status-complete-note"><span>✓</span><div><strong>Service completed</strong><p>Thank you for choosing NOOR AL AFIYA. Our team has successfully completed your requested home care service.</p></div></div>
           )}
 
           <div className="status-actions">
@@ -167,11 +165,52 @@ function RequestStatus() {
       </main>
 
       <footer className="status-footer">
-        <div className="status-container status-footer-inner">
-          <Link to="/" className="status-footer-logo">Bahrain <span>HOME NURSING CARE</span></Link>
-          <div><Link to="/about">About Us</Link><Link to="/services">Our Services</Link><Link to="/contact">Contact Us</Link></div>
+        <div className="status-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', padding: '40px 0' }}>
+          <div>
+            <Link className="home-brand" to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+              <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+              <span>
+                <strong>NOOR AL AFIYA</strong>
+                <small>Home Health Care WLL</small>
+              </span>
+            </Link>
+            <p style={{ marginTop: '12px', fontSize: '13px', color: '#8995A7' }}>
+              Compassionate home-care services for families in Bahrain.
+            </p>
+          </div>
+          <div>
+            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Quick Links</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Link to="/" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Home</Link>
+              <Link to="/about" style={{ color: '#9AA5B6', textDecoration: 'none' }}>About Us</Link>
+              <Link to="/services" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Our Services</Link>
+              <Link to="/why-us" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Why Choose Us</Link>
+              <Link to="/contact" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Contact Us</Link>
+              <Link to="/careers" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Job Opportunities</Link>
+            </div>
+          </div>
+          <div>
+            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Services</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <Link to="/care/patient" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Patient Care</Link>
+              <Link to="/care/elder" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Elder Care</Link>
+              <Link to="/care/newborn" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Newborn Care</Link>
+              <Link to="/care/children" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Children's Care</Link>
+            </div>
+          </div>
+          <div>
+            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Contact</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#9AA5B6' }}>
+              <a href="tel:+97300000000" style={{ color: '#9AA5B6', textDecoration: 'none' }}>+973 0000 0000</a>
+              <a href="mailto:info@bahrainnursingcare.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>info@bahrainnursingcare.com</a>
+              <span>Bahrain</span>
+            </div>
+          </div>
         </div>
-        <div className="status-footer-bottom">© 2026 Bahrain Home Nursing Care. All rights reserved.</div>
+        <div className="status-footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
+          <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
+          <span>Home Nursing • Bahrain</span>
+        </div>
       </footer>
     </div>
   );
@@ -180,12 +219,17 @@ function RequestStatus() {
 function StatusHeader() {
   return (
     <>
-      <div className="status-topbar"><div className="status-container"><span>Bahrain Home Nursing Care</span><span>24/7 Home Care Support • Bahrain</span></div></div>
+      <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain</span></div></div>
       <header className="status-navbar">
         <div className="status-container status-nav-inner">
-          <Link to="/" className="status-logo"><span>Bahrain</span><small>HOME NURSING CARE</small></Link>
+          <Link to="/" className="home-brand">
+            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <span>
+              <strong>NOOR AL AFIYA</strong>
+              <small>Home Health Care WLL</small>
+            </span>
+          </Link>
           <nav><Link to="/">Home</Link><Link to="/about">About Us</Link><Link to="/services">Our Services</Link><Link to="/why-us">Why Choose Us</Link><Link to="/contact">Contact Us</Link></nav>
-          <Link to="/login" className="status-login-btn">Login</Link>
         </div>
       </header>
     </>

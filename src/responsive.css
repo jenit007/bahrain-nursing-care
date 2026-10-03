@@ -301,16 +301,6 @@ a {
     font-size: 14px;
   }
 
-  .map-container {
-    height: 260px;
-    border-radius: 10px;
-  }
-
-  .map-container .leaflet-container {
-    height: 100% !important;
-    width: 100% !important;
-  }
-
   .location-details {
     padding: 11px;
   }
@@ -830,5 +820,517 @@ a {
   .service-card:hover {
     transform: none;
     box-shadow: none;
+  }
+}
+
+/* =========================================================
+   GLOBAL MOBILE POLISH - ALL PAGES
+   Keeps every page usable from 320px phones through tablets.
+========================================================= */
+
+*, *::before, *::after {
+  max-width: 100%;
+}
+
+img, video, iframe, svg {
+  max-width: 100%;
+}
+
+input, select, textarea, button {
+  max-width: 100%;
+}
+
+@media (max-width: 767px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Prevent desktop-sized typography from creating horizontal overflow. */
+  h1, h2, h3, h4, h5, h6, p, a, span, label, strong {
+    overflow-wrap: anywhere;
+  }
+
+  /* Public-page containers */
+  .home-container,
+  .about-container,
+  .why-container,
+  .contact-container,
+  .services-container,
+  .login-container,
+  .care-form-container,
+  .status-container,
+  .feedback-shell,
+  .admin-main {
+    width: min(100% - 24px, 1180px);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Keep large decorative shapes inside the viewport. */
+  .home-page,
+  .about-page,
+  .why-page,
+  .contact-page,
+  .services-page,
+  .login-page,
+  .care-form-page,
+  .request-status-page,
+  .feedback-page,
+  .admin-page {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* ---------- Public navigation ---------- */
+  .why-nav-inner,
+  .contact-nav-inner,
+  .login-nav-inner,
+  .patient-nav-inner,
+  .elder-nav-inner,
+  .newborn-nav-inner,
+  .children-nav-inner,
+  .care-form-nav-inner,
+  .status-nav-inner,
+  .feedback-navbar > div {
+    min-height: 68px;
+    gap: 10px;
+  }
+
+  .why-nav-links,
+  .contact-nav-links,
+  .login-nav-links,
+  .patient-nav-links,
+  .elder-nav-links,
+  .newborn-nav-links,
+  .children-nav-links,
+  .care-form-nav-links,
+  .status-nav-inner nav {
+    display: flex;
+    flex: 1 1 100%;
+    order: 3;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 18px;
+    padding: 7px 2px 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .why-nav-links::-webkit-scrollbar,
+  .contact-nav-links::-webkit-scrollbar,
+  .login-nav-links::-webkit-scrollbar,
+  .patient-nav-links::-webkit-scrollbar,
+  .elder-nav-links::-webkit-scrollbar,
+  .newborn-nav-links::-webkit-scrollbar,
+  .children-nav-links::-webkit-scrollbar,
+  .care-form-nav-links::-webkit-scrollbar,
+  .status-nav-inner nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .why-nav-links a,
+  .contact-nav-links a,
+  .login-nav-links a,
+  .patient-nav-links a,
+  .elder-nav-links a,
+  .newborn-nav-links a,
+  .children-nav-links a,
+  .care-form-nav-links a,
+  .status-nav-inner nav a {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    font-size: 12px;
+  }
+
+  .why-nav-inner,
+  .contact-nav-inner,
+  .login-nav-inner,
+  .patient-nav-inner,
+  .elder-nav-inner,
+  .newborn-nav-inner,
+  .children-nav-inner,
+  .care-form-nav-inner,
+  .status-nav-inner {
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Headers with a horizontal mobile nav ---------- */
+  .patient-navbar,
+  .elder-navbar,
+  .newborn-navbar,
+  .children-navbar,
+  .care-form-navbar,
+  .status-navbar {
+    position: relative;
+  }
+
+  .patient-logo,
+  .elder-logo,
+  .newborn-logo,
+  .children-logo,
+  .care-form-logo,
+  .status-logo,
+  .login-logo {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  .patient-login-btn,
+  .elder-login-btn,
+  .newborn-login-btn,
+  .children-login-btn,
+  .care-form-login-btn,
+  .status-login-btn,
+  .login-nav-btn {
+    flex: 0 0 auto;
+    padding: 9px 13px;
+    font-size: 12px;
+  }
+
+  /* ---------- Hero sections ---------- */
+  .patient-hero-content,
+  .elder-hero-content,
+  .newborn-hero-content,
+  .children-hero-content,
+  .care-form-hero-inner,
+  .status-hero-inner,
+  .feedback-hero > div {
+    padding-top: 34px;
+    padding-bottom: 40px;
+  }
+
+  .patient-hero h1,
+  .elder-hero h1,
+  .newborn-hero h1,
+  .children-hero h1,
+  .care-form-hero h1,
+  .status-hero h1,
+  .feedback-hero h1 {
+    font-size: clamp(30px, 9vw, 43px);
+    line-height: 1.08;
+  }
+
+  .patient-hero-description,
+  .elder-hero-description,
+  .newborn-hero-description,
+  .children-hero-description,
+  .care-form-hero p,
+  .status-hero p,
+  .feedback-hero p {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .patient-hero-buttons,
+  .elder-hero-buttons,
+  .newborn-hero-buttons,
+  .children-hero-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .patient-hero-buttons a,
+  .elder-hero-buttons a,
+  .newborn-hero-buttons a,
+  .children-hero-buttons a {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ---------- Service detail cards ---------- */
+  .patient-options-grid,
+  .elder-options-grid,
+  .newborn-options-grid,
+  .children-options-grid,
+  .patient-support-grid,
+  .elder-support-grid,
+  .newborn-support-grid,
+  .children-support-grid,
+  .patient-shift-grid,
+  .elder-shift-grid,
+  .newborn-shift-grid,
+  .children-shift-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .patient-footer-grid,
+  .elder-footer-grid,
+  .newborn-footer-grid,
+  .children-footer-grid {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+
+  /* ---------- Forms ---------- */
+  .care-form-section {
+    padding-top: 30px;
+    padding-bottom: 45px;
+  }
+
+  .care-form-card {
+    width: 100%;
+    padding: 18px;
+  }
+
+  .care-form-card-header {
+    gap: 12px;
+  }
+
+  .care-form-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .care-choice-grid,
+  .care-shift-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .care-choice-card {
+    min-height: 48px;
+  }
+
+  .care-location-wrapper {
+    padding: 13px;
+  }
+
+  .care-location-wrapper .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .care-location-wrapper .map-wrapper,
+  .care-location-wrapper .map-container,
+  .map-container {
+    width: 100%;
+    height: 250px;
+    max-height: 55vh;
+  }
+
+  .care-submit-area {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .care-primary-btn,
+  .submit-request-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ---------- Tracking ---------- */
+  .status-request-grid,
+  .status-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .status-request-card,
+  .status-tracking-card,
+  .status-detail-card {
+    padding: 18px;
+  }
+
+  .status-request-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .status-timeline {
+    grid-template-columns: 1fr;
+  }
+
+  .status-step {
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 10px;
+    padding-bottom: 22px;
+  }
+
+  .status-step:before {
+    left: 18px;
+    top: 38px;
+    bottom: 0;
+    width: 1px;
+    height: auto;
+  }
+
+  .status-step:last-child:before {
+    display: none;
+  }
+
+  .status-address {
+    grid-template-columns: 1fr;
+  }
+
+  .status-actions {
+    flex-direction: column;
+  }
+
+  .status-primary-btn,
+  .status-secondary-btn {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  /* ---------- Feedback ---------- */
+  .feedback-shell {
+    width: min(100% - 24px, 900px);
+  }
+
+  .feedback-card-header {
+    flex-direction: column;
+    padding: 20px 17px;
+  }
+
+  .feedback-form {
+    padding: 0 17px;
+  }
+
+  .feedback-answer-options {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+  }
+
+  .feedback-answer-options span {
+    width: 100%;
+    height: 42px;
+  }
+
+  .feedback-submit-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .feedback-submit {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  /* ---------- Admin ---------- */
+  .admin-main {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .admin-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .requests-table-container {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .requests-table {
+    min-width: 850px;
+  }
+
+  .modal-overlay {
+    padding: 8px;
+  }
+
+  .details-modal {
+    width: 100%;
+    max-height: calc(100svh - 16px);
+    overflow-y: auto;
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-actions button,
+  .map-link {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-container,
+  .about-container,
+  .why-container,
+  .contact-container,
+  .services-container,
+  .login-container,
+  .care-form-container,
+  .status-container,
+  .feedback-shell,
+  .admin-main {
+    width: calc(100% - 20px);
+  }
+
+  .brand-mark,
+  .about-brand-mark,
+  .why-brand-mark,
+  .contact-brand-mark {
+    flex: 0 0 auto;
+  }
+
+  .patient-container,
+  .elder-container,
+  .newborn-container,
+  .children-container {
+    width: calc(100% - 20px);
+  }
+
+  .patient-footer-grid,
+  .elder-footer-grid,
+  .newborn-footer-grid,
+  .children-footer-grid,
+  .care-footer-inner,
+  .status-footer-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .care-footer-links,
+  .status-footer-inner > div {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px 18px;
+  }
+
+  .admin-stats {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .stat-card {
+    padding: 11px 9px;
+  }
+
+  .stat-content strong {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 360px) {
+  .care-form-card,
+  .status-request-card,
+  .status-tracking-card,
+  .status-detail-card,
+  .feedback-card {
+    border-radius: 10px;
+  }
+
+  .feedback-answer-options {
+    gap: 5px;
+  }
+
+  .feedback-answer-options span {
+    height: 38px;
+    font-size: 11px;
   }
 }
