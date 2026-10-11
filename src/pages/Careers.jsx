@@ -15,19 +15,12 @@ const positions = [
   "Other Healthcare Position",
 ];
 
-const governorates = [
-  "Capital Governorate",
-  "Muharraq Governorate",
-  "Northern Governorate",
-  "Southern Governorate",
-];
-
 const initialForm = {
   fullName: "",
   email: "",
   phone: "",
+  cprNo: "",
   address: "",
-  governorate: "",
   position: "",
   experience: "",
   qualification: "",
@@ -131,8 +124,8 @@ function Careers() {
       ["fullName", "Full name is required."],
       ["email", "Email address is required."],
       ["phone", "Phone number is required."],
+      ["cprNo", "CPR No. is required."],
       ["address", "Address is required."],
-      ["governorate", "Please select your governorate."],
       ["position", "Please select a position."],
       ["experience", "Please select your experience level."],
       ["qualification", "Professional qualification is required."],
@@ -395,7 +388,7 @@ function Careers() {
                 <Field label="Full Name" name="fullName" value={form.fullName} onChange={updateField} required placeholder="Enter your full name" error={errors.fullName} />
                 <Field label="Email Address" name="email" type="email" value={form.email} onChange={updateField} required placeholder="you@example.com" error={errors.email} />
                 <Field label="Phone Number" name="phone" value={form.phone} onChange={updateField} required placeholder="+973 XXXX XXXX" error={errors.phone} />
-                <SelectField label="Governorate" name="governorate" value={form.governorate} onChange={updateField} required options={governorates} placeholder="Select governorate" error={errors.governorate} />
+                <Field label="CPR No." name="cprNo" value={form.cprNo} onChange={updateField} required placeholder="Enter CPR No." error={errors.cprNo} />
                 <div className="career-field full-width">
                   <label htmlFor="address">Address <span>*</span></label>
                   <textarea id="address" name="address" value={form.address} onChange={updateField} required rows="3" placeholder="Flat / building, area and additional address details" />

@@ -45,6 +45,7 @@ function CareForm() {
   const navigate = useNavigate();
   const currentService = careData[service];
 
+  const [menuOpen, setMenuOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -130,7 +131,7 @@ function CareForm() {
 
       <header className="care-form-navbar">
         <div className="care-form-container care-form-nav-inner">
-          <Link to="/" className="home-brand">
+          <Link to="/" className="home-brand" onClick={() => setMenuOpen(false)}>
             <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
@@ -138,12 +139,24 @@ function CareForm() {
             </span>
           </Link>
 
-          <nav className="care-form-nav-links">
-            <Link to="/">Home</Link>
-            <Link to="/about">About Us</Link>
-            <Link to="/services">Our Services</Link>
-            <Link to="/why-us">Why Choose Us</Link>
-            <Link to="/contact">Contact Us</Link>
+          <button
+            type="button"
+            className={`care-menu-toggle ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen((value) => !value)}
+            aria-label="Toggle navigation"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav className={`care-form-nav-links ${menuOpen ? "show" : ""}`}>
+            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+            <Link to="/services" onClick={() => setMenuOpen(false)}>Our Services</Link>
+            <Link to="/why-us" onClick={() => setMenuOpen(false)}>Why Choose Us</Link>
+            <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link>
+            <Link to="/careers" onClick={() => setMenuOpen(false)}>Job Opportunities</Link>
           </nav>
         </div>
       </header>
@@ -213,7 +226,7 @@ function CareForm() {
                 </div>
 
                 <div className="care-field">
-                  <label>Email *</label>
+                  <label>Email</label>
                   <input
                     type="email"
                     name="email"
@@ -221,7 +234,6 @@ function CareForm() {
                     onChange={handleChange}
                     placeholder="Enter your email address"
                     autoComplete="email"
-                    required
                   />
                 </div>
 
@@ -271,7 +283,7 @@ function CareForm() {
               </div>
 
               <div className="care-choice-group">
-                <label className="care-choice-label">Condition *</label>
+                <label className="care-choice-label">Condition</label>
                 <div className="care-choice-grid">
                   {currentService.conditions.map((condition) => (
                     <label
@@ -284,7 +296,6 @@ function CareForm() {
                         value={condition}
                         checked={formData.condition === condition}
                         onChange={handleChange}
-                        required
                       />
                       <span className="care-choice-radio" />
                       <span>{condition}</span>
@@ -294,7 +305,7 @@ function CareForm() {
               </div>
 
               <div className="care-choice-group">
-                <label className="care-choice-label">Shift *</label>
+                <label className="care-choice-label">Shift</label>
                 <div className="care-choice-grid care-shift-grid">
                   {shiftOptions.map((shift) => (
                     <label
@@ -307,7 +318,6 @@ function CareForm() {
                         value={shift}
                         checked={formData.shift === shift}
                         onChange={handleChange}
-                        required
                       />
                       <span className="care-choice-radio" />
                       <span>{shift}</span>
@@ -318,17 +328,27 @@ function CareForm() {
 
               {formData.shift === "Other" && (
                 <div className="care-field care-shift-other-field">
-                  <label>Enter Preferred Shift *</label>
+                  <label>Enter Preferred Shift <span className="optional-label">(Optional)</span></label>
                   <input
                     type="text"
                     name="shiftOther"
                     value={formData.shiftOther}
                     onChange={handleChange}
                     placeholder="Example: 8 hours, 10 AM - 6 PM"
-                    required
                   />
                 </div>
               )}
+
+              <div className="care-field care-shift-other-field">
+                <label>Preferred Time <span className="optional-label">(Optional)</span></label>
+                <input
+                  type="time"
+                  name="preferredTime"
+                  value={formData.preferredTime || ""}
+                  onChange={handleChange}
+                  placeholder="Select preferred time"
+                />
+              </div>
 
               <div className="care-form-divider" />
 
@@ -340,13 +360,13 @@ function CareForm() {
 
               <div className="care-address-grid">
                 <div className="care-field">
-                  <label>Flat No. *</label>
+                  <label>Block Number *</label>
                   <input
                     type="text"
                     name="flatNo"
                     value={formData.address.flatNo}
                     onChange={handleAddressChange}
-                    placeholder="Enter flat number"
+                    placeholder="Enter block number"
                     required
                   />
                 </div>
@@ -376,12 +396,11 @@ function CareForm() {
                 </div>
 
                 <div className="care-field">
-                  <label>Governorate *</label>
+                  <label>Governorate</label>
                   <select
                     name="governorate"
                     value={formData.address.governorate}
                     onChange={handleAddressChange}
-                    required
                   >
                     <option value="">Select governorate</option>
                     {GOVERNORATES.map((governorate) => (

@@ -302,16 +302,16 @@ input[type="checkbox"] {
 .services-brand-mark,
 .why-brand-mark,
 .contact-brand-mark {
-  width: 48px;
-  height: 48px;
+  width: 63px;
+  height: 63px;
   border-radius: 12px;
   background-color: #FEFEFE !important;
   box-shadow: 0 8px 22px rgba(252, 58, 147, 0.14);
 }
 
 .admin-logo {
-  width: 52px;
-  height: 52px;
+  width: 67px;
+  height: 67px;
   border-radius: 14px;
   background-color: #FEFEFE !important;
   box-shadow: 0 8px 22px rgba(252, 58, 147, 0.14);

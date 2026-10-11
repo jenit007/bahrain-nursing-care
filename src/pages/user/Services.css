@@ -77,7 +77,7 @@
 }
 
 .services-nav {
-  min-height: 78px;
+  min-height: 98px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -113,8 +113,8 @@
 }
 
 .services-brand-mark {
-  width: 42px;
-  height: 42px;
+  width: 57px;
+  height: 57px;
   display: grid;
   place-items: center;
   border-radius: 12px;
@@ -851,7 +851,10 @@
   /* SERVICE IMAGE */
 
   .service-card-image-wrap {
-    height: 320px;
+    aspect-ratio: 16 / 9;
+    height: auto;
+    min-height: 240px;
+    max-height: 360px;
   }
 
   /* PROCESS */
@@ -967,7 +970,10 @@
   }
 
   .service-card-image-wrap {
-    height: 250px;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    min-height: 200px;
+    max-height: 280px;
     margin-bottom: 20px;
     border-radius: 12px;
   }
@@ -1034,6 +1040,9 @@
   }
 
   .service-card-image-wrap {
-    height: 220px;
+    aspect-ratio: 16 / 10;
+    height: auto;
+    min-height: 180px;
+    max-height: 240px;
   }
 }

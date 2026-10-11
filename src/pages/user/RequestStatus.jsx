@@ -217,19 +217,39 @@ function RequestStatus() {
 }
 
 function StatusHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
       <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain</span></div></div>
       <header className="status-navbar">
         <div className="status-container status-nav-inner">
-          <Link to="/" className="home-brand">
+          <Link to="/" className="home-brand" onClick={() => setMenuOpen(false)}>
             <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
               <small>Home Health Care WLL</small>
             </span>
           </Link>
-          <nav><Link to="/">Home</Link><Link to="/about">About Us</Link><Link to="/services">Our Services</Link><Link to="/why-us">Why Choose Us</Link><Link to="/contact">Contact Us</Link></nav>
+
+          <button
+            type="button"
+            className={`status-menu-toggle ${menuOpen ? "open" : ""}`}
+            onClick={() => setMenuOpen((value) => !value)}
+            aria-label="Toggle navigation"
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav className={`status-nav-links ${menuOpen ? "show" : ""}`}>
+            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
+            <Link to="/services" onClick={() => setMenuOpen(false)}>Our Services</Link>
+            <Link to="/why-us" onClick={() => setMenuOpen(false)}>Why Choose Us</Link>
+            <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link>
+            <Link to="/careers" onClick={() => setMenuOpen(false)}>Job Opportunities</Link>
+          </nav>
         </div>
       </header>
     </>

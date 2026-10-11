@@ -1334,3 +1334,86 @@ input, select, textarea, button {
     font-size: 11px;
   }
 }
+
+/* =========================================================
+   MOBILE HERO IMAGES & FORM / BUTTON RESPONSIVE PRESERVATION
+   Strictly scoped to viewports below 1024px.
+   Desktop layout (1024px+) remains 100% unaltered.
+   ========================================================= */
+
+@media (max-width: 1023px) {
+  /* Prevent any hero image, banner, or content image distortion */
+  .home-hero,
+  .about-hero,
+  .services-hero,
+  .why-hero,
+  .contact-hero,
+  .patient-hero,
+  .elder-hero,
+  .newborn-hero,
+  .children-hero,
+  .care-form-hero {
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+  }
+
+  /* Responsive image scaling */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Ensure explicit object-fit elements retain proportions */
+  .about-intro-bg-img,
+  .service-card-image,
+  .careers-image-card img,
+  .brand-mark-image,
+  .contact-logo-mark,
+  .career-logo-mark,
+  .career-footer-mark {
+    max-width: 100%;
+    object-fit: cover;
+  }
+
+  /* Standardize touch buttons on mobile and prevent horizontal overflow */
+  .primary-cta,
+  .secondary-cta,
+  .about-primary-button,
+  .about-cta-button,
+  .services-primary-button,
+  .service-select-button,
+  .contact-primary-btn,
+  .contact-outline-btn,
+  .contact-submit-btn,
+  .careers-primary-button,
+  .careers-secondary-button,
+  .career-submit-button,
+  .patient-primary-btn,
+  .patient-secondary-btn,
+  .elder-primary-btn,
+  .elder-secondary-btn,
+  .newborn-primary-btn,
+  .newborn-secondary-btn,
+  .children-primary-btn,
+  .children-secondary-btn,
+  .care-primary-btn {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  /* Standardize form inputs on mobile/tablet */
+  .care-field input,
+  .care-field select,
+  .care-field textarea,
+  .contact-field input,
+  .contact-field textarea,
+  .career-field input,
+  .career-field select,
+  .career-field textarea {
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+}
+

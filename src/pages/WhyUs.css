@@ -43,7 +43,7 @@
 }
 
 .why-nav-inner {
-  min-height: 82px;
+  min-height: 102px;
   display: flex;
   align-items: center;
   gap: 30px;
@@ -630,7 +630,7 @@
   }
 
   .why-nav-inner {
-    min-height: 70px;
+    min-height: 90px;
     gap: 15px;
   }
 
@@ -775,8 +775,8 @@
 }
 
 .why-logo-mark {
-  width: 42px;
-  height: 42px;
+  width: 57px;
+  height: 57px;
   object-fit: cover;
   object-position: center;
   border-radius: 10px;

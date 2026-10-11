@@ -83,7 +83,7 @@
 }
 
 .about-nav {
-  min-height: 78px;
+  min-height: 98px;
 
   display: flex;
   align-items: center;
@@ -128,8 +128,8 @@
 }
 
 .about-brand-mark {
-  width: 42px;
-  height: 42px;
+  width: 57px;
+  height: 57px;
 
   display: grid;
   place-items: center;
@@ -1052,7 +1052,13 @@
   }
 
   .about-intro-image {
-    min-height: 380px;
+    aspect-ratio: 16 / 11;
+    min-height: 320px;
+    max-height: 480px;
+  }
+
+  .about-intro-bg-img {
+    object-position: center 25%;
   }
 
 
@@ -1167,14 +1173,19 @@
   /* IMAGE */
 
   .about-intro-image {
-    min-height: 330px;
+    aspect-ratio: 16 / 12;
+    min-height: 260px;
+    max-height: 380px;
+    border-radius: 20px;
+  }
 
-    border-radius: 22px;
+  .about-intro-bg-img {
+    object-position: center 20%;
+    border-radius: 20px;
   }
 
   .about-image-card {
     width: 82%;
-
     padding: 30px 20px;
   }
 
@@ -1237,6 +1248,12 @@
 
   .about-hero-copy h1 {
     font-size: 37px;
+  }
+
+  .about-intro-image {
+    aspect-ratio: 4 / 3;
+    min-height: 220px;
+    border-radius: 16px;
   }
 
 }

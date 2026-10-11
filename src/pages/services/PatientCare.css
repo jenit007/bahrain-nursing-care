@@ -58,7 +58,7 @@
 }
 
 .patient-nav-inner {
-  min-height: 78px;
+  min-height: 98px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -667,7 +667,7 @@
   }
 
   .patient-nav-inner {
-    min-height: 70px;
+    min-height: 90px;
   }
 
   .patient-logo {

@@ -154,8 +154,8 @@ function Contact() {
                   service enquiries.
                 </p>
 
-                <a href="mailto:info@example.com">
-                  info@example.com
+                <a href="mailto:info@bahrainnursingcare.com">
+                  info@bahrainnursingcare.com
                 </a>
 
               </div>

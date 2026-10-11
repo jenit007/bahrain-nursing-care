@@ -43,7 +43,7 @@
 }
 
 .login-nav-inner {
-  min-height: 82px;
+  min-height: 102px;
   display: flex;
   align-items: center;
   gap: 30px;
@@ -419,7 +419,7 @@
   }
 
   .login-nav-inner {
-    min-height: 70px;
+    min-height: 90px;
     gap: 15px;
   }
 

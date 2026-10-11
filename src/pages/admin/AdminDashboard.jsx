@@ -395,6 +395,7 @@ function AdminDashboard() {
         app.phone?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
         app.email?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
         app.qualification?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
+        app.cprNo?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
         app.governorate?.toLowerCase().includes(jobSearchTerm.toLowerCase());
 
       const matchesPosition =
@@ -970,7 +971,7 @@ function AdminDashboard() {
                 <span className="search-icon">🔍</span>
                 <input
                   type="text"
-                  placeholder="Search by Application ID, Candidate Name, Phone, Qualification, Governorate..."
+                  placeholder="Search by Application ID, Candidate Name, Phone, CPR No., Qualification..."
                   value={jobSearchTerm}
                   onChange={(e) => setJobSearchTerm(e.target.value)}
                 />
@@ -1045,7 +1046,7 @@ function AdminDashboard() {
                         <th>Applicant Name</th>
                         <th>Position Applied</th>
                         <th>Qualification & Experience</th>
-                        <th>Governorate</th>
+                        <th>CPR No.</th>
                         <th>Availability</th>
                         <th>Status Workflow</th>
                         <th>Submitted</th>
@@ -1079,7 +1080,7 @@ function AdminDashboard() {
                               </div>
                             </td>
                             <td>
-                              <small>{app.governorate || "Bahrain"}</small>
+                              <small>{app.cprNo || app.governorate || "N/A"}</small>
                             </td>
                             <td>
                               <span className="availability-chip">{app.availability || "Immediate"}</span>
@@ -1931,6 +1932,248 @@ function AdminDashboard() {
                 onClick={() => handleDeleteRequest(deleteConfirmReq.id)}
               >
                 Delete Request
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: JOB APPLICATION DETAILS
+      ======================================================== */}
+      {selectedJobApp && (
+        <div className="modal-overlay" onClick={() => setSelectedJobApp(null)}>
+          <div className="details-modal job-app-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div>
+                <h2>Job Application Details</h2>
+                <p className="modal-subtitle">{selectedJobApp.id}</p>
+              </div>
+              <button className="close-btn" onClick={() => setSelectedJobApp(null)}>×</button>
+            </div>
+
+            <div className="modal-body-scroll">
+              {/* Top Banner */}
+              <div className="details-top-banner job-app-banner">
+                <div>
+                  <span className="label">POSITION APPLIED</span>
+                  <h3>{selectedJobApp.position}</h3>
+                </div>
+                <div>
+                  <span className="label">APPLICATION STATUS</span>
+                  <select
+                    className={`status-select status-${(selectedJobApp.status || "")
+                      .toLowerCase()
+                      .replace(/[\/\s]+/g, "-")}`}
+                    value={selectedJobApp.status}
+                    onChange={(e) => handleJobStatusChange(selectedJobApp.id, e.target.value)}
+                  >
+                    <option value="Application Received">Application Received</option>
+                    <option value="Under Review">Under Review</option>
+                    <option value="Hired / Added to Roster">Hired / Added to Roster</option>
+                    <option value="Rejected">Rejected</option>
+                  </select>
+                </div>
+                <div>
+                  <span className="label">SUBMITTED ON</span>
+                  <p>{selectedJobApp.submittedAt ? new Date(selectedJobApp.submittedAt).toLocaleString() : "N/A"}</p>
+                </div>
+              </div>
+
+              {/* Details Grid */}
+              <div className="details-info-grid">
+                <div className="info-section">
+                  <h4>👤 Personal Information</h4>
+                  <div className="info-row">
+                    <label>Full Name:</label>
+                    <span>{selectedJobApp.fullName}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>Email:</label>
+                    <span>{selectedJobApp.email}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>Phone:</label>
+                    <span>{selectedJobApp.phone}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>Address:</label>
+                    <span>{selectedJobApp.address || "N/A"}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>CPR No.:</label>
+                    <span>{selectedJobApp.cprNo || selectedJobApp.governorate || "N/A"}</span>
+                  </div>
+                </div>
+
+                <div className="info-section">
+                  <h4>🩺 Professional Profile</h4>
+                  <div className="info-row">
+                    <label>Qualification:</label>
+                    <span>{selectedJobApp.qualification}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>Experience:</label>
+                    <span>{selectedJobApp.experience}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>License Number:</label>
+                    <span>{selectedJobApp.licenseNumber || "Not provided"}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>Availability:</label>
+                    <span>{selectedJobApp.availability}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>CV File:</label>
+                    <span>{selectedJobApp.cvFileName || "Not provided"}</span>
+                  </div>
+                  <div className="info-row">
+                    <label>Certification:</label>
+                    <span>{selectedJobApp.certificationFileName || "Not provided"}</span>
+                  </div>
+                </div>
+
+                {selectedJobApp.message && (
+                  <div className="info-section full-width">
+                    <h4>💬 Applicant Message</h4>
+                    <p className="message-text">{selectedJobApp.message}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer Actions */}
+            <div className="modal-footer job-app-footer">
+              <button
+                className="admin-secondary-btn"
+                onClick={() => setSelectedJobApp(null)}
+              >
+                Close
+              </button>
+              {!selectedJobApp.status?.toLowerCase().includes("hired") && (
+                <button
+                  className="admin-primary-btn hire-confirm-btn"
+                  onClick={() => {
+                    setSelectedJobApp(null);
+                    handleOpenHireModal(selectedJobApp);
+                  }}
+                >
+                  💼 Take for Job / Hire Now
+                </button>
+              )}
+              {selectedJobApp.status?.toLowerCase().includes("hired") && (
+                <span className="modal-hired-badge">✓ Staff Member in Active Roster</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: HIRE APPLICANT CONFIRMATION
+      ======================================================== */}
+      {hireConfirmApp && (
+        <div className="modal-overlay" onClick={() => setHireConfirmApp(null)}>
+          <div className="confirm-modal hire-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div>
+                <h2>💼 Confirm Hiring Decision</h2>
+                <p className="modal-subtitle">This will add the applicant to the active Staff & Caregivers Roster</p>
+              </div>
+              <button className="close-btn" onClick={() => setHireConfirmApp(null)}>×</button>
+            </div>
+
+            <form onSubmit={handleConfirmHireApplicant}>
+              <div className="modal-body">
+                <div className="hire-candidate-preview">
+                  <div className="hire-avatar">
+                    {hireConfirmApp.fullName?.split(" ").slice(0, 2).map(n => n[0]).join("").toUpperCase()}
+                  </div>
+                  <div>
+                    <strong>{hireConfirmApp.fullName}</strong>
+                    <span>{hireConfirmApp.email}</span>
+                    <span>{hireConfirmApp.phone}</span>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label>Role / Job Title in Roster:</label>
+                  <select
+                    value={hireForm.role}
+                    onChange={(e) => setHireForm({ ...hireForm, role: e.target.value })}
+                    required
+                  >
+                    <option value="Registered Nurse">Registered Nurse</option>
+                    <option value="Caregiver">Caregiver</option>
+                    <option value="Newborn Care Specialist">Newborn Care Specialist</option>
+                    <option value="Patient Care Assistant">Patient Care Assistant</option>
+                    <option value="Senior Nurse">Senior Nurse</option>
+                    <option value="Clinical Support Staff">Clinical Support Staff</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
+                  <label>Specialization:</label>
+                  <input
+                    type="text"
+                    value={hireForm.specialization}
+                    onChange={(e) => setHireForm({ ...hireForm, specialization: e.target.value })}
+                    placeholder="e.g. Elder Care, Post-Op Nursing, Neonatal Care..."
+                  />
+                </div>
+
+                <div className="hire-info-note">
+                  <strong>ℹ️ Note:</strong> The candidate will be added to the Staff & Caregivers Roster with <strong>Available</strong> status and can be assigned to care requests immediately.
+                </div>
+              </div>
+
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="admin-secondary-btn"
+                  onClick={() => setHireConfirmApp(null)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="admin-primary-btn hire-confirm-btn">
+                  ✅ Confirm Hire & Add to Roster
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================
+          MODAL: DELETE JOB APPLICATION CONFIRMATION
+      ======================================================== */}
+      {deleteConfirmJobApp && (
+        <div className="modal-overlay" onClick={() => setDeleteConfirmJobApp(null)}>
+          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Delete Job Application</h2>
+              <button className="close-btn" onClick={() => setDeleteConfirmJobApp(null)}>×</button>
+            </div>
+            <div className="modal-body">
+              <p>
+                Are you sure you want to permanently delete the job application by{" "}
+                <strong>{deleteConfirmJobApp.fullName}</strong> ({deleteConfirmJobApp.id})?
+              </p>
+              <p className="warning-text">This action cannot be undone.</p>
+            </div>
+            <div className="modal-footer">
+              <button
+                className="admin-secondary-btn"
+                onClick={() => setDeleteConfirmJobApp(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="admin-danger-btn"
+                onClick={() => handleDeleteJobApplication(deleteConfirmJobApp.id)}
+              >
+                🗑️ Delete Application
               </button>
             </div>
           </div>
