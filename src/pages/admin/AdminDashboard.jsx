@@ -1,1553 +1,1412 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
+import { Link } from "react-router-dom";
+import logoMark from "../../assets/noor-al-afiya-mark.png";
 import {
-  getRequests,
-  updateRequestStatus,
-  assignStaffToRequest,
-  deleteRequest,
-  addRequest,
-  getStaffRoster,
-  addStaffMember,
-  toggleStaffStatus,
-  seedSampleDataIfEmpty,
-  getJobApplications,
-  updateJobApplicationStatus,
-  hireJobApplicant,
-  deleteJobApplication,
-} from "../../utils/requestStorage";
+  fetchAdminBookings,
+  fetchAdminBookingHistory,
+  updateAdminBookingStatus,
+  fetchAdminJobApplications,
+  updateAdminJobApplicationStatus,
+  fetchJobApplicationSignedDocumentUrl,
+  logoutAdmin,
+} from "../../utils/api";
 import "./AdminDashboard.css";
 
+const BOOKING_STATUSES = [
+  "Pending Verification",
+  "Verified",
+  "Completed",
+];
+
+const APPLICATION_STATUSES = [
+  "Application Received",
+  "Under Review",
+  "Approved",
+  "Rejected",
+];
+
+const SECTION_META = {
+  dashboard: {
+    title: "Dashboard",
+    subtitle: "Overview of care bookings and pending verification requests",
+  },
+  bookings: {
+    title: "Care Bookings",
+    subtitle: "Search, filter, verify, and manage submitted patient care bookings",
+  },
+  applications: {
+    title: "Job Applications",
+    subtitle: "Review healthcare career applications submitted through the website",
+  },
+};
+
+function formatDate(dateString) {
+  if (!dateString) return "Not specified";
+  const parsed = dateString.includes("T")
+    ? new Date(dateString)
+    : new Date(`${dateString}T00:00:00`);
+  if (Number.isNaN(parsed.getTime())) return dateString;
+  return parsed.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+}
+
+function formatDateTime(dateString) {
+  if (!dateString) return "Not specified";
+  const parsed = new Date(dateString);
+  if (Number.isNaN(parsed.getTime())) return dateString;
+  return parsed.toLocaleString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+function getStatusClass(status) {
+  const normalized = (status || "").toLowerCase();
+  if (normalized.includes("pending") || normalized.includes("received")) {
+    return "status-pending";
+  }
+  if (normalized.includes("verified") || normalized.includes("review")) {
+    return "status-verified";
+  }
+  if (normalized.includes("completed") || normalized.includes("approved")) {
+    return "status-positive";
+  }
+  if (normalized.includes("rejected")) {
+    return "status-rejected";
+  }
+  return "status-default";
+}
+
 function AdminDashboard() {
-  // State management
+  const [activeSection, setActiveSection] = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // Real database data states
   const [requests, setRequests] = useState([]);
-  const [staffRoster, setStaffRoster] = useState([]);
   const [jobApplications, setJobApplications] = useState([]);
-  const [activeTab, setActiveTab] = useState("requests"); // 'requests' | 'jobs' | 'staff' | 'analytics' | 'settings'
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
 
-  // Search & Filter state for Care Requests
-  const [searchTerm, setSearchTerm] = useState("");
-  const [statusFilter, setStatusFilter] = useState("ALL");
-  const [serviceFilter, setServiceFilter] = useState("ALL");
-  const [urgencyFilter, setUrgencyFilter] = useState("ALL");
+  // Care Bookings search & filters
+  const [bookingSearch, setBookingSearch] = useState("");
+  const [bookingStatusFilter, setBookingStatusFilter] = useState("ALL");
+  const [bookingDateFilter, setBookingDateFilter] = useState("");
 
-  // Search & Filter state for Job Applications
-  const [jobSearchTerm, setJobSearchTerm] = useState("");
-  const [jobPositionFilter, setJobPositionFilter] = useState("ALL");
+  // Job Applications search & filters
+  const [jobSearch, setJobSearch] = useState("");
   const [jobStatusFilter, setJobStatusFilter] = useState("ALL");
 
-  // Dark/Light Theme state
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem("admin_theme") || "dark";
-  });
-
-  // Modal states
-  const [selectedRequest, setSelectedRequest] = useState(null);
-  const [assignModalReq, setAssignModalReq] = useState(null);
-  const [selectedStaffId, setSelectedStaffId] = useState("");
-  const [showAddStaffModal, setShowAddStaffModal] = useState(false);
-  const [showAddRequestModal, setShowAddRequestModal] = useState(false);
-  const [deleteConfirmReq, setDeleteConfirmReq] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const [printModalReq, setPrintModalReq] = useState(null);
-
-  // Job Application Modal states
+  // Modals & booking status history
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [bookingHistory, setBookingHistory] = useState([]);
+  const [loadingHistory, setLoadingHistory] = useState(false);
   const [selectedJobApp, setSelectedJobApp] = useState(null);
-  const [hireConfirmApp, setHireConfirmApp] = useState(null);
-  const [deleteConfirmJobApp, setDeleteConfirmJobApp] = useState(null);
 
-  // Hire Form State
-  const [hireForm, setHireForm] = useState({
-    role: "Registered Nurse",
-    specialization: "General Home Care",
-  });
+  // Status notice banner
+  const [statusNotice, setStatusNotice] = useState(null);
 
-  // New staff form state
-  const [newStaffForm, setNewStaffForm] = useState({
-    name: "",
-    role: "Registered Nurse",
-    specialization: "General Home Care",
-    phone: "",
-    cpr: "",
-    status: "Available",
-  });
+  const showNotice = useCallback((text, type = "success") => {
+    setStatusNotice({ text, type });
+    setTimeout(() => {
+      setStatusNotice((current) => (current?.text === text ? null : current));
+    }, 3500);
+  }, []);
 
-  // New request form state
-  const [newReqForm, setNewReqForm] = useState({
-    service: "Elder Care",
-    name: "",
-    email: "",
-    phone: "",
-    condition: "",
-    shift: "Day Shift (8 AM - 4 PM)",
-    preferredDate: new Date().toISOString().split("T")[0],
-    notes: "",
-    urgency: "Normal",
-    flatNo: "",
-    buildingNo: "",
-    area: "Seef District",
-    governorate: "Capital Governorate",
-  });
-
-  // Toast notification state
-  const [toastMessage, setToastMessage] = useState(null);
-
-  const showToast = (msg, type = "success") => {
-    setToastMessage({ text: msg, type });
-    setTimeout(() => setToastMessage(null), 3500);
-  };
-
-  // Load all data
-  const loadData = () => {
-    const storedReqs = getRequests();
-    const storedStaff = getStaffRoster();
-    const storedJobs = getJobApplications();
-
-    setRequests(storedReqs);
-    setStaffRoster(storedStaff);
-    setJobApplications(storedJobs);
-
-    // Keep selected request synchronized
-    if (selectedRequest) {
-      const updated = storedReqs.find((r) => r.id === selectedRequest.id);
-      if (updated) setSelectedRequest(updated);
+  const loadData = useCallback(async (showSpinner = false) => {
+    if (showSpinner) {
+      setIsLoading(true);
     }
+    try {
+      const [storedReqs, storedJobs] = await Promise.all([
+        fetchAdminBookings(),
+        fetchAdminJobApplications(),
+      ]);
 
-    // Keep selected job application synchronized
-    if (selectedJobApp) {
-      const updatedJob = storedJobs.find((j) => j.id === selectedJobApp.id);
-      if (updatedJob) setSelectedJobApp(updatedJob);
-    }
-  };
+      setRequests(storedReqs);
+      setJobApplications(storedJobs);
+      setLoadError("");
 
-  useEffect(() => {
-    loadData();
-
-    const handleStorageChange = () => loadData();
-    window.addEventListener("storage", handleStorageChange);
-    const interval = setInterval(loadData, 1500);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      clearInterval(interval);
-    };
-  }, [selectedRequest, selectedJobApp]);
-
-  // Persist Theme
-  useEffect(() => {
-    localStorage.setItem("admin_theme", theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme((prev) => (prev === "dark" ? "light" : "dark"));
-  };
-
-  // Status handlers
-  const handleStatusChange = (requestId, newStatus) => {
-    updateRequestStatus(requestId, newStatus);
-    loadData();
-    showToast(`Request ${requestId} status updated to "${newStatus}"`);
-  };
-
-  const handleDeleteRequest = (requestId) => {
-    deleteRequest(requestId);
-    setDeleteConfirmReq(null);
-    if (selectedRequest?.id === requestId) setSelectedRequest(null);
-    loadData();
-    showToast(`Request ${requestId} permanently removed`, "info");
-  };
-
-  // Job Applications Handlers
-  const handleJobStatusChange = (appId, newStatus) => {
-    updateJobApplicationStatus(appId, newStatus);
-    loadData();
-    showToast(`Application ${appId} status updated to "${newStatus}"`);
-  };
-
-  const handleDeleteJobApplication = (appId) => {
-    deleteJobApplication(appId);
-    setDeleteConfirmJobApp(null);
-    if (selectedJobApp?.id === appId) setSelectedJobApp(null);
-    loadData();
-    showToast(`Job application ${appId} removed`, "info");
-  };
-
-  const handleOpenHireModal = (app) => {
-    setHireConfirmApp(app);
-    setHireForm({
-      role: app.position || "Registered Nurse",
-      specialization: `${app.qualification || "Healthcare Specialist"} (${app.experience || "Experienced"})`,
-    });
-  };
-
-  const handleConfirmHireApplicant = (e) => {
-    e.preventDefault();
-    if (!hireConfirmApp) return;
-
-    hireJobApplicant(hireConfirmApp.id, hireForm.role, hireForm.specialization);
-    showToast(`Successfully hired ${hireConfirmApp.fullName}! Added to Staff & Caregivers Roster.`);
-    setHireConfirmApp(null);
-    if (selectedJobApp?.id === hireConfirmApp.id) {
-      setSelectedJobApp(null);
-    }
-    loadData();
-  };
-
-  // Staff Assignment
-  const handleOpenAssignModal = (request) => {
-    setAssignModalReq(request);
-    setSelectedStaffId(request.assignedStaffId || "");
-  };
-
-  const handleConfirmAssignStaff = (e) => {
-    e.preventDefault();
-    if (!assignModalReq) return;
-
-    if (!selectedStaffId) {
-      showToast("Please select a caregiver or nurse to appoint", "error");
-      return;
-    }
-
-    const staffMember = staffRoster.find((s) => s.id === selectedStaffId);
-    if (staffMember) {
-      assignStaffToRequest(
-        assignModalReq.id,
-        staffMember.id,
-        staffMember.name,
-        staffMember.role
+      setSelectedBooking((prev) =>
+        prev ? storedReqs.find((r) => r.id === prev.id) || prev : null
       );
-      showToast(`Assigned ${staffMember.name} to Request ${assignModalReq.id}`);
+      setSelectedJobApp((prev) =>
+        prev ? storedJobs.find((j) => j.id === prev.id) || prev : null
+      );
+    } catch (err) {
+      if (err.status === 401) {
+        window.location.replace("/admin/login");
+        return;
+      }
+      setLoadError(
+        err.message || "Unable to load dashboard records from the server."
+      );
+    } finally {
+      setIsLoading(false);
     }
-    setAssignModalReq(null);
-    setSelectedStaffId("");
-    loadData();
+  }, []);
+
+  useEffect(() => {
+    loadData(true);
+    const interval = setInterval(() => loadData(false), 10000);
+    return () => clearInterval(interval);
+  }, [loadData]);
+
+  // Load status history when a booking details modal opens
+  const handleOpenBookingDetails = async (booking) => {
+    setSelectedBooking(booking);
+    setBookingHistory([]);
+    setLoadingHistory(true);
+    try {
+      const history = await fetchAdminBookingHistory(booking.id);
+      setBookingHistory(history);
+    } catch {
+      setBookingHistory([]);
+    } finally {
+      setLoadingHistory(false);
+    }
   };
 
-  // Add Staff Submit
-  const handleAddStaffSubmit = (e) => {
-    e.preventDefault();
-    if (!newStaffForm.name || !newStaffForm.phone) {
-      showToast("Please fill in all required fields", "error");
-      return;
-    }
-
-    addStaffMember(newStaffForm);
-    showToast(`Added new staff member: ${newStaffForm.name}`);
-    setShowAddStaffModal(false);
-    setNewStaffForm({
-      name: "",
-      role: "Registered Nurse",
-      specialization: "General Home Care",
-      phone: "",
-      cpr: "",
-      status: "Available",
-    });
-    loadData();
-  };
-
-  // Add Request Submit
-  const handleAddRequestSubmit = (e) => {
-    e.preventDefault();
-    if (!newReqForm.name || !newReqForm.phone) {
-      showToast("Please provide patient name and phone number", "error");
-      return;
-    }
-
-    const payload = {
-      service: newReqForm.service,
-      name: newReqForm.name,
-      email: newReqForm.email,
-      phone: newReqForm.phone,
-      condition: newReqForm.condition,
-      shift: newReqForm.shift,
-      preferredDate: newReqForm.preferredDate,
-      notes: newReqForm.notes,
-      urgency: newReqForm.urgency,
-      address: {
-        flatNo: newReqForm.flatNo,
-        buildingNo: newReqForm.buildingNo,
-        area: newReqForm.area,
-        governorate: newReqForm.governorate,
-      },
-      status: "Pending Verification",
+  // Close mobile sidebar or active modal on Escape key
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setSidebarOpen(false);
+        setSelectedBooking(null);
+        setSelectedJobApp(null);
+      }
     };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
-    const created = addRequest(payload);
-    showToast(`Created new Care Request ${created.id}`);
-    setShowAddRequestModal(false);
-    setNewReqForm({
-      service: "Elder Care",
-      name: "",
-      email: "",
-      phone: "",
-      condition: "",
-      shift: "Day Shift (8 AM - 4 PM)",
-      preferredDate: new Date().toISOString().split("T")[0],
-      notes: "",
-      urgency: "Normal",
-      flatNo: "",
-      buildingNo: "",
-      area: "Seef District",
-      governorate: "Capital Governorate",
+  const handleNavigateSection = (section, presetStatus = null) => {
+    setActiveSection(section);
+    setSidebarOpen(false);
+    if (section === "bookings" && presetStatus !== null) {
+      setBookingStatusFilter(presetStatus);
+    }
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+
+  const handleLogout = async () => {
+    await logoutAdmin();
+    window.location.replace("/admin/login");
+  };
+
+  // Care Booking actions
+  const handleVerifyBooking = async (booking) => {
+    try {
+      const updated = await updateAdminBookingStatus(booking.id, "Verified");
+      setRequests((prev) =>
+        prev.map((item) => (item.id === booking.id ? updated : item))
+      );
+      if (selectedBooking?.id === booking.id) {
+        setSelectedBooking(updated);
+        const history = await fetchAdminBookingHistory(booking.id).catch(() => []);
+        setBookingHistory(history);
+      }
+      showNotice(`Booking ${booking.id} has been verified.`);
+    } catch (err) {
+      showNotice(err.message || "Could not verify booking.", "error");
+    }
+  };
+
+  const handleBookingStatusChange = async (bookingId, newStatus) => {
+    try {
+      const updated = await updateAdminBookingStatus(bookingId, newStatus);
+      setRequests((prev) =>
+        prev.map((item) => (item.id === bookingId ? updated : item))
+      );
+      if (selectedBooking?.id === bookingId) {
+        setSelectedBooking(updated);
+        const history = await fetchAdminBookingHistory(bookingId).catch(() => []);
+        setBookingHistory(history);
+      }
+      showNotice(`Booking ${bookingId} status updated to "${newStatus}".`);
+    } catch (err) {
+      showNotice(err.message || "Could not update booking status.", "error");
+    }
+  };
+
+  // Job Application actions
+  const handleJobStatusChange = async (appId, newStatus) => {
+    try {
+      const updated = await updateAdminJobApplicationStatus(appId, newStatus);
+      setJobApplications((prev) =>
+        prev.map((item) => (item.id === appId ? updated : item))
+      );
+      if (selectedJobApp?.id === appId) {
+        setSelectedJobApp(updated);
+      }
+      showNotice(`Application ${appId} status updated to "${newStatus}".`);
+    } catch (err) {
+      showNotice(err.message || "Could not update application status.", "error");
+    }
+  };
+
+  const handleOpenPrivateDocument = async (appId, type = "cv") => {
+    try {
+      const signedUrl = await fetchJobApplicationSignedDocumentUrl(appId, type);
+      window.open(signedUrl, "_blank", "noopener,noreferrer");
+    } catch (err) {
+      showNotice(
+        err.message || "Could not generate temporary access link for document.",
+        "error"
+      );
+    }
+  };
+
+  // Computed metrics & sorted lists
+  const sortedRequests = useMemo(() => {
+    return [...requests].sort((a, b) => {
+      const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return timeB - timeA;
     });
-    loadData();
-  };
+  }, [requests]);
 
-  // Staff Status Toggle
-  const handleToggleStaffStatus = (staffId) => {
-    toggleStaffStatus(staffId);
-    loadData();
-    showToast("Staff availability updated");
-  };
+  const totalBookingsCount = sortedRequests.length;
+  const pendingBookings = useMemo(
+    () => sortedRequests.filter((r) => r.status === "Pending Verification"),
+    [sortedRequests]
+  );
+  const verifiedBookings = useMemo(
+    () => sortedRequests.filter((r) => r.status === "Verified"),
+    [sortedRequests]
+  );
+  const recentBookings = useMemo(
+    () => sortedRequests.slice(0, 5),
+    [sortedRequests]
+  );
 
-  // Reset Demo Data
-  const handleResetData = () => {
-    if (window.confirm("Are you sure you want to reset all data to default demo state?")) {
-      seedSampleDataIfEmpty(true);
-      loadData();
-      showToast("System demo data has been restored", "info");
-    }
-  };
-
-  // CSV Export
-  const handleExportCSV = () => {
-    if (requests.length === 0) {
-      showToast("No care requests available to export", "error");
-      return;
-    }
-
-    const headers = [
-      "Request ID",
-      "Service",
-      "Patient Name",
-      "Email",
-      "Phone",
-      "Governorate",
-      "Area",
-      "Status",
-      "Assigned Staff",
-      "Urgency",
-      "Date",
-    ];
-
-    const rows = requests.map((r) => [
-      r.id,
-      `"${r.service || ""}"`,
-      `"${r.name || ""}"`,
-      `"${r.email || ""}"`,
-      `"${r.phone || ""}"`,
-      `"${r.address?.governorate || ""}"`,
-      `"${r.address?.area || ""}"`,
-      `"${r.status || ""}"`,
-      `"${r.assignedStaffName || "Unassigned"}"`,
-      `"${r.urgency || "Normal"}"`,
-      `"${r.createdAt ? new Date(r.createdAt).toLocaleDateString() : ""}"`,
-    ]);
-
-    const csvContent =
-      "data:text/csv;charset=utf-8," +
-      [headers.join(","), ...rows.map((e) => e.join(","))].join("\n");
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `bahrain_care_requests_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    showToast("Exported care requests to CSV file");
-  };
-
-  // Filtering Logic for Care Requests
-  const filteredRequests = useMemo(() => {
-    return requests.filter((req) => {
+  const filteredBookings = useMemo(() => {
+    const query = bookingSearch.trim().toLowerCase();
+    return sortedRequests.filter((req) => {
       const matchesSearch =
-        !searchTerm ||
-        req.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        req.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        req.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        req.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        req.address?.area?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        req.service?.toLowerCase().includes(searchTerm.toLowerCase());
+        !query ||
+        (req.id || "").toLowerCase().includes(query) ||
+        (req.name || "").toLowerCase().includes(query) ||
+        (req.phone || "").toLowerCase().includes(query);
 
       const matchesStatus =
-        statusFilter === "ALL" ||
-        req.status?.toLowerCase() === statusFilter.toLowerCase();
+        bookingStatusFilter === "ALL" ||
+        (req.status || "").toLowerCase() === bookingStatusFilter.toLowerCase();
 
-      const matchesService =
-        serviceFilter === "ALL" ||
-        req.service?.toLowerCase() === serviceFilter.toLowerCase();
+      const createdDate = req.createdAt ? req.createdAt.split("T")[0] : "";
+      const matchesDate =
+        !bookingDateFilter ||
+        req.preferredDate === bookingDateFilter ||
+        createdDate === bookingDateFilter;
 
-      const matchesUrgency =
-        urgencyFilter === "ALL" ||
-        (req.urgency || "Normal").toLowerCase() === urgencyFilter.toLowerCase();
-
-      return matchesSearch && matchesStatus && matchesService && matchesUrgency;
+      return matchesSearch && matchesStatus && matchesDate;
     });
-  }, [requests, searchTerm, statusFilter, serviceFilter, urgencyFilter]);
+  }, [sortedRequests, bookingSearch, bookingStatusFilter, bookingDateFilter]);
 
-  // Filtering Logic for Job Applications
+  const sortedJobApplications = useMemo(() => {
+    return [...jobApplications].sort((a, b) => {
+      const timeA = a.submittedAt ? new Date(a.submittedAt).getTime() : 0;
+      const timeB = b.submittedAt ? new Date(b.submittedAt).getTime() : 0;
+      return timeB - timeA;
+    });
+  }, [jobApplications]);
+
   const filteredJobApplications = useMemo(() => {
-    return jobApplications.filter((app) => {
+    const query = jobSearch.trim().toLowerCase();
+    return sortedJobApplications.filter((app) => {
       const matchesSearch =
-        !jobSearchTerm ||
-        app.id?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        app.fullName?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        app.phone?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        app.email?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        app.qualification?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        app.cprNo?.toLowerCase().includes(jobSearchTerm.toLowerCase()) ||
-        app.governorate?.toLowerCase().includes(jobSearchTerm.toLowerCase());
-
-      const matchesPosition =
-        jobPositionFilter === "ALL" ||
-        app.position?.toLowerCase() === jobPositionFilter.toLowerCase();
+        !query ||
+        (app.id || "").toLowerCase().includes(query) ||
+        (app.fullName || "").toLowerCase().includes(query) ||
+        (app.phone || "").toLowerCase().includes(query) ||
+        (app.email || "").toLowerCase().includes(query) ||
+        (app.position || "").toLowerCase().includes(query);
 
       const matchesStatus =
         jobStatusFilter === "ALL" ||
-        app.status?.toLowerCase() === jobStatusFilter.toLowerCase();
+        (app.status || "").toLowerCase() === jobStatusFilter.toLowerCase();
 
-      return matchesSearch && matchesPosition && matchesStatus;
+      return matchesSearch && matchesStatus;
     });
-  }, [jobApplications, jobSearchTerm, jobPositionFilter, jobStatusFilter]);
+  }, [sortedJobApplications, jobSearch, jobStatusFilter]);
 
-  // Statistics
-  const totalCount = requests.length;
-  const pendingCount = requests.filter(
-    (r) => r.status === "Pending Verification"
-  ).length;
-  const verifiedCount = requests.filter((r) => r.status === "Verified").length;
-  const appointedCount = requests.filter(
-    (r) => r.status === "Staff Appointed"
-  ).length;
-  const completedCount = requests.filter((r) => r.status === "Completed").length;
-  const urgentCount = requests.filter(
-    (r) => r.urgency === "Urgent" || r.urgency === "High"
-  ).length;
-
-  // Job Statistics
-  const totalJobsCount = jobApplications.length;
-  const pendingJobsCount = jobApplications.filter(
-    (a) => a.status === "Application Received" || a.status === "Under Review"
-  ).length;
-  const hiredJobsCount = jobApplications.filter(
-    (a) => a.status?.toLowerCase().includes("hired")
-  ).length;
-
-  const totalNotificationsBadge = pendingCount + pendingJobsCount;
-
-  // Combined System Notifications list
-  const notificationsList = useMemo(() => {
-    const bookingNotifs = requests.map((r) => ({
-      id: r.id,
-      title: `Care Booking ${r.id} (${r.service})`,
-      type: "booking",
-      status: r.status,
-      time: r.createdAt ? new Date(r.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now",
-      dateObj: r.createdAt ? new Date(r.createdAt) : new Date(0),
-      detail: `Patient: ${r.name}`,
-    }));
-
-    const jobNotifs = jobApplications.map((j) => ({
-      id: j.id,
-      title: `Job Application: ${j.fullName}`,
-      type: "job",
-      status: j.status,
-      time: j.submittedAt ? new Date(j.submittedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : "Just now",
-      dateObj: j.submittedAt ? new Date(j.submittedAt) : new Date(0),
-      detail: `Position: ${j.position}`,
-      raw: j,
-    }));
-
-    return [...bookingNotifs, ...jobNotifs]
-      .sort((a, b) => b.dateObj - a.dateObj)
-      .slice(0, 8);
-  }, [requests, jobApplications]);
+  const currentSectionMeta =
+    SECTION_META[activeSection] || SECTION_META.dashboard;
 
   return (
-    <div className={`admin-app-root theme-${theme}`}>
-      {/* Toast notification popup */}
-      {toastMessage && (
-        <div className={`admin-toast toast-${toastMessage.type}`}>
-          <span className="toast-icon">
-            {toastMessage.type === "error" ? "⚠️" : toastMessage.type === "info" ? "ℹ️" : "✓"}
-          </span>
-          <span>{toastMessage.text}</span>
-        </div>
+    <div className="admin-layout">
+      {/* Mobile Sidebar Backdrop */}
+      {sidebarOpen && (
+        <div
+          className="admin-sidebar-backdrop"
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden="true"
+        />
       )}
 
-      {/* Header */}
-      <header className="admin-navbar">
-        <div className="admin-navbar-inner">
-          <div className="admin-brand-block">
-            <div className="admin-brand-icon">✚</div>
-            <div>
-              <div className="admin-brand-title">NOOR AL AFIYA</div>
-              <div className="admin-brand-subtitle">
-                Bahrain • HOME HEALTH CARE WLL Admin Portal
-              </div>
+      {/* Sidebar Navigation */}
+      <aside
+        className={`admin-sidebar ${sidebarOpen ? "open" : ""}`}
+        aria-label="Admin navigation"
+      >
+        <div className="admin-sidebar-header">
+          <div className="admin-brand">
+            <img
+              src={logoMark}
+              alt="NOOR AL AFIYA"
+              className="admin-brand-logo"
+            />
+            <div className="admin-brand-text">
+              <strong>NOOR AL AFIYA</strong>
+              <span>Home Health Care WLL</span>
+            </div>
+          </div>
+          <button
+            type="button"
+            className="admin-sidebar-close"
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Close navigation menu"
+          >
+            ×
+          </button>
+        </div>
+
+        <nav className="admin-sidebar-nav">
+          <div className="admin-nav-group">
+            <span className="admin-nav-label">MANAGEMENT</span>
+            <button
+              type="button"
+              className={`admin-nav-item ${
+                activeSection === "dashboard" ? "active" : ""
+              }`}
+              onClick={() => handleNavigateSection("dashboard")}
+            >
+              <svg
+                className="admin-nav-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <rect x="3" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="3" width="7" height="7" rx="1" />
+                <rect x="14" y="14" width="7" height="7" rx="1" />
+                <rect x="3" y="14" width="7" height="7" rx="1" />
+              </svg>
+              <span>Dashboard</span>
+            </button>
+
+            <button
+              type="button"
+              className={`admin-nav-item ${
+                activeSection === "bookings" ? "active" : ""
+              }`}
+              onClick={() => handleNavigateSection("bookings")}
+            >
+              <svg
+                className="admin-nav-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <span>Care Bookings</span>
+            </button>
+
+            <button
+              type="button"
+              className={`admin-nav-item ${
+                activeSection === "applications" ? "active" : ""
+              }`}
+              onClick={() => handleNavigateSection("applications")}
+            >
+              <svg
+                className="admin-nav-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <rect x="2" y="7" width="20" height="14" rx="2" />
+                <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+              </svg>
+              <span>Job Applications</span>
+            </button>
+          </div>
+
+          <div className="admin-nav-footer">
+            <span className="admin-nav-label">SYSTEM</span>
+            <Link to="/" className="admin-nav-item admin-website-link">
+              <svg
+                className="admin-nav-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
+              <span>Website</span>
+            </Link>
+
+            <button
+              type="button"
+              className="admin-nav-item admin-logout-item"
+              onClick={handleLogout}
+            >
+              <svg
+                className="admin-nav-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span>Logout</span>
+            </button>
+          </div>
+        </nav>
+      </aside>
+
+      {/* Main Content Wrapper */}
+      <div className="admin-main-wrapper">
+        {/* Compact Top Header */}
+        <header className="admin-topbar">
+          <div className="admin-topbar-left">
+            <button
+              type="button"
+              className="admin-menu-toggle"
+              onClick={() => setSidebarOpen(true)}
+              aria-label="Open navigation menu"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            </button>
+            <div className="admin-page-heading">
+              <h1>{currentSectionMeta.title}</h1>
+              <p>{currentSectionMeta.subtitle}</p>
             </div>
           </div>
 
-          {/* Quick Stats Summary / System Badge */}
-          <div className="admin-system-status">
-            <span className="pulse-dot"></span>
-            <span className="status-label">System Operational</span>
-            <span className="version-tag">v2.4 Pro</span>
+          <div className="admin-topbar-right">
+            <span className="admin-role-pill">
+              <span className="admin-role-dot" />
+              Administrator
+            </span>
           </div>
+        </header>
 
-          {/* Top Actions */}
-          <div className="admin-nav-actions">
-            {/* Theme Toggle Button */}
+        {/* Status Toast Notification */}
+        {statusNotice && (
+          <div
+            className={`admin-notice admin-notice-${statusNotice.type}`}
+            role="status"
+          >
+            <span>{statusNotice.text}</span>
             <button
-              className="admin-icon-btn"
-              onClick={toggleTheme}
-              title={`Switch to ${theme === "dark" ? "Light" : "Dark"} Mode`}
+              type="button"
+              className="admin-notice-close"
+              onClick={() => setStatusNotice(null)}
+              aria-label="Dismiss notification"
             >
-              {theme === "dark" ? "☀️ Light Mode" : "🌙 Dark Mode"}
+              ×
             </button>
+          </div>
+        )}
 
-            {/* Notifications Bell */}
-            <div className="notification-wrapper">
-              <button
-                className="admin-icon-btn notif-btn"
-                onClick={() => setShowNotifications(!showNotifications)}
-                title="System Notifications"
-              >
-                🔔 <span className="notif-badge">{totalNotificationsBadge || notificationsList.length}</span>
-              </button>
+        {loadError && (
+          <div
+            className="admin-notice"
+            role="alert"
+            style={{
+              backgroundColor: "#FFF0F7",
+              borderColor: "#FF3A94",
+            }}
+          >
+            <span>{loadError}</span>
+            <button
+              type="button"
+              className="admin-action-btn"
+              onClick={() => loadData(true)}
+            >
+              Retry
+            </button>
+          </div>
+        )}
 
-              {showNotifications && (
-                <div className="notifications-popover">
-                  <div className="notif-header">
-                    <h4>Recent System Events</h4>
-                    <span className="notif-count">{notificationsList.length} recent</span>
-                  </div>
-                  <div className="notif-list">
-                    {notificationsList.map((n) => (
-                      <div
-                        className={`notif-item ${n.type === "job" ? "notif-job-item" : ""}`}
-                        key={n.id}
-                        onClick={() => {
-                          setShowNotifications(false);
-                          if (n.type === "job") {
-                            setActiveTab("jobs");
-                            if (n.raw) setSelectedJobApp(n.raw);
-                          } else {
-                            setActiveTab("requests");
-                          }
-                        }}
+        {/* Main Workspace Content */}
+        <main className="admin-content">
+          {isLoading ? (
+            <div className="admin-card admin-empty-state">
+              <p>Loading dashboard data...</p>
+            </div>
+          ) : (
+            <>
+              {/* ==================== 1. DASHBOARD SECTION ==================== */}
+              {activeSection === "dashboard" && (
+                <div className="admin-section-stack">
+                  {/* Summary Cards */}
+                  <section
+                    className="admin-stats-grid"
+                    aria-label="Booking statistics"
+                  >
+                    <div className="admin-stat-card">
+                      <div className="admin-stat-info">
+                        <span className="admin-stat-label">
+                          Total Care Bookings
+                        </span>
+                        <strong className="admin-stat-value">
+                          {totalBookingsCount}
+                        </strong>
+                        <span className="admin-stat-sub">
+                          All submitted care requests
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        className="admin-stat-link"
+                        onClick={() => handleNavigateSection("bookings", "ALL")}
                       >
-                        <div className={`notif-dot ${n.type === "job" ? "job-dot" : ""}`}></div>
-                        <div className="notif-content">
-                          <div className="notif-title">
-                            {n.type === "job" && <span className="notif-tag-job">JOB APP</span>}
-                            {n.title}
-                          </div>
-                          <div className="notif-sub">
-                            {n.detail} • <strong>{n.status}</strong>
-                          </div>
-                          <div className="notif-time">{n.time}</div>
-                        </div>
+                        View all →
+                      </button>
+                    </div>
+
+                    <div className="admin-stat-card stat-highlight-pink">
+                      <div className="admin-stat-info">
+                        <span className="admin-stat-label">
+                          Pending Bookings
+                        </span>
+                        <strong className="admin-stat-value text-pink">
+                          {pendingBookings.length}
+                        </strong>
+                        <span className="admin-stat-sub">
+                          Awaiting verification
+                        </span>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
+                      <button
+                        type="button"
+                        className="admin-stat-link"
+                        onClick={() =>
+                          handleNavigateSection(
+                            "bookings",
+                            "Pending Verification"
+                          )
+                        }
+                      >
+                        Review pending →
+                      </button>
+                    </div>
 
-            {/* New Request Modal Button */}
-            <button
-              className="admin-primary-btn"
-              onClick={() => setShowAddRequestModal(true)}
-            >
-              ➕ New Request
-            </button>
+                    <div className="admin-stat-card stat-highlight-green">
+                      <div className="admin-stat-info">
+                        <span className="admin-stat-label">
+                          Verified Bookings
+                        </span>
+                        <strong className="admin-stat-value text-green">
+                          {verifiedBookings.length}
+                        </strong>
+                        <span className="admin-stat-sub">
+                          Verified and confirmed
+                        </span>
+                      </div>
+                      <button
+                        type="button"
+                        className="admin-stat-link"
+                        onClick={() =>
+                          handleNavigateSection("bookings", "Verified")
+                        }
+                      >
+                        View verified →
+                      </button>
+                    </div>
+                  </section>
 
-            <div className="admin-user-profile">
-              <div className="user-avatar">AD</div>
-              <div className="user-info">
-                <span className="user-name">Executive Admin</span>
-                <span className="user-role">Superintendent</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </header>
+                  {/* Quick Access to Pending Requests */}
+                  <section className="admin-card">
+                    <div className="admin-card-header">
+                      <div>
+                        <h2>Pending Booking Requests</h2>
+                        <p>
+                          Quick access to bookings requiring verification (
+                          {pendingBookings.length})
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        className="admin-btn admin-btn-secondary"
+                        onClick={() =>
+                          handleNavigateSection(
+                            "bookings",
+                            "Pending Verification"
+                          )
+                        }
+                      >
+                        Filter Pending Bookings
+                      </button>
+                    </div>
 
-      {/* Main Container */}
-      <div className="admin-dashboard-container">
-        {/* Metric Cards (Clickable Filter Shortcuts) */}
-        <div className="admin-metrics-grid">
-          <div
-            className={`metric-card ${statusFilter === "ALL" && activeTab === "requests" ? "active" : ""}`}
-            onClick={() => {
-              setActiveTab("requests");
-              setStatusFilter("ALL");
-            }}
-          >
-            <div className="metric-header">
-              <span className="metric-title">Total Requests</span>
-              <span className="metric-icon">📋</span>
-            </div>
-            <div className="metric-value">{totalCount}</div>
-            <div className="metric-footer">All logged bookings in system</div>
-          </div>
-
-          <div
-            className={`metric-card warning ${statusFilter === "Pending Verification" && activeTab === "requests" ? "active" : ""}`}
-            onClick={() => {
-              setActiveTab("requests");
-              setStatusFilter("Pending Verification");
-            }}
-          >
-            <div className="metric-header">
-              <span className="metric-title">Pending Verification</span>
-              <span className="metric-icon">⏳</span>
-            </div>
-            <div className="metric-value">{pendingCount}</div>
-            <div className="metric-footer">Requires immediate admin review</div>
-          </div>
-
-          <div
-            className={`metric-card primary ${activeTab === "jobs" ? "active" : ""}`}
-            onClick={() => setActiveTab("jobs")}
-          >
-            <div className="metric-header">
-              <span className="metric-title">Job Applications</span>
-              <span className="metric-icon">💼</span>
-            </div>
-            <div className="metric-value">{totalJobsCount}</div>
-            <div className="metric-footer">
-              {pendingJobsCount > 0 ? `⚠️ ${pendingJobsCount} pending review & hiring` : "All applicant requests synced"}
-            </div>
-          </div>
-
-          <div
-            className={`metric-card info ${statusFilter === "Verified" && activeTab === "requests" ? "active" : ""}`}
-            onClick={() => {
-              setActiveTab("requests");
-              setStatusFilter("Verified");
-            }}
-          >
-            <div className="metric-header">
-              <span className="metric-title">Verified & Ready</span>
-              <span className="metric-icon">✓</span>
-            </div>
-            <div className="metric-value">{verifiedCount}</div>
-            <div className="metric-footer">Ready for nurse appointment</div>
-          </div>
-
-          <div
-            className={`metric-card success ${statusFilter === "Completed" && activeTab === "requests" ? "active" : ""}`}
-            onClick={() => {
-              setActiveTab("requests");
-              setStatusFilter("Completed");
-            }}
-          >
-            <div className="metric-header">
-              <span className="metric-title">Completed Care</span>
-              <span className="metric-icon">🏁</span>
-            </div>
-            <div className="metric-value">{completedCount}</div>
-            <div className="metric-footer">Successfully served patients</div>
-          </div>
-
-          <div
-            className={`metric-card danger ${urgencyFilter === "Urgent" && activeTab === "requests" ? "active" : ""}`}
-            onClick={() => {
-              setActiveTab("requests");
-              setUrgencyFilter(urgencyFilter === "Urgent" ? "ALL" : "Urgent");
-            }}
-          >
-            <div className="metric-header">
-              <span className="metric-title">High Priority / Urgent</span>
-              <span className="metric-icon">🚨</span>
-            </div>
-            <div className="metric-value">{urgentCount}</div>
-            <div className="metric-footer">Requires priority dispatch</div>
-          </div>
-        </div>
-
-        {/* Navigation Tabs */}
-        <div className="admin-tabs-bar">
-          <button
-            className={`tab-btn ${activeTab === "requests" ? "active" : ""}`}
-            onClick={() => setActiveTab("requests")}
-          >
-            📊 Care Requests Hub ({filteredRequests.length})
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "jobs" ? "active" : ""}`}
-            onClick={() => setActiveTab("jobs")}
-          >
-            💼 Job Applications ({filteredJobApplications.length})
-            {pendingJobsCount > 0 && (
-              <span className="tab-badge-count">{pendingJobsCount}</span>
-            )}
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "staff" ? "active" : ""}`}
-            onClick={() => setActiveTab("staff")}
-          >
-            👩‍⚕️ Staff & Caregivers ({staffRoster.length})
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "analytics" ? "active" : ""}`}
-            onClick={() => setActiveTab("analytics")}
-          >
-            📈 Operations Analytics
-          </button>
-          <button
-            className={`tab-btn ${activeTab === "settings" ? "active" : ""}`}
-            onClick={() => setActiveTab("settings")}
-          >
-            ⚙️ System Settings
-          </button>
-        </div>
-
-        {/* TAB 1: CARE REQUESTS */}
-        {activeTab === "requests" && (
-          <div className="tab-panel">
-            {/* Filter Bar */}
-            <div className="admin-filter-card">
-              <div className="filter-search-box">
-                <span className="search-icon">🔍</span>
-                <input
-                  type="text"
-                  placeholder="Search by Request ID, Patient Name, Phone, Area..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-                {searchTerm && (
-                  <button
-                    className="clear-search-btn"
-                    onClick={() => setSearchTerm("")}
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-
-              <div className="filter-controls-group">
-                {/* Service Filter */}
-                <div className="filter-select-wrapper">
-                  <label>Service:</label>
-                  <select
-                    value={serviceFilter}
-                    onChange={(e) => setServiceFilter(e.target.value)}
-                  >
-                    <option value="ALL">All Services</option>
-                    <option value="Elder Care">Elder Care</option>
-                    <option value="Newborn Care">Newborn Care</option>
-                    <option value="Patient Care">Patient Care</option>
-                    <option value="Children Care">Children Care</option>
-                  </select>
-                </div>
-
-                {/* Status Filter */}
-                <div className="filter-select-wrapper">
-                  <label>Status:</label>
-                  <select
-                    value={statusFilter}
-                    onChange={(e) => setStatusFilter(e.target.value)}
-                  >
-                    <option value="ALL">All Statuses</option>
-                    <option value="Pending Verification">
-                      Pending Verification
-                    </option>
-                    <option value="Verified">Verified</option>
-                    <option value="Staff Appointed">Staff Appointed</option>
-                    <option value="Completed">Completed</option>
-                  </select>
-                </div>
-
-                {/* Urgency Filter */}
-                <div className="filter-select-wrapper">
-                  <label>Urgency:</label>
-                  <select
-                    value={urgencyFilter}
-                    onChange={(e) => setUrgencyFilter(e.target.value)}
-                  >
-                    <option value="ALL">All Urgencies</option>
-                    <option value="Normal">Normal</option>
-                    <option value="High">High</option>
-                    <option value="Urgent">Urgent</option>
-                  </select>
-                </div>
-
-                {/* Reset Filters & Export */}
-                <button
-                  className="admin-secondary-btn"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setStatusFilter("ALL");
-                    setServiceFilter("ALL");
-                    setUrgencyFilter("ALL");
-                  }}
-                >
-                  Reset Filters
-                </button>
-
-                <button
-                  className="admin-outline-btn"
-                  onClick={handleExportCSV}
-                  title="Export current table to CSV file"
-                >
-                  📥 Export CSV
-                </button>
-              </div>
-            </div>
-
-            {/* Table Container */}
-            <div className="admin-table-card">
-              {filteredRequests.length === 0 ? (
-                <div className="empty-table-state">
-                  <div className="empty-icon">📂</div>
-                  <h3>No matching care requests found</h3>
-                  <p>Try adjusting your search query or clear existing filter selections.</p>
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <table className="admin-data-table">
-                    <thead>
-                      <tr>
-                        <th>Request ID</th>
-                        <th>Patient Name</th>
-                        <th>Service</th>
-                        <th>Location (Bahrain)</th>
-                        <th>Urgency</th>
-                        <th>Status Workflow</th>
-                        <th>Assigned Staff</th>
-                        <th>Submitted</th>
-                        <th className="text-right">Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredRequests
-                        .slice()
-                        .reverse()
-                        .map((req) => (
-                          <tr key={req.id}>
-                            <td>
-                              <span className="req-id-badge">{req.id}</span>
-                            </td>
-                            <td>
-                              <div className="patient-name-block">
-                                <strong>{req.name || "N/A"}</strong>
-                                <span className="patient-phone">{req.phone}</span>
-                              </div>
-                            </td>
-                            <td>
-                              <span className="service-tag">
-                                {req.service}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="location-block">
-                                <span>{req.address?.area || "N/A"}</span>
-                                <small>{req.address?.governorate || "Bahrain"}</small>
-                              </div>
-                            </td>
-                            <td>
-                              <span
-                                className={`urgency-badge urgency-${(
-                                  req.urgency || "Normal"
-                                ).toLowerCase()}`}
-                              >
-                                {req.urgency || "Normal"}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="status-dropdown-wrapper">
-                                <select
-                                  className={`status-select status-${(
-                                    req.status || ""
-                                  )
-                                    .toLowerCase()
-                                    .replace(/ /g, "-")}`}
-                                  value={req.status}
-                                  onChange={(e) =>
-                                    handleStatusChange(req.id, e.target.value)
-                                  }
-                                >
-                                  <option value="Pending Verification">
-                                    Pending Verification
-                                  </option>
-                                  <option value="Verified">Verified</option>
-                                  <option value="Staff Appointed">
-                                    Staff Appointed
-                                  </option>
-                                  <option value="Completed">Completed</option>
-                                </select>
-                              </div>
-                            </td>
-                            <td>
-                              {req.assignedStaffName ? (
-                                <div className="staff-assigned-chip">
-                                  <span className="chip-avatar">🩺</span>
-                                  <span>{req.assignedStaffName}</span>
-                                </div>
-                              ) : (
-                                <button
-                                  className="assign-prompt-btn"
-                                  onClick={() => handleOpenAssignModal(req)}
-                                >
-                                  + Assign Staff
-                                </button>
-                              )}
-                            </td>
-                            <td>
-                              <small className="date-text">
-                                {req.createdAt
-                                  ? new Date(req.createdAt).toLocaleDateString()
-                                  : "N/A"}
-                              </small>
-                            </td>
-                            <td className="text-right">
-                              <div className="action-buttons-group">
-                                <button
-                                  className="btn-action view"
-                                  onClick={() => setSelectedRequest(req)}
-                                  title="View Full Booking Details"
-                                >
-                                  👁️ View
-                                </button>
-                                <button
-                                  className="btn-action appoint"
-                                  onClick={() => handleOpenAssignModal(req)}
-                                  title="Assign Caregiver or Nurse"
-                                >
-                                  🩺 Staff
-                                </button>
-                                <button
-                                  className="btn-action print"
-                                  onClick={() => setPrintModalReq(req)}
-                                  title="Print Summary"
-                                >
-                                  🖨️
-                                </button>
-                                <button
-                                  className="btn-action delete"
-                                  onClick={() => setDeleteConfirmReq(req)}
-                                  title="Delete Request"
-                                >
-                                  🗑️
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* TAB: JOB APPLICATIONS HUB */}
-        {activeTab === "jobs" && (
-          <div className="tab-panel">
-            <div className="admin-section-header">
-              <div>
-                <h2>Job Opportunities & Staff Recruitment</h2>
-                <p>
-                  Review job application submissions from nursing & care staff across Bahrain, verify candidate credentials, and accept them into the active staff roster.
-                </p>
-              </div>
-              <div className="job-summary-badges">
-                <span className="summary-badge pending">
-                  ⏳ {pendingJobsCount} Pending Review
-                </span>
-                <span className="summary-badge hired">
-                  ✓ {hiredJobsCount} Hired to Roster
-                </span>
-              </div>
-            </div>
-
-            {/* Job Filter Bar */}
-            <div className="admin-filter-card">
-              <div className="filter-search-box">
-                <span className="search-icon">🔍</span>
-                <input
-                  type="text"
-                  placeholder="Search by Application ID, Candidate Name, Phone, CPR No., Qualification..."
-                  value={jobSearchTerm}
-                  onChange={(e) => setJobSearchTerm(e.target.value)}
-                />
-                {jobSearchTerm && (
-                  <button
-                    className="clear-search-btn"
-                    onClick={() => setJobSearchTerm("")}
-                  >
-                    ×
-                  </button>
-                )}
-              </div>
-
-              <div className="filter-controls-group">
-                {/* Position Filter */}
-                <div className="filter-select-wrapper">
-                  <label>Position:</label>
-                  <select
-                    value={jobPositionFilter}
-                    onChange={(e) => setJobPositionFilter(e.target.value)}
-                  >
-                    <option value="ALL">All Positions</option>
-                    <option value="Registered Nurse">Registered Nurse</option>
-                    <option value="Caregiver">Caregiver</option>
-                    <option value="Newborn Care Specialist">Newborn Care Specialist</option>
-                    <option value="Patient Care Assistant">Patient Care Assistant</option>
-                  </select>
-                </div>
-
-                {/* Status Filter */}
-                <div className="filter-select-wrapper">
-                  <label>Status:</label>
-                  <select
-                    value={jobStatusFilter}
-                    onChange={(e) => setJobStatusFilter(e.target.value)}
-                  >
-                    <option value="ALL">All Statuses</option>
-                    <option value="Application Received">Application Received</option>
-                    <option value="Under Review">Under Review</option>
-                    <option value="Hired / Added to Roster">Hired / Added to Roster</option>
-                    <option value="Rejected">Rejected</option>
-                  </select>
-                </div>
-
-                <button
-                  className="admin-secondary-btn"
-                  onClick={() => {
-                    setJobSearchTerm("");
-                    setJobPositionFilter("ALL");
-                    setJobStatusFilter("ALL");
-                  }}
-                >
-                  Reset Filters
-                </button>
-              </div>
-            </div>
-
-            {/* Table Container */}
-            <div className="admin-table-card">
-              {filteredJobApplications.length === 0 ? (
-                <div className="empty-table-state">
-                  <div className="empty-icon">📁</div>
-                  <h3>No job applications found</h3>
-                  <p>When staff submit forms on the Careers page, their application requests will appear here in real-time.</p>
-                </div>
-              ) : (
-                <div className="table-responsive">
-                  <table className="admin-data-table">
-                    <thead>
-                      <tr>
-                        <th>Application ID</th>
-                        <th>Applicant Name</th>
-                        <th>Position Applied</th>
-                        <th>Qualification & Experience</th>
-                        <th>CPR No.</th>
-                        <th>Availability</th>
-                        <th>Status Workflow</th>
-                        <th>Submitted</th>
-                        <th className="text-right">Recruitment Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {filteredJobApplications
-                        .slice()
-                        .reverse()
-                        .map((app) => (
-                          <tr key={app.id}>
-                            <td>
-                              <span className="req-id-badge job-app-id">{app.id}</span>
-                            </td>
-                            <td>
-                              <div className="patient-name-block">
-                                <strong>{app.fullName}</strong>
-                                <span className="patient-phone">{app.phone}</span>
-                              </div>
-                            </td>
-                            <td>
-                              <span className="service-tag job-position-tag">
-                                {app.position}
-                              </span>
-                            </td>
-                            <td>
-                              <div className="location-block">
-                                <span>{app.qualification || "Healthcare Professional"}</span>
-                                <small>{app.experience || "N/A experience"}</small>
-                              </div>
-                            </td>
-                            <td>
-                              <small>{app.cprNo || app.governorate || "N/A"}</small>
-                            </td>
-                            <td>
-                              <span className="availability-chip">{app.availability || "Immediate"}</span>
-                            </td>
-                            <td>
-                              <div className="status-dropdown-wrapper">
-                                <select
-                                  className={`status-select status-${(
-                                    app.status || ""
-                                  )
-                                    .toLowerCase()
-                                    .replace(/[\/\s]+/g, "-")}`}
-                                  value={app.status}
-                                  onChange={(e) =>
-                                    handleJobStatusChange(app.id, e.target.value)
-                                  }
-                                >
-                                  <option value="Application Received">Application Received</option>
-                                  <option value="Under Review">Under Review</option>
-                                  <option value="Hired / Added to Roster">Hired / Added to Roster</option>
-                                  <option value="Rejected">Rejected</option>
-                                </select>
-                              </div>
-                            </td>
-                            <td>
-                              <small className="date-text">
-                                {app.submittedAt
-                                  ? new Date(app.submittedAt).toLocaleDateString()
-                                  : "N/A"}
-                              </small>
-                            </td>
-                            <td className="text-right">
-                              <div className="action-buttons-group">
-                                <button
-                                  className="btn-action view"
-                                  onClick={() => setSelectedJobApp(app)}
-                                  title="View Full Job Application Details"
-                                >
-                                  👁️ View
-                                </button>
-
-                                {app.status?.toLowerCase().includes("hired") ? (
-                                  <span className="hired-badge-check" title="Staff active in roster">
-                                    ✓ Active Staff
+                    {pendingBookings.length === 0 ? (
+                      <div className="admin-empty-state">
+                        <h3>No pending booking requests</h3>
+                        <p>
+                          All submitted care bookings have been reviewed. New
+                          pending bookings will appear here automatically.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="admin-table-wrap">
+                        <table className="admin-table">
+                          <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Customer</th>
+                              <th>Phone</th>
+                              <th>Service</th>
+                              <th>Preferred Date</th>
+                              <th className="text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {pendingBookings.slice(0, 5).map((req) => (
+                              <tr key={req.id}>
+                                <td>
+                                  <span className="admin-ref-badge">
+                                    {req.id}
                                   </span>
-                                ) : (
-                                  <button
-                                    className="btn-action hire-btn"
-                                    onClick={() => handleOpenHireModal(app)}
-                                    title="Take candidate for job & add to active roster"
-                                  >
-                                    💼 Take for Job
-                                  </button>
-                                )}
+                                </td>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {req.name || "N/A"}
+                                  </strong>
+                                </td>
+                                <td>{req.phone || "N/A"}</td>
+                                <td>{req.service || "N/A"}</td>
+                                <td>{formatDate(req.preferredDate)}</td>
+                                <td className="text-right">
+                                  <div className="admin-table-actions">
+                                    <button
+                                      type="button"
+                                      className="admin-action-btn action-verify"
+                                      onClick={() => handleVerifyBooking(req)}
+                                    >
+                                      Verify
+                                    </button>
+                                    <button
+                                      type="button"
+                                      className="admin-action-btn"
+                                      onClick={() =>
+                                        handleOpenBookingDetails(req)
+                                      }
+                                    >
+                                      View Details
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </section>
 
-                                <button
-                                  className="btn-action delete"
-                                  onClick={() => setDeleteConfirmJobApp(app)}
-                                  title="Delete Application"
-                                >
-                                  🗑️
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                        ))}
-                    </tbody>
-                  </table>
+                  {/* Recent Booking Requests */}
+                  <section className="admin-card">
+                    <div className="admin-card-header">
+                      <div>
+                        <h2>Recent Booking Requests</h2>
+                        <p>Latest care requests submitted by customers</p>
+                      </div>
+                      <button
+                        type="button"
+                        className="admin-btn admin-btn-primary"
+                        onClick={() => handleNavigateSection("bookings", "ALL")}
+                      >
+                        Manage All Bookings
+                      </button>
+                    </div>
+
+                    {recentBookings.length === 0 ? (
+                      <div className="admin-empty-state">
+                        <h3>No care bookings submitted yet</h3>
+                        <p>
+                          Bookings submitted through the public Care Booking
+                          forms will appear here.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="admin-table-wrap">
+                        <table className="admin-table">
+                          <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Customer</th>
+                              <th>Phone</th>
+                              <th>Service</th>
+                              <th>Preferred Date</th>
+                              <th>Status</th>
+                              <th className="text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {recentBookings.map((req) => (
+                              <tr key={req.id}>
+                                <td>
+                                  <span className="admin-ref-badge">
+                                    {req.id}
+                                  </span>
+                                </td>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {req.name || "N/A"}
+                                  </strong>
+                                </td>
+                                <td>{req.phone || "N/A"}</td>
+                                <td>{req.service || "N/A"}</td>
+                                <td>{formatDate(req.preferredDate)}</td>
+                                <td>
+                                  <span
+                                    className={`admin-status-badge ${getStatusClass(
+                                      req.status
+                                    )}`}
+                                  >
+                                    {req.status || "Pending Verification"}
+                                  </span>
+                                </td>
+                                <td className="text-right">
+                                  <div className="admin-table-actions">
+                                    {req.status === "Pending Verification" && (
+                                      <button
+                                        type="button"
+                                        className="admin-action-btn action-verify"
+                                        onClick={() => handleVerifyBooking(req)}
+                                      >
+                                        Verify
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="admin-action-btn"
+                                      onClick={() =>
+                                        handleOpenBookingDetails(req)
+                                      }
+                                    >
+                                      View Details
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </section>
                 </div>
               )}
-            </div>
-          </div>
-        )}
 
-        {/* TAB 2: STAFF MANAGEMENT */}
-        {activeTab === "staff" && (
-          <div className="tab-panel">
-            <div className="admin-section-header">
-              <div>
-                <h2>Healthcare Staff & Caregiver Roster</h2>
-                <p>
-                  Manage active nurses, pediatric caregivers, and clinical staff assigned to home care requests.
-                </p>
-              </div>
-              <button
-                className="admin-primary-btn"
-                onClick={() => setShowAddStaffModal(true)}
-              >
-                ➕ Add New Nurse / Caregiver
-              </button>
-            </div>
+              {/* ==================== 2. CARE BOOKINGS SECTION ==================== */}
+              {activeSection === "bookings" && (
+                <div className="admin-section-stack">
+                  {/* Search & Filter Bar */}
+                  <section className="admin-card admin-filter-bar">
+                    <div className="admin-filter-field admin-filter-search">
+                      <label htmlFor="booking-search">Search Bookings</label>
+                      <input
+                        id="booking-search"
+                        type="search"
+                        placeholder="Search by customer name, phone number, or reference..."
+                        value={bookingSearch}
+                        onChange={(e) => setBookingSearch(e.target.value)}
+                      />
+                    </div>
 
-            <div className="staff-cards-grid">
-              {staffRoster.map((staff) => (
-                <div className="staff-card" key={staff.id}>
-                  <div className="staff-card-header">
-                    <div
-                      className="staff-avatar"
-                      style={{ backgroundColor: staff.avatarColor || "#0066cc" }}
-                    >
-                      {staff.name
-                        .split(" ")
-                        .map((n) => n[0])
-                        .join("")
-                        .slice(0, 2)}
+                    <div className="admin-filter-field">
+                      <label htmlFor="booking-status-filter">Status</label>
+                      <select
+                        id="booking-status-filter"
+                        value={bookingStatusFilter}
+                        onChange={(e) => setBookingStatusFilter(e.target.value)}
+                      >
+                        <option value="ALL">All Statuses</option>
+                        {BOOKING_STATUSES.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
                     </div>
-                    <div>
-                      <h3>{staff.name}</h3>
-                      <span className="staff-role-badge">{staff.role}</span>
-                    </div>
-                  </div>
 
-                  <div className="staff-card-body">
-                    <div className="staff-info-row">
-                      <label>Specialization:</label>
-                      <span>{staff.specialization}</span>
+                    <div className="admin-filter-field">
+                      <label htmlFor="booking-date-filter">Date</label>
+                      <input
+                        id="booking-date-filter"
+                        type="date"
+                        value={bookingDateFilter}
+                        onChange={(e) => setBookingDateFilter(e.target.value)}
+                      />
                     </div>
-                    <div className="staff-info-row">
-                      <label>Bahrain Phone:</label>
-                      <span>{staff.phone}</span>
-                    </div>
-                    <div className="staff-info-row">
-                      <label>CPR Number:</label>
-                      <span>{staff.cpr}</span>
-                    </div>
-                    <div className="staff-info-row">
-                      <label>Active Cases:</label>
-                      <strong>{staff.assignedCount || 0} Patients</strong>
-                    </div>
-                  </div>
 
-                  <div className="staff-card-footer">
-                    <button
-                      className={`staff-status-toggle status-${staff.status
-                        .toLowerCase()
-                        .replace(/ /g, "-")}`}
-                      onClick={() => handleToggleStaffStatus(staff.id)}
-                      title="Click to toggle availability status"
-                    >
-                      ● {staff.status} (Click to toggle)
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* TAB 3: OPERATIONS ANALYTICS */}
-        {activeTab === "analytics" && (
-          <div className="tab-panel">
-            <div className="admin-section-header">
-              <div>
-                <h2>Operations & Care Service Analytics</h2>
-                <p>Overview of patient request distribution and service metrics across Bahrain governorates.</p>
-              </div>
-            </div>
-
-            <div className="analytics-grid">
-              {/* Service Distribution */}
-              <div className="analytics-card">
-                <h3>Requests by Service Package</h3>
-                <div className="analytics-bar-list">
-                  {["Elder Care", "Newborn Care", "Patient Care", "Children Care"].map((service) => {
-                    const count = requests.filter((r) => r.service === service).length;
-                    const pct = totalCount ? Math.round((count / totalCount) * 100) : 0;
-                    return (
-                      <div className="analytics-bar-item" key={service}>
-                        <div className="bar-label-row">
-                          <span>{service}</span>
-                          <strong>
-                            {count} requests ({pct}%)
-                          </strong>
-                        </div>
-                        <div className="bar-track">
-                          <div
-                            className="bar-fill"
-                            style={{ width: `${pct}%` }}
-                          ></div>
-                        </div>
+                    {(bookingSearch ||
+                      bookingStatusFilter !== "ALL" ||
+                      bookingDateFilter) && (
+                      <div className="admin-filter-actions">
+                        <button
+                          type="button"
+                          className="admin-btn admin-btn-secondary"
+                          onClick={() => {
+                            setBookingSearch("");
+                            setBookingStatusFilter("ALL");
+                            setBookingDateFilter("");
+                          }}
+                        >
+                          Clear Filters
+                        </button>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
+                    )}
+                  </section>
 
-              {/* Status Breakdown */}
-              <div className="analytics-card">
-                <h3>Request Workflow Status Distribution</h3>
-                <div className="analytics-bar-list">
-                  {[
-                    { label: "Pending Verification", count: pendingCount, color: "#f59e0b" },
-                    { label: "Verified", count: verifiedCount, color: "#0284c7" },
-                    { label: "Staff Appointed", count: appointedCount, color: "#7c3aed" },
-                    { label: "Completed", count: completedCount, color: "#10b981" },
-                  ].map((item) => {
-                    const pct = totalCount ? Math.round((item.count / totalCount) * 100) : 0;
-                    return (
-                      <div className="analytics-bar-item" key={item.label}>
-                        <div className="bar-label-row">
-                          <span>{item.label}</span>
-                          <strong>
-                            {item.count} ({pct}%)
-                          </strong>
-                        </div>
-                        <div className="bar-track">
-                          <div
-                            className="bar-fill"
-                            style={{ width: `${pct}%`, backgroundColor: item.color }}
-                          ></div>
-                        </div>
+                  {/* Care Bookings Table */}
+                  <section className="admin-card">
+                    <div className="admin-card-header">
+                      <div>
+                        <h2>Submitted Care Bookings</h2>
+                        <p>
+                          Showing {filteredBookings.length} of{" "}
+                          {sortedRequests.length} total bookings
+                        </p>
                       </div>
-                    );
-                  })}
-                </div>
-              </div>
+                    </div>
 
-              {/* Governorates Coverage */}
-              <div className="analytics-card">
-                <h3>Bahrain Governorate Coverage</h3>
-                <div className="governorate-grid">
-                  {[
-                    "Capital Governorate",
-                    "Muharraq Governorate",
-                    "Northern Governorate",
-                    "Southern Governorate",
-                  ].map((gov) => {
-                    const count = requests.filter(
-                      (r) => r.address?.governorate === gov
-                    ).length;
-                    return (
-                      <div className="gov-stat-box" key={gov}>
-                        <span className="gov-name">{gov.replace(" Governorate", "")}</span>
-                        <strong className="gov-count">{count} Active Bookings</strong>
+                    {filteredBookings.length === 0 ? (
+                      <div className="admin-empty-state">
+                        <h3>No matching care bookings found</h3>
+                        <p>
+                          {sortedRequests.length === 0
+                            ? "No customer care bookings have been submitted yet."
+                            : "Try adjusting your search query, status filter, or date filter."}
+                        </p>
                       </div>
-                    );
-                  })}
+                    ) : (
+                      <div className="admin-table-wrap">
+                        <table className="admin-table">
+                          <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Customer</th>
+                              <th>Service & Shift</th>
+                              <th>Preferred Date</th>
+                              <th>Status</th>
+                              <th className="text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredBookings.map((req) => (
+                              <tr key={req.id}>
+                                <td>
+                                  <span className="admin-ref-badge">
+                                    {req.id}
+                                  </span>
+                                  <span className="admin-cell-sub">
+                                    {formatDate(req.createdAt)}
+                                  </span>
+                                </td>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {req.name || "N/A"}
+                                  </strong>
+                                  <span className="admin-cell-sub">
+                                    {req.phone || "N/A"}
+                                  </span>
+                                </td>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {req.service || "N/A"}
+                                  </strong>
+                                  <span className="admin-cell-sub">
+                                    {req.shift === "Other" && req.shiftOther
+                                      ? req.shiftOther
+                                      : req.shift || "Standard shift"}
+                                  </span>
+                                </td>
+                                <td>{formatDate(req.preferredDate)}</td>
+                                <td>
+                                  <select
+                                    aria-label={`Update status for ${req.id}`}
+                                    className={`admin-status-select ${getStatusClass(
+                                      req.status
+                                    )}`}
+                                    value={
+                                      BOOKING_STATUSES.includes(req.status)
+                                        ? req.status
+                                        : "Pending Verification"
+                                    }
+                                    onChange={(e) =>
+                                      handleBookingStatusChange(
+                                        req.id,
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    {BOOKING_STATUSES.map((st) => (
+                                      <option key={st} value={st}>
+                                        {st}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </td>
+                                <td className="text-right">
+                                  <div className="admin-table-actions">
+                                    {req.status === "Pending Verification" && (
+                                      <button
+                                        type="button"
+                                        className="admin-action-btn action-verify"
+                                        onClick={() => handleVerifyBooking(req)}
+                                      >
+                                        Verify
+                                      </button>
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="admin-action-btn"
+                                      onClick={() =>
+                                        handleOpenBookingDetails(req)
+                                      }
+                                    >
+                                      Details
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </section>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
 
-        {/* TAB 4: SYSTEM SETTINGS */}
-        {activeTab === "settings" && (
-          <div className="tab-panel">
-            <div className="admin-section-header">
-              <div>
-                <h2>System Preferences & Data Controls</h2>
-                <p>Configure dashboard behavior, system details, and demo environment.</p>
-              </div>
-            </div>
+              {/* ==================== 3. JOB APPLICATIONS SECTION ==================== */}
+              {activeSection === "applications" && (
+                <div className="admin-section-stack">
+                  <section className="admin-card admin-filter-bar">
+                    <div className="admin-filter-field admin-filter-search">
+                      <label htmlFor="job-search">Search Applications</label>
+                      <input
+                        id="job-search"
+                        type="search"
+                        placeholder="Search by applicant name, phone, email, or role..."
+                        value={jobSearch}
+                        onChange={(e) => setJobSearch(e.target.value)}
+                      />
+                    </div>
 
-            <div className="settings-cards-grid">
-              <div className="settings-card">
-                <h3>🏢 Healthcare Provider Identity</h3>
-                <p className="settings-desc">Registered medical identity details shown on patient receipts and printouts.</p>
-                <div className="settings-field">
-                  <label>Company Legal Title:</label>
-                  <input type="text" value="Bahrain HOME HEALTH CARE WLL" readOnly />
-                </div>
-                <div className="settings-field">
-                  <label>Brand Trade Name:</label>
-                  <input type="text" value="NOOR AL AFIYA" readOnly />
-                </div>
-                <div className="settings-field">
-                  <label>NHRA Accreditation No.:</label>
-                  <input type="text" value="NHRA-BH-2026-9910" readOnly />
-                </div>
-                <div className="settings-field">
-                  <label>24/7 Dispatch Hotline:</label>
-                  <input type="text" value="+973 1700 8899" readOnly />
-                </div>
-              </div>
+                    <div className="admin-filter-field">
+                      <label htmlFor="job-status-filter">Status</label>
+                      <select
+                        id="job-status-filter"
+                        value={jobStatusFilter}
+                        onChange={(e) => setJobStatusFilter(e.target.value)}
+                      >
+                        <option value="ALL">All Statuses</option>
+                        {APPLICATION_STATUSES.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
 
-              <div className="settings-card">
-                <h3>🛠️ Demo & Data Management</h3>
-                <p className="settings-desc">Reset local storage or seed default Bahrain patient requests for testing.</p>
-                <div className="settings-action-block">
-                  <button className="admin-secondary-btn" onClick={handleResetData}>
-                    🔄 Restore Default Demo Dataset
-                  </button>
-                  <p className="sub-text">
-                    Restores standard sample requests and nursing roster for smooth demo walkthroughs.
-                  </p>
+                    {(jobSearch || jobStatusFilter !== "ALL") && (
+                      <div className="admin-filter-actions">
+                        <button
+                          type="button"
+                          className="admin-btn admin-btn-secondary"
+                          onClick={() => {
+                            setJobSearch("");
+                            setJobStatusFilter("ALL");
+                          }}
+                        >
+                          Clear Filters
+                        </button>
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="admin-card">
+                    <div className="admin-card-header">
+                      <div>
+                        <h2>Submitted Job Applications</h2>
+                        <p>
+                          Showing {filteredJobApplications.length} of{" "}
+                          {sortedJobApplications.length} applications from the
+                          Careers page
+                        </p>
+                      </div>
+                    </div>
+
+                    {filteredJobApplications.length === 0 ? (
+                      <div className="admin-empty-state">
+                        <h3>No job applications found</h3>
+                        <p>
+                          {sortedJobApplications.length === 0
+                            ? "Applications submitted through the public Careers page will appear here."
+                            : "No applications match your current search or filter."}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="admin-table-wrap">
+                        <table className="admin-table">
+                          <thead>
+                            <tr>
+                              <th>Reference</th>
+                              <th>Applicant</th>
+                              <th>Position & Experience</th>
+                              <th>Submitted</th>
+                              <th>CV / Resume</th>
+                              <th>Status</th>
+                              <th className="text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredJobApplications.map((app) => {
+                              const cvName =
+                                app.cvFileName || app.resumeName || null;
+
+                              return (
+                                <tr key={app.id}>
+                                  <td>
+                                    <span className="admin-ref-badge">
+                                      {app.id}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <strong className="admin-cell-primary">
+                                      {app.fullName || "N/A"}
+                                    </strong>
+                                    <span className="admin-cell-sub">
+                                      {app.phone || "N/A"}
+                                    </span>
+                                  </td>
+                                  <td>
+                                    <strong className="admin-cell-primary">
+                                      {app.position || "N/A"}
+                                    </strong>
+                                    <span className="admin-cell-sub">
+                                      {app.experience || "Not specified"}
+                                    </span>
+                                  </td>
+                                  <td>{formatDate(app.submittedAt)}</td>
+                                  <td>
+                                    {app.hasCv ? (
+                                      <button
+                                        type="button"
+                                        className="admin-action-btn"
+                                        onClick={() =>
+                                          handleOpenPrivateDocument(
+                                            app.id,
+                                            "cv"
+                                          )
+                                        }
+                                      >
+                                        Open CV
+                                      </button>
+                                    ) : cvName && cvName !== "Not provided" ? (
+                                      <span
+                                        className="admin-cv-filename"
+                                        title={cvName}
+                                      >
+                                        {cvName}
+                                      </span>
+                                    ) : (
+                                      <span className="admin-unassigned-text">
+                                        Not provided
+                                      </span>
+                                    )}
+                                  </td>
+                                  <td>
+                                    <select
+                                      aria-label={`Update status for ${app.id}`}
+                                      className={`admin-status-select ${getStatusClass(
+                                        app.status
+                                      )}`}
+                                      value={
+                                        APPLICATION_STATUSES.includes(
+                                          app.status
+                                        )
+                                          ? app.status
+                                          : "Application Received"
+                                      }
+                                      onChange={(e) =>
+                                        handleJobStatusChange(
+                                          app.id,
+                                          e.target.value
+                                        )
+                                      }
+                                    >
+                                      {APPLICATION_STATUSES.map((st) => (
+                                        <option key={st} value={st}>
+                                          {st}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </td>
+                                  <td className="text-right">
+                                    <div className="admin-table-actions">
+                                      <button
+                                        type="button"
+                                        className="admin-action-btn"
+                                        onClick={() => setSelectedJobApp(app)}
+                                      >
+                                        View Details
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              );
+                            })}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </section>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
+            </>
+          )}
+        </main>
       </div>
 
-      {/* ========================================================
-          MODAL 1: BOOKING DETAILS MODAL
-      ======================================================== */}
-      {selectedRequest && (
-        <div className="modal-overlay" onClick={() => setSelectedRequest(null)}>
-          <div className="details-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+      {/* ==================== MODAL 1: BOOKING DETAILS ==================== */}
+      {selectedBooking && (
+        <div
+          className="admin-modal-overlay"
+          onClick={() => setSelectedBooking(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="booking-modal-title"
+        >
+          <div
+            className="admin-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="admin-modal-header">
               <div>
-                <h2>Booking Record Details</h2>
-                <p className="modal-subtitle">{selectedRequest.id}</p>
+                <h2 id="booking-modal-title">Care Booking Details</h2>
+                <p className="admin-modal-subtitle">
+                  Reference: <strong>{selectedBooking.id}</strong>
+                </p>
               </div>
-              <button className="close-btn" onClick={() => setSelectedRequest(null)}>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setSelectedBooking(null)}
+                aria-label="Close booking details modal"
+              >
                 ×
               </button>
             </div>
 
-            <div className="modal-body-scroll">
-              {/* Top Banner */}
-              <div className="details-top-banner">
+            <div className="admin-modal-body">
+              <div className="admin-detail-banner">
                 <div>
-                  <span className="label">SERVICE REQUESTED</span>
-                  <h3>{selectedRequest.service}</h3>
+                  <span className="admin-detail-label">Service Requested</span>
+                  <strong>{selectedBooking.service || "N/A"}</strong>
                 </div>
                 <div>
-                  <span className="label">WORKFLOW STATUS</span>
+                  <label
+                    htmlFor="modal-booking-status"
+                    className="admin-detail-label"
+                  >
+                    Booking Status
+                  </label>
                   <select
-                    className={`status-select status-${(
-                      selectedRequest.status || ""
-                    )
-                      .toLowerCase()
-                      .replace(/ /g, "-")}`}
-                    value={selectedRequest.status}
+                    id="modal-booking-status"
+                    className={`admin-status-select ${getStatusClass(
+                      selectedBooking.status
+                    )}`}
+                    value={
+                      BOOKING_STATUSES.includes(selectedBooking.status)
+                        ? selectedBooking.status
+                        : "Pending Verification"
+                    }
                     onChange={(e) =>
-                      handleStatusChange(selectedRequest.id, e.target.value)
+                      handleBookingStatusChange(
+                        selectedBooking.id,
+                        e.target.value
+                      )
                     }
                   >
-                    <option value="Pending Verification">Pending Verification</option>
-                    <option value="Verified">Verified</option>
-                    <option value="Staff Appointed">Staff Appointed</option>
-                    <option value="Completed">Completed</option>
+                    {BOOKING_STATUSES.map((st) => (
+                      <option key={st} value={st}>
+                        {st}
+                      </option>
+                    ))}
                   </select>
                 </div>
               </div>
 
-              {/* Patient Info */}
-              <div className="detail-section">
-                <h4>👤 Patient & Contact Profile</h4>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>Full Name</label>
-                    <span>{selectedRequest.name || "N/A"}</span>
+              <div className="admin-detail-section">
+                <h3>Customer & Schedule</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Customer Name</span>
+                    <p>{selectedBooking.name || "N/A"}</p>
                   </div>
-                  <div className="detail-item">
-                    <label>Phone Number</label>
-                    <span>{selectedRequest.phone || "N/A"}</span>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Phone Number</span>
+                    <p>{selectedBooking.phone || "N/A"}</p>
                   </div>
-                  <div className="detail-item">
-                    <label>Email Address</label>
-                    <span>{selectedRequest.email || "N/A"}</span>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Email Address</span>
+                    <p>{selectedBooking.email || "N/A"}</p>
                   </div>
-                  <div className="detail-item">
-                    <label>Preferred Date</label>
-                    <span>
-                      {selectedRequest.preferredDate
-                        ? new Date(`${selectedRequest.preferredDate}T00:00:00`).toLocaleDateString()
-                        : "N/A"}
-                    </span>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Preferred Date</span>
+                    <p>{formatDate(selectedBooking.preferredDate)}</p>
                   </div>
-                  <div className="detail-item">
-                    <label>Shift Schedule</label>
-                    <span>{selectedRequest.shift || "N/A"}</span>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Shift / Timing</span>
+                    <p>
+                      {selectedBooking.shift === "Other" &&
+                      selectedBooking.shiftOther
+                        ? selectedBooking.shiftOther
+                        : selectedBooking.shift || "Not specified"}
+                    </p>
                   </div>
-                  <div className="detail-item">
-                    <label>Priority Level</label>
-                    <span className={`urgency-badge urgency-${(selectedRequest.urgency || "Normal").toLowerCase()}`}>
-                      {selectedRequest.urgency || "Normal"}
-                    </span>
-                  </div>
-                </div>
-                <div className="detail-item full-width">
-                  <label>Medical Condition & Requirements</label>
-                  <p>{selectedRequest.condition || "None provided."}</p>
-                </div>
-              </div>
-
-              {/* Service Address */}
-              <div className="detail-section">
-                <h4>📍 Bahrain Service Address</h4>
-                <div className="detail-grid">
-                  <div className="detail-item">
-                    <label>Flat / Villa No.</label>
-                    <span>
-                      {selectedRequest.address?.flatNo ||
-                        selectedRequest.address?.flatVilla ||
-                        "N/A"}
-                    </span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Building No.</label>
-                    <span>
-                      {selectedRequest.address?.buildingNo ||
-                        selectedRequest.address?.buildingNumber ||
-                        "N/A"}
-                    </span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Area / District</label>
-                    <span>{selectedRequest.address?.area || "N/A"}</span>
-                  </div>
-                  <div className="detail-item">
-                    <label>Governorate</label>
-                    <span>{selectedRequest.address?.governorate || "N/A"}</span>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Submitted At</span>
+                    <p>{formatDateTime(selectedBooking.createdAt)}</p>
                   </div>
                 </div>
               </div>
 
-              {/* Staff Assignment Info */}
-              <div className="detail-section">
-                <h4>🩺 Assigned Healthcare Staff</h4>
-                {selectedRequest.assignedStaffName ? (
-                  <div className="assigned-staff-box">
-                    <div>
-                      <strong>{selectedRequest.assignedStaffName}</strong>
-                      <p>{selectedRequest.assignedStaffRole || "Registered Nurse"}</p>
-                    </div>
-                    <button
-                      className="admin-secondary-btn"
-                      onClick={() => {
-                        const r = selectedRequest;
-                        setSelectedRequest(null);
-                        handleOpenAssignModal(r);
-                      }}
-                    >
-                      Reassign Staff
-                    </button>
+              <div className="admin-detail-section">
+                <h3>Clinical Details & Address</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item admin-detail-full">
+                    <span className="admin-detail-label">
+                      Patient Condition / Care Need
+                    </span>
+                    <p>{selectedBooking.condition || "Not specified"}</p>
                   </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Flat / Villa No.</span>
+                    <p>
+                      {selectedBooking.address?.flatNo ||
+                        selectedBooking.address?.flatVilla ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Building No.</span>
+                    <p>
+                      {selectedBooking.address?.buildingNo ||
+                        selectedBooking.address?.buildingNumber ||
+                        "N/A"}
+                    </p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Area / Block</span>
+                    <p>{selectedBooking.address?.area || "N/A"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Governorate</span>
+                    <p>{selectedBooking.address?.governorate || "Bahrain"}</p>
+                  </div>
+                  <div className="admin-detail-item admin-detail-full">
+                    <span className="admin-detail-label">Additional Notes</span>
+                    <p>
+                      {selectedBooking.notes ||
+                        "No additional notes provided."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-detail-section">
+                <h3>Status History</h3>
+                {loadingHistory ? (
+                  <p>Loading status history...</p>
+                ) : bookingHistory.length === 0 ? (
+                  <p>No status transitions recorded yet.</p>
                 ) : (
-                  <div className="unassigned-staff-box">
-                    <p>No caregiver or nurse has been appointed to this request yet.</p>
-                    <button
-                      className="admin-primary-btn"
-                      onClick={() => {
-                        const r = selectedRequest;
-                        setSelectedRequest(null);
-                        handleOpenAssignModal(r);
-                      }}
-                    >
-                      + Appoint Staff Now
-                    </button>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+                    {bookingHistory.map((entry) => (
+                      <div
+                        key={entry.id}
+                        style={{
+                          padding: "8px 12px",
+                          borderRadius: "8px",
+                          backgroundColor: "#F8F9FA",
+                          border: "1px solid #E8E8EC",
+                          fontSize: "13px",
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: "12px",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <span>
+                          <strong>{entry.newStatus}</strong>
+                          {entry.previousStatus ? ` (from ${entry.previousStatus})` : " (Initial)"}
+                        </span>
+                        <span style={{ color: "#6B6B6B" }}>
+                          {entry.changedBy} · {formatDateTime(entry.createdAt)}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
-
-              {/* Notes */}
-              <div className="detail-section">
-                <h4>📝 Patient Notes</h4>
-                <p className="notes-text">
-                  {selectedRequest.notes || "No special instructions supplied by the patient."}
-                </p>
-              </div>
             </div>
 
-            <div className="modal-footer">
+            <div className="admin-modal-footer">
+              {selectedBooking.status === "Pending Verification" && (
+                <button
+                  type="button"
+                  className="admin-btn admin-btn-green"
+                  onClick={() => handleVerifyBooking(selectedBooking)}
+                >
+                  Verify Booking
+                </button>
+              )}
               <button
-                className="admin-outline-btn"
-                onClick={() => {
-                  setPrintModalReq(selectedRequest);
-                  setSelectedRequest(null);
-                }}
-              >
-                🖨️ Print Request Record
-              </button>
-              <button
-                className="admin-secondary-btn"
-                onClick={() => setSelectedRequest(null)}
+                type="button"
+                className="admin-btn admin-btn-secondary"
+                onClick={() => setSelectedBooking(null)}
               >
                 Close
               </button>
@@ -1556,710 +1415,154 @@ function AdminDashboard() {
         </div>
       )}
 
-      {/* ========================================================
-          MODAL 2: ASSIGN STAFF MODAL
-      ======================================================== */}
-      {assignModalReq && (
-        <div className="modal-overlay" onClick={() => setAssignModalReq(null)}>
-          <div className="form-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Appoint Caregiver to Request {assignModalReq.id}</h2>
-              <button className="close-btn" onClick={() => setAssignModalReq(null)}>
-                ×
-              </button>
-            </div>
-
-            <form onSubmit={handleConfirmAssignStaff}>
-              <div className="form-group">
-                <label>Select Nurse / Caregiver from Roster:</label>
-                <select
-                  value={selectedStaffId}
-                  onChange={(e) => setSelectedStaffId(e.target.value)}
-                  required
-                >
-                  <option value="">-- Choose Staff Member --</option>
-                  {staffRoster.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.name} ({s.role} - {s.status})
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="admin-secondary-btn"
-                  onClick={() => setAssignModalReq(null)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="admin-primary-btn">
-                  Confirm Staff Assignment
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL 3: ADD NEW STAFF MODAL
-      ======================================================== */}
-      {showAddStaffModal && (
-        <div className="modal-overlay" onClick={() => setShowAddStaffModal(false)}>
-          <div className="form-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Add New Staff Member</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowAddStaffModal(false)}
-              >
-                ×
-              </button>
-            </div>
-
-            <form onSubmit={handleAddStaffSubmit}>
-              <div className="form-group">
-                <label>Full Name & Title:</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Nurse Fatima Al-Sayed"
-                  value={newStaffForm.name}
-                  onChange={(e) =>
-                    setNewStaffForm({ ...newStaffForm, name: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Role:</label>
-                <select
-                  value={newStaffForm.role}
-                  onChange={(e) =>
-                    setNewStaffForm({ ...newStaffForm, role: e.target.value })
-                  }
-                >
-                  <option value="Registered Senior Nurse">Registered Senior Nurse</option>
-                  <option value="Pediatric Care Specialist">Pediatric Care Specialist</option>
-                  <option value="Palliative Caregiver">Palliative Caregiver</option>
-                  <option value="Clinical Home Care Specialist">Clinical Home Care Specialist</option>
-                  <option value="Maternal & Newborn Caregiver">Maternal & Newborn Caregiver</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label>Specialization:</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Elderly Care & Wound Management"
-                  value={newStaffForm.specialization}
-                  onChange={(e) =>
-                    setNewStaffForm({
-                      ...newStaffForm,
-                      specialization: e.target.value,
-                    })
-                  }
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Bahrain Phone Number:</label>
-                <input
-                  type="text"
-                  placeholder="+973 3900 1122"
-                  value={newStaffForm.phone}
-                  onChange={(e) =>
-                    setNewStaffForm({ ...newStaffForm, phone: e.target.value })
-                  }
-                  required
-                />
-              </div>
-
-              <div className="form-group">
-                <label>CPR ID Number:</label>
-                <input
-                  type="text"
-                  placeholder="920188310"
-                  value={newStaffForm.cpr}
-                  onChange={(e) =>
-                    setNewStaffForm({ ...newStaffForm, cpr: e.target.value })
-                  }
-                />
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="admin-secondary-btn"
-                  onClick={() => setShowAddStaffModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="admin-primary-btn">
-                  Save Staff Member
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL 4: ADD NEW REQUEST MODAL (ADMIN CREATION)
-      ======================================================== */}
-      {showAddRequestModal && (
-        <div className="modal-overlay" onClick={() => setShowAddRequestModal(false)}>
-          <div className="form-modal large-form" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Log New Patient Care Request</h2>
-              <button
-                className="close-btn"
-                onClick={() => setShowAddRequestModal(false)}
-              >
-                ×
-              </button>
-            </div>
-
-            <form onSubmit={handleAddRequestSubmit}>
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Care Package / Service:</label>
-                  <select
-                    value={newReqForm.service}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, service: e.target.value })
-                    }
-                  >
-                    <option value="Elder Care">Elder Care</option>
-                    <option value="Newborn Care">Newborn Care</option>
-                    <option value="Patient Care">Patient Care</option>
-                    <option value="Children Care">Children Care</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Priority / Urgency:</label>
-                  <select
-                    value={newReqForm.urgency}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, urgency: e.target.value })
-                    }
-                  >
-                    <option value="Normal">Normal</option>
-                    <option value="High">High Priority</option>
-                    <option value="Urgent">Emergency / Urgent</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Patient Full Name:</label>
-                  <input
-                    type="text"
-                    placeholder="Patient Name"
-                    value={newReqForm.name}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, name: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Phone Number (+973):</label>
-                  <input
-                    type="text"
-                    placeholder="+973 3xxx xxxx"
-                    value={newReqForm.phone}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, phone: e.target.value })
-                    }
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Email Address:</label>
-                  <input
-                    type="email"
-                    placeholder="patient@domain.bh"
-                    value={newReqForm.email}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, email: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Preferred Start Date:</label>
-                  <input
-                    type="date"
-                    value={newReqForm.preferredDate}
-                    onChange={(e) =>
-                      setNewReqForm({
-                        ...newReqForm,
-                        preferredDate: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Shift Schedule:</label>
-                  <select
-                    value={newReqForm.shift}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, shift: e.target.value })
-                    }
-                  >
-                    <option value="Day Shift (8 AM - 4 PM)">Day Shift (8 AM - 4 PM)</option>
-                    <option value="Evening Shift (4 PM - 10 PM)">Evening Shift (4 PM - 10 PM)</option>
-                    <option value="Night Shift (10 PM - 6 AM)">Night Shift (10 PM - 6 AM)</option>
-                    <option value="Full Time (24 Hours)">Full Time (24 Hours)</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Bahrain Governorate:</label>
-                  <select
-                    value={newReqForm.governorate}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, governorate: e.target.value })
-                    }
-                  >
-                    <option value="Capital Governorate">Capital Governorate</option>
-                    <option value="Muharraq Governorate">Muharraq Governorate</option>
-                    <option value="Northern Governorate">Northern Governorate</option>
-                    <option value="Southern Governorate">Southern Governorate</option>
-                  </select>
-                </div>
-              </div>
-
-              <div className="form-row">
-                <div className="form-group">
-                  <label>Area / District:</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Seef, Riffa, Saar, Juffair"
-                    value={newReqForm.area}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, area: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Building / Flat No.:</label>
-                  <input
-                    type="text"
-                    placeholder="Building 12, Flat 4"
-                    value={newReqForm.buildingNo}
-                    onChange={(e) =>
-                      setNewReqForm({ ...newReqForm, buildingNo: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label>Medical Condition & Instructions:</label>
-                <textarea
-                  rows="3"
-                  placeholder="Describe patient condition, medications, special care notes..."
-                  value={newReqForm.condition}
-                  onChange={(e) =>
-                    setNewReqForm({ ...newReqForm, condition: e.target.value })
-                  }
-                ></textarea>
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="admin-secondary-btn"
-                  onClick={() => setShowAddRequestModal(false)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="admin-primary-btn">
-                  Create Booking
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL 5: DELETE CONFIRMATION MODAL
-      ======================================================== */}
-      {deleteConfirmReq && (
-        <div className="modal-overlay" onClick={() => setDeleteConfirmReq(null)}>
-          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Confirm Request Deletion</h2>
-              <button
-                className="close-btn"
-                onClick={() => setDeleteConfirmReq(null)}
-              >
-                ×
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>
-                Are you sure you want to permanently delete care request{" "}
-                <strong>{deleteConfirmReq.id}</strong> for patient{" "}
-                <strong>{deleteConfirmReq.name}</strong>?
-              </p>
-              <p className="warning-text">This action cannot be undone.</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="admin-secondary-btn"
-                onClick={() => setDeleteConfirmReq(null)}
-              >
-                Cancel
-              </button>
-              <button
-                className="admin-danger-btn"
-                onClick={() => handleDeleteRequest(deleteConfirmReq.id)}
-              >
-                Delete Request
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL: JOB APPLICATION DETAILS
-      ======================================================== */}
+      {/* ==================== MODAL 2: JOB APPLICATION DETAILS ==================== */}
       {selectedJobApp && (
-        <div className="modal-overlay" onClick={() => setSelectedJobApp(null)}>
-          <div className="details-modal job-app-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div
+          className="admin-modal-overlay"
+          onClick={() => setSelectedJobApp(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="job-modal-title"
+        >
+          <div
+            className="admin-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="admin-modal-header">
               <div>
-                <h2>Job Application Details</h2>
-                <p className="modal-subtitle">{selectedJobApp.id}</p>
+                <h2 id="job-modal-title">Job Application Details</h2>
+                <p className="admin-modal-subtitle">
+                  Reference: <strong>{selectedJobApp.id}</strong>
+                </p>
               </div>
-              <button className="close-btn" onClick={() => setSelectedJobApp(null)}>×</button>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setSelectedJobApp(null)}
+                aria-label="Close job application modal"
+              >
+                ×
+              </button>
             </div>
 
-            <div className="modal-body-scroll">
-              {/* Top Banner */}
-              <div className="details-top-banner job-app-banner">
+            <div className="admin-modal-body">
+              <div className="admin-detail-banner">
                 <div>
-                  <span className="label">POSITION APPLIED</span>
-                  <h3>{selectedJobApp.position}</h3>
+                  <span className="admin-detail-label">Position Applied For</span>
+                  <strong>{selectedJobApp.position || "N/A"}</strong>
                 </div>
                 <div>
-                  <span className="label">APPLICATION STATUS</span>
-                  <select
-                    className={`status-select status-${(selectedJobApp.status || "")
-                      .toLowerCase()
-                      .replace(/[\/\s]+/g, "-")}`}
-                    value={selectedJobApp.status}
-                    onChange={(e) => handleJobStatusChange(selectedJobApp.id, e.target.value)}
+                  <label
+                    htmlFor="modal-job-status"
+                    className="admin-detail-label"
                   >
-                    <option value="Application Received">Application Received</option>
-                    <option value="Under Review">Under Review</option>
-                    <option value="Hired / Added to Roster">Hired / Added to Roster</option>
-                    <option value="Rejected">Rejected</option>
+                    Application Status
+                  </label>
+                  <select
+                    id="modal-job-status"
+                    className={`admin-status-select ${getStatusClass(
+                      selectedJobApp.status
+                    )}`}
+                    value={
+                      APPLICATION_STATUSES.includes(selectedJobApp.status)
+                        ? selectedJobApp.status
+                        : "Application Received"
+                    }
+                    onChange={(e) =>
+                      handleJobStatusChange(selectedJobApp.id, e.target.value)
+                    }
+                  >
+                    {APPLICATION_STATUSES.map((st) => (
+                      <option key={st} value={st}>
+                        {st}
+                      </option>
+                    ))}
                   </select>
                 </div>
-                <div>
-                  <span className="label">SUBMITTED ON</span>
-                  <p>{selectedJobApp.submittedAt ? new Date(selectedJobApp.submittedAt).toLocaleString() : "N/A"}</p>
+              </div>
+
+              <div className="admin-detail-section">
+                <h3>Applicant Information</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Full Name</span>
+                    <p>{selectedJobApp.fullName || "N/A"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Phone Number</span>
+                    <p>{selectedJobApp.phone || "N/A"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Email Address</span>
+                    <p>{selectedJobApp.email || "N/A"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Qualification</span>
+                    <p>{selectedJobApp.qualification || "Not specified"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Experience</span>
+                    <p>{selectedJobApp.experience || "Not specified"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">NHRA / License Status</span>
+                    <p>{selectedJobApp.licenseNumber || "Not specified"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Availability</span>
+                    <p>{selectedJobApp.availability || selectedJobApp.preferredShift || "Not specified"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Submitted At</span>
+                    <p>{formatDateTime(selectedJobApp.submittedAt)}</p>
+                  </div>
                 </div>
               </div>
 
-              {/* Details Grid */}
-              <div className="details-info-grid">
-                <div className="info-section">
-                  <h4>👤 Personal Information</h4>
-                  <div className="info-row">
-                    <label>Full Name:</label>
-                    <span>{selectedJobApp.fullName}</span>
+              <div className="admin-detail-section">
+                <h3>CV & Cover Note</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item admin-detail-full">
+                    <span className="admin-detail-label">Uploaded CV (Private Storage)</span>
+                    {selectedJobApp.hasCv ? (
+                      <p>
+                        <button
+                          type="button"
+                          className="admin-action-btn"
+                          onClick={() =>
+                            handleOpenPrivateDocument(selectedJobApp.id, "cv")
+                          }
+                        >
+                          Download / View CV (
+                          {selectedJobApp.cvFileName || "Document"})
+                        </button>
+                      </p>
+                    ) : (
+                      <p>No CV file uploaded.</p>
+                    )}
                   </div>
-                  <div className="info-row">
-                    <label>Email:</label>
-                    <span>{selectedJobApp.email}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>Phone:</label>
-                    <span>{selectedJobApp.phone}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>Address:</label>
-                    <span>{selectedJobApp.address || "N/A"}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>CPR No.:</label>
-                    <span>{selectedJobApp.cprNo || selectedJobApp.governorate || "N/A"}</span>
-                  </div>
-                </div>
-
-                <div className="info-section">
-                  <h4>🩺 Professional Profile</h4>
-                  <div className="info-row">
-                    <label>Qualification:</label>
-                    <span>{selectedJobApp.qualification}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>Experience:</label>
-                    <span>{selectedJobApp.experience}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>License Number:</label>
-                    <span>{selectedJobApp.licenseNumber || "Not provided"}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>Availability:</label>
-                    <span>{selectedJobApp.availability}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>CV File:</label>
-                    <span>{selectedJobApp.cvFileName || "Not provided"}</span>
-                  </div>
-                  <div className="info-row">
-                    <label>Certification:</label>
-                    <span>{selectedJobApp.certificationFileName || "Not provided"}</span>
+                  <div className="admin-detail-item admin-detail-full">
+                    <span className="admin-detail-label">
+                      Cover Letter / Message
+                    </span>
+                    <p className="admin-detail-notes">
+                      {selectedJobApp.coverLetter ||
+                        selectedJobApp.message ||
+                        "No cover message provided."}
+                    </p>
                   </div>
                 </div>
-
-                {selectedJobApp.message && (
-                  <div className="info-section full-width">
-                    <h4>💬 Applicant Message</h4>
-                    <p className="message-text">{selectedJobApp.message}</p>
-                  </div>
-                )}
               </div>
             </div>
 
-            {/* Footer Actions */}
-            <div className="modal-footer job-app-footer">
+            <div className="admin-modal-footer">
               <button
-                className="admin-secondary-btn"
+                type="button"
+                className="admin-btn admin-btn-secondary"
                 onClick={() => setSelectedJobApp(null)}
               >
                 Close
               </button>
-              {!selectedJobApp.status?.toLowerCase().includes("hired") && (
-                <button
-                  className="admin-primary-btn hire-confirm-btn"
-                  onClick={() => {
-                    setSelectedJobApp(null);
-                    handleOpenHireModal(selectedJobApp);
-                  }}
-                >
-                  💼 Take for Job / Hire Now
-                </button>
-              )}
-              {selectedJobApp.status?.toLowerCase().includes("hired") && (
-                <span className="modal-hired-badge">✓ Staff Member in Active Roster</span>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL: HIRE APPLICANT CONFIRMATION
-      ======================================================== */}
-      {hireConfirmApp && (
-        <div className="modal-overlay" onClick={() => setHireConfirmApp(null)}>
-          <div className="confirm-modal hire-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <div>
-                <h2>💼 Confirm Hiring Decision</h2>
-                <p className="modal-subtitle">This will add the applicant to the active Staff & Caregivers Roster</p>
-              </div>
-              <button className="close-btn" onClick={() => setHireConfirmApp(null)}>×</button>
-            </div>
-
-            <form onSubmit={handleConfirmHireApplicant}>
-              <div className="modal-body">
-                <div className="hire-candidate-preview">
-                  <div className="hire-avatar">
-                    {hireConfirmApp.fullName?.split(" ").slice(0, 2).map(n => n[0]).join("").toUpperCase()}
-                  </div>
-                  <div>
-                    <strong>{hireConfirmApp.fullName}</strong>
-                    <span>{hireConfirmApp.email}</span>
-                    <span>{hireConfirmApp.phone}</span>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Role / Job Title in Roster:</label>
-                  <select
-                    value={hireForm.role}
-                    onChange={(e) => setHireForm({ ...hireForm, role: e.target.value })}
-                    required
-                  >
-                    <option value="Registered Nurse">Registered Nurse</option>
-                    <option value="Caregiver">Caregiver</option>
-                    <option value="Newborn Care Specialist">Newborn Care Specialist</option>
-                    <option value="Patient Care Assistant">Patient Care Assistant</option>
-                    <option value="Senior Nurse">Senior Nurse</option>
-                    <option value="Clinical Support Staff">Clinical Support Staff</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Specialization:</label>
-                  <input
-                    type="text"
-                    value={hireForm.specialization}
-                    onChange={(e) => setHireForm({ ...hireForm, specialization: e.target.value })}
-                    placeholder="e.g. Elder Care, Post-Op Nursing, Neonatal Care..."
-                  />
-                </div>
-
-                <div className="hire-info-note">
-                  <strong>ℹ️ Note:</strong> The candidate will be added to the Staff & Caregivers Roster with <strong>Available</strong> status and can be assigned to care requests immediately.
-                </div>
-              </div>
-
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="admin-secondary-btn"
-                  onClick={() => setHireConfirmApp(null)}
-                >
-                  Cancel
-                </button>
-                <button type="submit" className="admin-primary-btn hire-confirm-btn">
-                  ✅ Confirm Hire & Add to Roster
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL: DELETE JOB APPLICATION CONFIRMATION
-      ======================================================== */}
-      {deleteConfirmJobApp && (
-        <div className="modal-overlay" onClick={() => setDeleteConfirmJobApp(null)}>
-          <div className="confirm-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>Delete Job Application</h2>
-              <button className="close-btn" onClick={() => setDeleteConfirmJobApp(null)}>×</button>
-            </div>
-            <div className="modal-body">
-              <p>
-                Are you sure you want to permanently delete the job application by{" "}
-                <strong>{deleteConfirmJobApp.fullName}</strong> ({deleteConfirmJobApp.id})?
-              </p>
-              <p className="warning-text">This action cannot be undone.</p>
-            </div>
-            <div className="modal-footer">
-              <button
-                className="admin-secondary-btn"
-                onClick={() => setDeleteConfirmJobApp(null)}
-              >
-                Cancel
-              </button>
-              <button
-                className="admin-danger-btn"
-                onClick={() => handleDeleteJobApplication(deleteConfirmJobApp.id)}
-              >
-                🗑️ Delete Application
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ========================================================
-          MODAL 6: PRINT RECORD SUMMARY MODAL
-      ======================================================== */}
-      {printModalReq && (
-        <div className="modal-overlay" onClick={() => setPrintModalReq(null)}>
-          <div className="print-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="print-header-actions">
-              <button
-                className="admin-primary-btn"
-                onClick={() => window.print()}
-              >
-                🖨️ Print / Save PDF
-              </button>
-              <button
-                className="admin-secondary-btn"
-                onClick={() => setPrintModalReq(null)}
-              >
-                Close
-              </button>
-            </div>
-
-            <div className="printable-record-paper">
-              <div className="printable-header">
-                <div>
-                  <h1>NOOR AL AFIYA</h1>
-                  <p>HOME HEALTH CARE WLL • Kingdom of Bahrain</p>
-                </div>
-                <div className="text-right">
-                  <h3>CARE REQUEST RECEIPT</h3>
-                  <small>ID: {printModalReq.id}</small>
-                </div>
-              </div>
-
-              <hr />
-
-              <div className="printable-grid">
-                <div>
-                  <strong>Patient Name:</strong> {printModalReq.name}
-                </div>
-                <div>
-                  <strong>Phone:</strong> {printModalReq.phone}
-                </div>
-                <div>
-                  <strong>Service:</strong> {printModalReq.service}
-                </div>
-                <div>
-                  <strong>Status:</strong> {printModalReq.status}
-                </div>
-                <div>
-                  <strong>Preferred Date:</strong> {printModalReq.preferredDate}
-                </div>
-                <div>
-                  <strong>Shift:</strong> {printModalReq.shift}
-                </div>
-              </div>
-
-              <div className="printable-section">
-                <strong>Service Address:</strong>
-                <p>
-                  Flat {printModalReq.address?.flatNo || "N/A"}, Building{" "}
-                  {printModalReq.address?.buildingNo || "N/A"}, Area{" "}
-                  {printModalReq.address?.area || "N/A"},{" "}
-                  {printModalReq.address?.governorate || "Bahrain"}
-                </p>
-              </div>
-
-              <div className="printable-section">
-                <strong>Assigned Medical Caregiver:</strong>
-                <p>{printModalReq.assignedStaffName || "Pending Assignment"}</p>
-              </div>
-
-              <div className="printable-section">
-                <strong>Patient Condition / Notes:</strong>
-                <p>{printModalReq.condition || "N/A"}</p>
-              </div>
-
-              <div className="printable-footer">
-                <span>Authorized Signature: _______________________</span>
-                <span>Date: {new Date().toLocaleDateString()}</span>
-              </div>
             </div>
           </div>
         </div>

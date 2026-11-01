@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logoMark from "../assets/noor-al-afiya-mark.png";
 import "./Home.css";
-import heroImage from "../assets/home-hero.png";
 import aboutCareImage from "../assets/about-care.png";
 import patientCareImage from "../assets/services/patient-care.jpg";
 import elderCareImage from "../assets/services/elder-care.jpg";
@@ -108,8 +107,8 @@ function Home() {
       ([entry]) => {
         if (entry.isIntersecting && !started) {
           started = true;
-          animateCount(setCareServicesCount, 1200);
-          animateCount(setBookingFlowCount, 153);
+          animateCount(setCareServicesCount, 4, 600);
+          animateCount(setBookingFlowCount, 3, 600);
           observer.unobserve(statsElement);
         }
       },
@@ -189,9 +188,15 @@ function Home() {
 
             <span>•</span>
 
-            <a href="mailto:info@bahrainnursingcare.com">
-              info@bahrainnursingcare.com
+            <a href="mailto:nooralafiyahomecare@gmail.com">
+              nooralafiyahomecare@gmail.com
             </a>
+
+            <span>•</span>
+
+            <Link to="/admin/login" className="top-admin-link">
+              Admin Sign In
+            </Link>
 
           </div>
 
@@ -780,8 +785,8 @@ function Home() {
               +973 0000 0000
             </a>
 
-            <a href="mailto:info@bahrainnursingcare.com">
-              info@bahrainnursingcare.com
+            <a href="mailto:nooralafiyahomecare@gmail.com">
+              nooralafiyahomecare@gmail.com
             </a>
 
             <span>
@@ -802,6 +807,10 @@ function Home() {
 
           <span>
             Home Nursing • Bahrain
+            {" • "}
+            <Link to="/admin/login" className="footer-admin-link">
+              Admin Sign In
+            </Link>
           </span>
 
         </div>

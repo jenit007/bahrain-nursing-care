@@ -64,27 +64,14 @@ a {
 .services-login-button,
 .why-primary-btn,
 .why-login-btn,
-.patient-primary-btn,
-.patient-login-btn,
-.elder-primary-btn,
-.elder-login-btn,
-.newborn-primary-btn,
-.newborn-login-btn,
-.children-primary-btn,
-.children-login-btn,
-.login-nav-btn,
-.login-submit,
 .care-form-login-btn,
 .care-primary-btn,
 .location-btn,
 .status-login-btn,
 .status-primary-btn,
-.feedback-submit,
-.submit-feedback,
 .submit-request-button,
 .admin-primary-btn,
-.admin-action-btn,
-.give-feedback-btn {
+.admin-action-btn {
   background: var(--theme-pink) !important;
   border-color: var(--theme-pink) !important;
   color: var(--theme-white) !important;
@@ -108,27 +95,14 @@ a {
 .services-login-button:hover,
 .why-primary-btn:hover,
 .why-login-btn:hover,
-.patient-primary-btn:hover,
-.patient-login-btn:hover,
-.elder-primary-btn:hover,
-.elder-login-btn:hover,
-.newborn-primary-btn:hover,
-.newborn-login-btn:hover,
-.children-primary-btn:hover,
-.children-login-btn:hover,
-.login-nav-btn:hover,
-.login-submit:hover,
 .care-form-login-btn:hover,
 .care-primary-btn:hover,
 .location-btn:hover,
 .status-login-btn:hover,
 .status-primary-btn:hover,
-.feedback-submit:hover,
-.submit-feedback:hover,
 .submit-request-button:hover,
 .admin-primary-btn:hover,
-.admin-action-btn:hover,
-.give-feedback-btn:hover {
+.admin-action-btn:hover {
   background: var(--theme-pink-dark) !important;
   border-color: var(--theme-pink-dark) !important;
   color: var(--theme-white) !important;
@@ -143,10 +117,6 @@ a {
 .contact-outline-btn,
 .why-outline-btn,
 .why-secondary-btn,
-.patient-secondary-btn,
-.elder-secondary-btn,
-.newborn-secondary-btn,
-.children-secondary-btn,
 .status-secondary-btn,
 .back-services-btn,
 .care-back-link {
@@ -160,10 +130,6 @@ a {
 .contact-outline-btn:hover,
 .why-outline-btn:hover,
 .why-secondary-btn:hover,
-.patient-secondary-btn:hover,
-.elder-secondary-btn:hover,
-.newborn-secondary-btn:hover,
-.children-secondary-btn:hover,
 .status-secondary-btn:hover,
 .back-services-btn:hover,
 .care-back-link:hover {
@@ -192,9 +158,6 @@ input[type="checkbox"] {
    BRAND ACCENTS — PINK
    ========================================================= */
 
-.login-logo-main,
-.login-logo-sub,
-.login-footer-logo,
 .care-form-logo-main,
 .care-form-logo-sub,
 .status-logo span,
@@ -266,11 +229,8 @@ input[type="checkbox"] {
   .hero-button,
   .service-card-button,
   .service-select-button,
-  .login-submit,
   .care-primary-btn,
   .status-primary-btn,
-  .feedback-submit,
-  .submit-feedback,
   .submit-request-button {
     width: 100%;
   }
@@ -337,15 +297,8 @@ input[type="checkbox"] {
 }
 
 /* Footer / standalone logo areas */
-.login-footer-logo,
 .care-footer-logo,
 .status-footer-logo,
-.feedback-logo,
-.feedback-footer-logo,
-.patient-footer-logo,
-.elder-footer-logo,
-.newborn-footer-logo,
-.children-footer-logo,
 .why-footer-logo,
 .contact-footer-logo {
   color: #FF3A94 !important;
@@ -366,14 +319,8 @@ input[type="checkbox"] {
 .why-footer-logo,
 .contact-footer-logo,
 .career-footer-logo,
-.patient-footer-logo,
-.elder-footer-logo,
-.newborn-footer-logo,
-.children-footer-logo,
 .care-footer-logo,
-.status-footer-logo,
-.feedback-footer-logo,
-.login-footer-logo {
+.status-footer-logo {
   font-size: 28px !important;
   font-weight: 900 !important;
   color: #FF3A94 !important;
@@ -389,14 +336,8 @@ input[type="checkbox"] {
 .why-footer-logo span,
 .contact-footer-logo span,
 .career-footer-logo span,
-.patient-footer-logo span,
-.elder-footer-logo span,
-.newborn-footer-logo span,
-.children-footer-logo span,
 .care-footer-logo span,
-.status-footer-logo span,
-.feedback-footer-logo span,
-.login-footer-logo span {
+.status-footer-logo span {
   display: block !important;
   font-size: 10px !important;
   font-weight: 800 !important;
@@ -404,4 +345,31 @@ input[type="checkbox"] {
   color: #8995a7 !important;
   margin-top: 4px !important;
   text-transform: uppercase !important;
+}
+
+/* Subtle Admin Sign In Links (Header Top Bar & Footer Bottom) */
+.top-admin-link {
+  color: rgba(255, 255, 255, 0.92);
+  text-decoration: none;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  transition: opacity 0.2s ease, color 0.2s ease;
+}
+
+.top-admin-link:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-admin-link {
+  color: #9AA5B6;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.footer-admin-link:hover {
+  color: #FF3A94;
 }

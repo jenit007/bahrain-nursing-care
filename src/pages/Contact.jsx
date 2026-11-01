@@ -1,11 +1,56 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import logoMark from "../assets/noor-al-afiya-mark.png";
+import { submitContactEnquiry } from "../utils/api";
 import "./Home.css";
 import "./Contact.css";
 
 function Contact() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState("");
+  const [submitError, setSubmitError] = useState("");
+
+  const handleFieldChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setSubmitError("");
+    setSubmitSuccess("");
+  };
+
+  const handleEnquirySubmit = async (event) => {
+    event.preventDefault();
+    setSubmitting(true);
+    setSubmitError("");
+    setSubmitSuccess("");
+
+    try {
+      const response = await submitContactEnquiry(formData);
+      setSubmitSuccess(
+        response?.message || "Thank you. Your enquiry has been submitted."
+      );
+      setFormData({
+        fullName: "",
+        phone: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      setSubmitError(
+        err.message || "We could not submit your enquiry right now. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
+  };
   return (
     <div className="contact-page">
 
@@ -15,7 +60,9 @@ function Contact() {
           <div className="top-contact">
             <a href="tel:+97300000000">+973 0000 0000</a>
             <span>•</span>
-            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
+            <span>•</span>
+            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
           </div>
         </div>
       </div>
@@ -154,8 +201,8 @@ function Contact() {
                   service enquiries.
                 </p>
 
-                <a href="mailto:info@bahrainnursingcare.com">
-                  info@bahrainnursingcare.com
+                <a href="mailto:nooralafiyahomecare@gmail.com">
+                  nooralafiyahomecare@gmail.com
                 </a>
 
               </div>
@@ -271,14 +318,44 @@ function Contact() {
 
           <div className="contact-form-card">
 
-            <form
-              onSubmit={(event) => {
-                event.preventDefault();
-                alert(
-                  "Thank you. Your enquiry has been submitted."
-                );
-              }}
-            >
+            <form onSubmit={handleEnquirySubmit}>
+              {submitSuccess && (
+                <div
+                  className="contact-success"
+                  role="status"
+                  style={{
+                    marginBottom: "16px",
+                    padding: "12px 16px",
+                    borderRadius: "10px",
+                    background: "#F3F9EA",
+                    border: "1px solid #96C855",
+                    color: "#252525",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {submitSuccess}
+                </div>
+              )}
+
+              {submitError && (
+                <div
+                  className="contact-error"
+                  role="alert"
+                  style={{
+                    marginBottom: "16px",
+                    padding: "12px 16px",
+                    borderRadius: "10px",
+                    background: "#FFF0F7",
+                    border: "1px solid #FF3A94",
+                    color: "#252525",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {submitError}
+                </div>
+              )}
 
               <div className="contact-form-row">
 
@@ -290,6 +367,9 @@ function Contact() {
 
                   <input
                     type="text"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleFieldChange}
                     placeholder="Enter your name"
                     required
                   />
@@ -304,6 +384,9 @@ function Contact() {
 
                   <input
                     type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleFieldChange}
                     placeholder="Enter phone number"
                     required
                   />
@@ -322,6 +405,9 @@ function Contact() {
 
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleFieldChange}
                     placeholder="Enter your email"
                     required
                   />
@@ -336,6 +422,9 @@ function Contact() {
 
                   <input
                     type="text"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleFieldChange}
                     placeholder="What can we help with?"
                     required
                   />
@@ -352,6 +441,9 @@ function Contact() {
 
                 <textarea
                   rows="6"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleFieldChange}
                   placeholder="Write your message..."
                   required
                 />
@@ -361,8 +453,9 @@ function Contact() {
               <button
                 type="submit"
                 className="contact-submit-btn"
+                disabled={submitting}
               >
-                Send Enquiry
+                {submitting ? "Sending Enquiry..." : "Send Enquiry"}
               </button>
 
             </form>
@@ -422,7 +515,7 @@ function Contact() {
           <div>
             <h4>Contact</h4>
             <a href="tel:+97300000000">+973 0000 0000</a>
-            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
             <span>Bahrain</span>
           </div>
 
@@ -431,7 +524,7 @@ function Contact() {
         <div className="contact-footer-bottom">
           <div className="contact-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain</span>
+            <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
           </div>
         </div>
 

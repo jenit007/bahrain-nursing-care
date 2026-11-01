@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { addJobApplication } from "../utils/requestStorage";
+import { submitJobApplication } from "../utils/api";
 import "../pages/Home.css";
 import "./Careers.css";
 
@@ -153,18 +153,10 @@ function Careers() {
     if (!validate()) return;
 
     setSubmitting(true);
-
-    const applicationPayload = {
-      ...form,
-      cvFileName: cvFile?.name || "Not provided",
-      certificationFileName: certificateFile?.name || "Not provided",
-      submittedAt: new Date().toISOString(),
-      status: "Application Received",
-    };
+    setErrors({});
 
     try {
-      addJobApplication(applicationPayload);
-      await new Promise((resolve) => setTimeout(resolve, 350));
+      await submitJobApplication(form, cvFile, certificateFile);
       setSubmitted(true);
       setForm(initialForm);
       setCvFile(null);
@@ -172,16 +164,17 @@ function Careers() {
       if (cvInputRef.current) cvInputRef.current.value = "";
       if (certificateInputRef.current) certificateInputRef.current.value = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
-    } catch {
+    } catch (err) {
       setErrors({
-        form: "We could not save the application in this browser. Please try again.",
+        ...err.details,
+        form:
+          err.message ||
+          "We could not submit your application right now. Please try again.",
       });
     } finally {
       setSubmitting(false);
     }
   };
-
-  const closeMenu = () => setMenuOpen(false);
 
   return (
     <div className="careers-page">
@@ -191,7 +184,9 @@ function Careers() {
           <div className="top-contact">
             <a href="tel:+97300000000">+973 0000 0000</a>
             <span>•</span>
-            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
+            <span>•</span>
+            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
           </div>
         </div>
       </div>
@@ -497,14 +492,14 @@ function Careers() {
           <div>
             <h4>Contact</h4>
             <a href="tel:+97300000000">+973 0000 0000</a>
-            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
             <span>Bahrain</span>
           </div>
         </div>
         <div className="careers-footer-bottom">
           <div className="careers-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain</span>
+            <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
           </div>
         </div>
       </footer>

@@ -29,9 +29,15 @@ function About() {
 
             <span>•</span>
 
-            <a href="mailto:info@bahrainnursingcare.com">
-              info@bahrainnursingcare.com
+            <a href="mailto:nooralafiyahomecare@gmail.com">
+              nooralafiyahomecare@gmail.com
             </a>
+
+            <span>•</span>
+
+            <Link to="/admin/login" className="top-admin-link">
+              Admin Sign In
+            </Link>
 
           </div>
 
@@ -582,8 +588,8 @@ function About() {
               +973 0000 0000
             </a>
 
-            <a href="mailto:info@bahrainnursingcare.com">
-              info@bahrainnursingcare.com
+            <a href="mailto:nooralafiyahomecare@gmail.com">
+              nooralafiyahomecare@gmail.com
             </a>
 
             <span>
@@ -604,6 +610,10 @@ function About() {
 
           <span>
             Professional Home Care Services
+            {" • "}
+            <Link to="/admin/login" className="footer-admin-link">
+              Admin Sign In
+            </Link>
           </span>
 
         </div>

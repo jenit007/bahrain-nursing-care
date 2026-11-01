@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import logoMark from "../../assets/noor-al-afiya-mark.png";
-import { addRequest } from "../../utils/requestStorage";
+import { createCareBooking } from "../../utils/api";
 import "./CareForm.css";
 
 const careData = {
@@ -46,6 +46,8 @@ function CareForm() {
   const currentService = careData[service];
 
   const [menuOpen, setMenuOpen] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -95,23 +97,43 @@ function CareForm() {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setSubmitError("");
+    setSubmitting(true);
 
-    addRequest({
-      service: currentService.title,
-      name: formData.name,
-      email: formData.email,
-      phone: formData.phone,
-      preferredDate: formData.preferredDate,
-      notes: formData.notes,
-      condition: formData.condition,
-      shift: formData.shift,
-      shiftOther: formData.shift === "Other" ? formData.shiftOther : "",
-      address: formData.address,
-    });
+    try {
+      const booking = await createCareBooking({
+        service: currentService.title,
+        careType: currentService.title,
+        name: formData.name,
+        fullName: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        preferredDate: formData.preferredDate,
+        preferredTime: formData.preferredTime || "",
+        notes: formData.notes,
+        additionalNotes: formData.notes,
+        condition: formData.condition,
+        shift: formData.shift,
+        shiftOther: formData.shift === "Other" ? formData.shiftOther : "",
+        patientDetails: {
+          condition: formData.condition,
+          shift: formData.shift,
+          shiftOther: formData.shift === "Other" ? formData.shiftOther : "",
+          preferredTime: formData.preferredTime || "",
+        },
+        address: formData.address,
+      });
 
-    navigate("/request-status");
+      navigate(`/request-status?ref=${encodeURIComponent(booking.bookingReference)}`);
+    } catch (err) {
+      setSubmitError(
+        err.message || "We could not submit your care booking right now. Please try again."
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -125,6 +147,8 @@ function CareForm() {
             <span>24/7 Home Care Support</span>
             <span>•</span>
             <span>Bahrain</span>
+            <span>•</span>
+            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
           </div>
         </div>
       </div>
@@ -417,13 +441,31 @@ function CareForm() {
                 <p>Service location: Bahrain</p>
               </div>
 
+              {submitError && (
+                <div
+                  role="alert"
+                  style={{
+                    marginBottom: "16px",
+                    padding: "12px 16px",
+                    borderRadius: "10px",
+                    background: "#FFF0F7",
+                    border: "1px solid #FF3A94",
+                    color: "#252525",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                  }}
+                >
+                  {submitError}
+                </div>
+              )}
+
               <div className="care-submit-area">
                 <div>
                   <strong>Ready to submit?</strong>
                   <span>Your request will appear in Request Tracking after submission.</span>
                 </div>
-                <button type="submit" className="care-primary-btn">
-                  Submit Care Request <span>→</span>
+                <button type="submit" className="care-primary-btn" disabled={submitting}>
+                  {submitting ? "Submitting Request..." : <>Submit Care Request <span>→</span></>}
                 </button>
               </div>
             </form>
@@ -469,14 +511,14 @@ function CareForm() {
             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Contact</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#9AA5B6' }}>
               <a href="tel:+97300000000" style={{ color: '#9AA5B6', textDecoration: 'none' }}>+973 0000 0000</a>
-              <a href="mailto:info@bahrainnursingcare.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>info@bahrainnursingcare.com</a>
+              <a href="mailto:nooralafiyahomecare@gmail.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
               <span>Bahrain</span>
             </div>
           </div>
         </div>
         <div className="care-footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
           <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-          <span>Home Nursing • Bahrain</span>
+          <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
         </div>
       </footer>
     </div>

@@ -1,44 +1,117 @@
-import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import logoMark from "../../assets/noor-al-afiya-mark.png";
-import { getLatestRequest, getRequests } from "../../utils/requestStorage";
+import {
+  getSavedBookingReference,
+  trackCareBooking,
+} from "../../utils/api";
 import "./RequestStatus.css";
 
 const trackingSteps = [
   { number: 1, title: "Request Submitted", description: "Your care request has been submitted successfully." },
   { number: 2, title: "Under Verification", description: "Our admin team is reviewing your request." },
-  { number: 3, title: "Verified", description: "Your request has been verified and is ready for appointment." },
-  { number: 4, title: "Staff Appointed", description: "A care staff member has been appointed for your request." },
-  { number: 5, title: "Completed", description: "Your care request has been completed." },
+  { number: 3, title: "Verified", description: "Your request has been verified and confirmed by our team." },
+  { number: 4, title: "Completed", description: "Your care request has been completed." },
 ];
 
 function getStatusIndex(status) {
   switch (status) {
     case "Pending Verification": return 2;
     case "Verified": return 3;
-    case "Staff Appointed": return 4;
-    case "Completed": return 5;
+    case "Completed": return 4;
     default: return 1;
   }
 }
 
 function RequestStatus() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const queryRef = searchParams.get("ref") || "";
+
+  const [referenceInput, setReferenceInput] = useState(
+    () => queryRef || getSavedBookingReference()
+  );
+  const [activeReference, setActiveReference] = useState(
+    () => queryRef || getSavedBookingReference()
+  );
   const [request, setRequest] = useState(null);
+  const [loading, setLoading] = useState(Boolean(queryRef || getSavedBookingReference()));
+  const [error, setError] = useState("");
+
+  const fetchBookingStatus = useCallback(async (refToFetch, showSpinner = false) => {
+    const cleanRef = String(refToFetch || "").trim().toUpperCase();
+    if (!cleanRef) {
+      setRequest(null);
+      setLoading(false);
+      return;
+    }
+
+    if (showSpinner) {
+      setLoading(true);
+      setError("");
+    }
+
+    try {
+      const booking = await trackCareBooking(cleanRef);
+      setRequest(booking);
+      setError("");
+    } catch (err) {
+      if (showSpinner) {
+        setRequest(null);
+        setError(err.message || "Could not find a booking with that reference.");
+      }
+    } finally {
+      if (showSpinner) {
+        setLoading(false);
+      }
+    }
+  }, []);
 
   useEffect(() => {
-    const loadRequest = () => setRequest(getLatestRequest());
-    loadRequest();
+    const targetRef = queryRef || getSavedBookingReference();
+    if (targetRef) {
+      setReferenceInput(targetRef);
+      setActiveReference(targetRef);
+      fetchBookingStatus(targetRef, true);
+    } else {
+      setLoading(false);
+    }
+  }, [queryRef, fetchBookingStatus]);
 
-    const handleStorageChange = () => loadRequest();
-    window.addEventListener("storage", handleStorageChange);
-    const interval = setInterval(loadRequest, 1000);
+  useEffect(() => {
+    if (!activeReference) return undefined;
+    const interval = setInterval(() => {
+      fetchBookingStatus(activeReference, false);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [activeReference, fetchBookingStatus]);
 
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-      clearInterval(interval);
-    };
-  }, []);
+  const handleLookupSubmit = (event) => {
+    event.preventDefault();
+    const clean = referenceInput.trim().toUpperCase();
+    if (!clean) {
+      setError("Please enter your booking reference (e.g. REQ-12345678).");
+      return;
+    }
+    setActiveReference(clean);
+    setSearchParams({ ref: clean });
+    fetchBookingStatus(clean, true);
+  };
+
+  if (loading) {
+    return (
+      <div className="request-status-page">
+        <StatusHeader />
+        <main className="status-main">
+          <div className="status-empty-card">
+            <p className="status-eyebrow">REQUEST TRACKING</p>
+            <h1>Loading booking status...</h1>
+            <p>Retrieving live status from NOOR AL AFIYA care records.</p>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   if (!request) {
     return (
@@ -48,9 +121,47 @@ function RequestStatus() {
           <div className="status-empty-card">
             <span className="status-empty-icon">⌁</span>
             <p className="status-eyebrow">REQUEST TRACKING</p>
-            <h1>No request found</h1>
-            <p>You have not submitted a care request yet. Choose a service to get started.</p>
-            <button className="status-primary-btn" onClick={() => navigate("/services")}>Explore Services <span>→</span></button>
+            <h1>{error ? "Booking not found" : "Track your care request"}</h1>
+            <p>
+              {error ||
+                "Enter your booking reference (for example REQ-12345678) to check live status, or choose a service to submit a new request."}
+            </p>
+            <form
+              onSubmit={handleLookupSubmit}
+              style={{
+                display: "flex",
+                gap: "10px",
+                justifyContent: "center",
+                flexWrap: "wrap",
+                margin: "20px auto",
+                maxWidth: "460px",
+              }}
+            >
+              <input
+                type="text"
+                value={referenceInput}
+                onChange={(e) => setReferenceInput(e.target.value)}
+                placeholder="Enter Booking Reference (e.g. REQ-12345678)"
+                aria-label="Booking Reference"
+                style={{
+                  flex: "1 1 240px",
+                  height: "44px",
+                  padding: "0 14px",
+                  borderRadius: "10px",
+                  border: "1px solid #E1E8E3",
+                  fontSize: "14px",
+                }}
+              />
+              <button type="submit" className="status-primary-btn">
+                Track Request
+              </button>
+            </form>
+            <button
+              className="status-secondary-btn"
+              onClick={() => navigate("/services")}
+            >
+              Explore Services <span>→</span>
+            </button>
           </div>
         </main>
       </div>
@@ -69,6 +180,36 @@ function RequestStatus() {
           <p className="status-eyebrow">REQUEST TRACKING</p>
           <h1>Track your care request</h1>
           <p>Follow every stage of your request from submission through completion.</p>
+          <form
+            onSubmit={handleLookupSubmit}
+            style={{
+              display: "flex",
+              gap: "10px",
+              flexWrap: "wrap",
+              marginTop: "18px",
+              maxWidth: "480px",
+            }}
+          >
+            <input
+              type="text"
+              value={referenceInput}
+              onChange={(e) => setReferenceInput(e.target.value)}
+              placeholder="Track another reference (e.g. REQ-12345678)"
+              aria-label="Track booking reference"
+              style={{
+                flex: "1 1 240px",
+                height: "42px",
+                padding: "0 14px",
+                borderRadius: "10px",
+                border: "1px solid #E1E8E3",
+                background: "#FFFFFF",
+                fontSize: "14px",
+              }}
+            />
+            <button type="submit" className="status-secondary-btn" style={{ height: "42px" }}>
+              Lookup
+            </button>
+          </form>
         </div>
       </section>
 
@@ -78,13 +219,13 @@ function RequestStatus() {
             <div className="status-request-head">
               <div>
                 <span className="status-small-label">REQUEST ID</span>
-                <h2>{request.id}</h2>
+                <h2>{request.bookingReference || request.id}</h2>
               </div>
               <span className="status-badge">{request.status}</span>
             </div>
             <div className="status-request-grid">
-              <InfoItem label="Service" value={request.service} />
-              <InfoItem label="Full Name" value={request.name} />
+              <InfoItem label="Service" value={request.service || request.careType} />
+              <InfoItem label="Full Name" value={request.name || request.fullName} />
               <InfoItem label="Email" value={request.email} />
               <InfoItem label="Phone" value={request.phone} />
               <InfoItem label="Preferred Date" value={request.preferredDate ? new Date(`${request.preferredDate}T00:00:00`).toLocaleDateString() : "N/A"} />
@@ -100,10 +241,10 @@ function RequestStatus() {
                 <p className="status-section-label">LIVE REQUEST JOURNEY</p>
                 <h2>Request progress</h2>
               </div>
-              <span>{Math.min(currentIndex, 5)} / 5 stages</span>
+              <span>{Math.min(currentIndex, 4)} / 4 stages</span>
             </div>
 
-            <div className="status-progress-bar"><span style={{ width: `${(currentIndex / 5) * 100}%` }} /></div>
+            <div className="status-progress-bar"><span style={{ width: `${(currentIndex / 4) * 100}%` }} /></div>
 
             <div className="status-timeline">
               {trackingSteps.map((step) => {
@@ -146,9 +287,11 @@ function RequestStatus() {
 
             <div className="status-detail-card">
               <p className="status-section-label">NEXT STEP</p>
-              <h3>{request.status === "Completed" ? "Your request is complete" : "Keep your request details available"}</h3>
+              <h3>{request.status === "Completed" ? "Your request is complete" : "Keep your booking reference available"}</h3>
               <p className="status-next-text">
-                {request.status === "Completed" ? "Thank you for choosing NOOR AL AFIYA Home Health Care." : "Your request status can be updated by the admin dashboard. This page checks for updates automatically."}
+                {request.status === "Completed"
+                  ? "Thank you for choosing NOOR AL AFIYA Home Health Care."
+                  : `Your booking reference is ${request.bookingReference || request.id}. You can use it anytime on any device to check live status updates.`}
               </p>
             </div>
           </section>
@@ -202,14 +345,14 @@ function RequestStatus() {
             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Contact</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#9AA5B6' }}>
               <a href="tel:+97300000000" style={{ color: '#9AA5B6', textDecoration: 'none' }}>+973 0000 0000</a>
-              <a href="mailto:info@bahrainnursingcare.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>info@bahrainnursingcare.com</a>
+              <a href="mailto:nooralafiyahomecare@gmail.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
               <span>Bahrain</span>
             </div>
           </div>
         </div>
         <div className="status-footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
           <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-          <span>Home Nursing • Bahrain</span>
+          <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
         </div>
       </footer>
     </div>
@@ -220,7 +363,7 @@ function StatusHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
-      <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain</span></div></div>
+      <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain • <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link></span></div></div>
       <header className="status-navbar">
         <div className="status-container status-nav-inner">
           <Link to="/" className="home-brand" onClick={() => setMenuOpen(false)}>

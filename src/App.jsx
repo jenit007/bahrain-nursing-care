@@ -19,6 +19,10 @@ import CareForm from "./pages/user/CareForm";
 import RequestStatus from "./pages/user/RequestStatus";
 
 import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLogin from "./pages/auth/AdminLogin";
+import AdminRegister from "./pages/auth/AdminRegister";
+import AdminResetPassword from "./pages/auth/AdminResetPassword";
+import AdminProtected from "./pages/auth/AdminProtected";
 
 import "./responsive.css";
 
@@ -69,9 +73,16 @@ function App() {
 
         {/* ================= ADMIN ================= */}
 
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin/register" element={<AdminRegister />} />
+        <Route path="/admin/reset-password" element={<AdminResetPassword />} />
         <Route
-          path="/admin"
-          element={<AdminDashboard />}
+          path="/admin/*"
+          element={
+            <AdminProtected>
+              <AdminDashboard />
+            </AdminProtected>
+          }
         />
 
         {/* ================= FALLBACK ================= */}

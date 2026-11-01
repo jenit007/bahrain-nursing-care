@@ -71,7 +71,9 @@ function WhyUs() {
           <div className="top-contact">
             <a href="tel:+97300000000">+973 0000 0000</a>
             <span>•</span>
-            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
+            <span>•</span>
+            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
           </div>
         </div>
       </div>
@@ -441,7 +443,7 @@ function WhyUs() {
           <div>
             <h4>Contact</h4>
             <a href="tel:+97300000000">+973 0000 0000</a>
-            <a href="mailto:info@bahrainnursingcare.com">info@bahrainnursingcare.com</a>
+            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
             <span>Bahrain</span>
           </div>
 
@@ -450,7 +452,7 @@ function WhyUs() {
         <div className="why-footer-bottom">
           <div className="why-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain</span>
+            <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
           </div>
         </div>
 

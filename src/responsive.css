@@ -43,10 +43,6 @@ a {
     max-width: 920px;
   }
 
-  .feedback-card {
-    max-width: 850px;
-  }
-
   .admin-main {
     max-width: 1440px;
   }
@@ -400,37 +396,6 @@ a {
     line-height: 1.5;
   }
 
-  .feedback-request-card,
-  .feedback-submitted-card,
-  .feedback-waiting-card {
-    padding: 18px 15px;
-    gap: 13px;
-    align-items: flex-start;
-    border-radius: 13px;
-  }
-
-  .feedback-request-icon,
-  .feedback-success-icon,
-  .feedback-waiting-icon {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    font-size: 20px;
-  }
-
-  .feedback-request-content h2,
-  .feedback-submitted-card h2 {
-    font-size: 17px;
-    line-height: 1.3;
-  }
-
-  .feedback-request-content p,
-  .feedback-submitted-card p,
-  .feedback-waiting-card p {
-    font-size: 13px;
-  }
-
-  .give-feedback-btn,
   .back-services-btn {
     min-height: 46px;
     width: 100%;
@@ -438,98 +403,6 @@ a {
 
   .status-footer-actions {
     width: 100%;
-  }
-
-  /* ---------- Feedback ---------- */
-  .feedback-page {
-    min-height: 100svh;
-    padding: 20px 12px 35px;
-  }
-
-  .feedback-card {
-    width: 100%;
-    padding: 20px 16px;
-    border-radius: 14px;
-  }
-
-  .feedback-header {
-    gap: 12px;
-    margin-bottom: 20px;
-  }
-
-  .feedback-icon {
-    width: 46px;
-    height: 46px;
-    min-width: 46px;
-    font-size: 21px;
-  }
-
-  .feedback-header h1 {
-    font-size: 21px;
-    line-height: 1.25;
-  }
-
-  .feedback-header p {
-    font-size: 13px;
-  }
-
-  .feedback-request {
-    flex-wrap: wrap;
-    gap: 5px;
-    padding: 12px;
-    margin-bottom: 15px;
-    font-size: 13px;
-    overflow-wrap: anywhere;
-  }
-
-  .feedback-section {
-    padding: 18px 0;
-  }
-
-  .feedback-section h3 {
-    font-size: 15px;
-    line-height: 1.4;
-  }
-
-  .feedback-section p {
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  .stars {
-    gap: 4px;
-  }
-
-  .star {
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0;
-    font-size: 32px;
-  }
-
-  .answer-options {
-    justify-content: space-between;
-    gap: 5px;
-    margin-top: 15px;
-  }
-
-  .answer-options span {
-    width: 42px;
-    height: 42px;
-  }
-
-  .scale-labels {
-    font-size: 11px;
-  }
-
-  .feedback-section textarea {
-    min-height: 120px;
-    font-size: 16px;
-  }
-
-  .submit-feedback {
-    min-height: 48px;
-    margin-top: 20px;
   }
 
   /* ---------- Admin ---------- */
@@ -685,23 +558,6 @@ a {
     font-size: 13px;
   }
 
-  .feedback-result {
-    padding: 15px;
-  }
-
-  .feedback-rating {
-    gap: 7px;
-  }
-
-  .feedback-rating span {
-    font-size: 20px;
-    letter-spacing: 1px;
-  }
-
-  .feedback-answer {
-    padding: 10px 11px;
-  }
-
   .modal-actions {
     padding: 13px 16px;
     flex-direction: column;
@@ -780,16 +636,6 @@ a {
     grid-template-columns: 1fr;
   }
 
-  .answer-options span {
-    width: 39px;
-    height: 39px;
-  }
-
-  .star {
-    min-width: 40px;
-    font-size: 29px;
-  }
-
   .admin-stats {
     gap: 8px;
   }
@@ -856,10 +702,8 @@ input, select, textarea, button {
   .why-container,
   .contact-container,
   .services-container,
-  .login-container,
   .care-form-container,
   .status-container,
-  .feedback-shell,
   .admin-main {
     width: min(100% - 24px, 1180px);
     margin-left: auto;
@@ -872,10 +716,8 @@ input, select, textarea, button {
   .why-page,
   .contact-page,
   .services-page,
-  .login-page,
   .care-form-page,
   .request-status-page,
-  .feedback-page,
   .admin-page {
     width: 100%;
     overflow-x: hidden;
@@ -884,25 +726,14 @@ input, select, textarea, button {
   /* ---------- Public navigation ---------- */
   .why-nav-inner,
   .contact-nav-inner,
-  .login-nav-inner,
-  .patient-nav-inner,
-  .elder-nav-inner,
-  .newborn-nav-inner,
-  .children-nav-inner,
   .care-form-nav-inner,
-  .status-nav-inner,
-  .feedback-navbar > div {
+  .status-nav-inner {
     min-height: 68px;
     gap: 10px;
   }
 
   .why-nav-links,
   .contact-nav-links,
-  .login-nav-links,
-  .patient-nav-links,
-  .elder-nav-links,
-  .newborn-nav-links,
-  .children-nav-links,
   .care-form-nav-links,
   .status-nav-inner nav {
     display: flex;
@@ -922,11 +753,6 @@ input, select, textarea, button {
 
   .why-nav-links::-webkit-scrollbar,
   .contact-nav-links::-webkit-scrollbar,
-  .login-nav-links::-webkit-scrollbar,
-  .patient-nav-links::-webkit-scrollbar,
-  .elder-nav-links::-webkit-scrollbar,
-  .newborn-nav-links::-webkit-scrollbar,
-  .children-nav-links::-webkit-scrollbar,
   .care-form-nav-links::-webkit-scrollbar,
   .status-nav-inner nav::-webkit-scrollbar {
     display: none;
@@ -934,11 +760,6 @@ input, select, textarea, button {
 
   .why-nav-links a,
   .contact-nav-links a,
-  .login-nav-links a,
-  .patient-nav-links a,
-  .elder-nav-links a,
-  .newborn-nav-links a,
-  .children-nav-links a,
   .care-form-nav-links a,
   .status-nav-inner nav a {
     flex: 0 0 auto;
@@ -948,122 +769,47 @@ input, select, textarea, button {
 
   .why-nav-inner,
   .contact-nav-inner,
-  .login-nav-inner,
-  .patient-nav-inner,
-  .elder-nav-inner,
-  .newborn-nav-inner,
-  .children-nav-inner,
   .care-form-nav-inner,
   .status-nav-inner {
     flex-wrap: wrap;
   }
 
   /* ---------- Headers with a horizontal mobile nav ---------- */
-  .patient-navbar,
-  .elder-navbar,
-  .newborn-navbar,
-  .children-navbar,
   .care-form-navbar,
   .status-navbar {
     position: relative;
   }
 
-  .patient-logo,
-  .elder-logo,
-  .newborn-logo,
-  .children-logo,
   .care-form-logo,
-  .status-logo,
-  .login-logo {
+  .status-logo {
     min-width: 0;
     flex: 1 1 auto;
   }
 
-  .patient-login-btn,
-  .elder-login-btn,
-  .newborn-login-btn,
-  .children-login-btn,
   .care-form-login-btn,
-  .status-login-btn,
-  .login-nav-btn {
+  .status-login-btn {
     flex: 0 0 auto;
     padding: 9px 13px;
     font-size: 12px;
   }
 
   /* ---------- Hero sections ---------- */
-  .patient-hero-content,
-  .elder-hero-content,
-  .newborn-hero-content,
-  .children-hero-content,
   .care-form-hero-inner,
-  .status-hero-inner,
-  .feedback-hero > div {
+  .status-hero-inner {
     padding-top: 34px;
     padding-bottom: 40px;
   }
 
-  .patient-hero h1,
-  .elder-hero h1,
-  .newborn-hero h1,
-  .children-hero h1,
   .care-form-hero h1,
-  .status-hero h1,
-  .feedback-hero h1 {
+  .status-hero h1 {
     font-size: clamp(30px, 9vw, 43px);
     line-height: 1.08;
   }
 
-  .patient-hero-description,
-  .elder-hero-description,
-  .newborn-hero-description,
-  .children-hero-description,
   .care-form-hero p,
-  .status-hero p,
-  .feedback-hero p {
+  .status-hero p {
     font-size: 14px;
     line-height: 1.65;
-  }
-
-  .patient-hero-buttons,
-  .elder-hero-buttons,
-  .newborn-hero-buttons,
-  .children-hero-buttons {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .patient-hero-buttons a,
-  .elder-hero-buttons a,
-  .newborn-hero-buttons a,
-  .children-hero-buttons a {
-    width: 100%;
-    justify-content: center;
-    text-align: center;
-  }
-
-  /* ---------- Service detail cards ---------- */
-  .patient-options-grid,
-  .elder-options-grid,
-  .newborn-options-grid,
-  .children-options-grid,
-  .patient-support-grid,
-  .elder-support-grid,
-  .newborn-support-grid,
-  .children-support-grid,
-  .patient-shift-grid,
-  .elder-shift-grid,
-  .newborn-shift-grid,
-  .children-shift-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .patient-footer-grid,
-  .elder-footer-grid,
-  .newborn-footer-grid,
-  .children-footer-grid {
-    grid-template-columns: 1fr;
-    gap: 26px;
   }
 
   /* ---------- Forms ---------- */
@@ -1176,41 +922,6 @@ input, select, textarea, button {
     text-align: center;
   }
 
-  /* ---------- Feedback ---------- */
-  .feedback-shell {
-    width: min(100% - 24px, 900px);
-  }
-
-  .feedback-card-header {
-    flex-direction: column;
-    padding: 20px 17px;
-  }
-
-  .feedback-form {
-    padding: 0 17px;
-  }
-
-  .feedback-answer-options {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 7px;
-  }
-
-  .feedback-answer-options span {
-    width: 100%;
-    height: 42px;
-  }
-
-  .feedback-submit-row {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .feedback-submit {
-    width: 100%;
-    min-height: 46px;
-  }
-
   /* ---------- Admin ---------- */
   .admin-main {
     padding-left: 12px;
@@ -1263,10 +974,8 @@ input, select, textarea, button {
   .why-container,
   .contact-container,
   .services-container,
-  .login-container,
   .care-form-container,
   .status-container,
-  .feedback-shell,
   .admin-main {
     width: calc(100% - 20px);
   }
@@ -1278,17 +987,6 @@ input, select, textarea, button {
     flex: 0 0 auto;
   }
 
-  .patient-container,
-  .elder-container,
-  .newborn-container,
-  .children-container {
-    width: calc(100% - 20px);
-  }
-
-  .patient-footer-grid,
-  .elder-footer-grid,
-  .newborn-footer-grid,
-  .children-footer-grid,
   .care-footer-inner,
   .status-footer-inner {
     flex-direction: column;
@@ -1320,18 +1018,8 @@ input, select, textarea, button {
   .care-form-card,
   .status-request-card,
   .status-tracking-card,
-  .status-detail-card,
-  .feedback-card {
+  .status-detail-card {
     border-radius: 10px;
-  }
-
-  .feedback-answer-options {
-    gap: 5px;
-  }
-
-  .feedback-answer-options span {
-    height: 38px;
-    font-size: 11px;
   }
 }
 
@@ -1348,10 +1036,6 @@ input, select, textarea, button {
   .services-hero,
   .why-hero,
   .contact-hero,
-  .patient-hero,
-  .elder-hero,
-  .newborn-hero,
-  .children-hero,
   .care-form-hero {
     box-sizing: border-box;
     width: 100%;
@@ -1390,14 +1074,6 @@ input, select, textarea, button {
   .careers-primary-button,
   .careers-secondary-button,
   .career-submit-button,
-  .patient-primary-btn,
-  .patient-secondary-btn,
-  .elder-primary-btn,
-  .elder-secondary-btn,
-  .newborn-primary-btn,
-  .newborn-secondary-btn,
-  .children-primary-btn,
-  .children-secondary-btn,
   .care-primary-btn {
     box-sizing: border-box;
     max-width: 100%;

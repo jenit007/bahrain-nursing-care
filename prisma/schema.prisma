@@ -1,0 +1,109 @@
+// ============================================================================
+// NOOR AL AFIYA — PRISMA SCHEMA (Supabase PostgreSQL + Supabase Auth)
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model Admin {
+  id         String   @id @default(uuid()) @db.Uuid
+  authUserId String   @unique @map("auth_user_id") @db.Uuid
+  name       String   @db.VarChar(120)
+  email      String   @unique @db.VarChar(255)
+  role       String   @default("ADMIN") @db.VarChar(50)
+  isActive   Boolean  @default(true) @map("is_active")
+  createdAt  DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt  DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([authUserId])
+  @@index([email])
+  @@map("admins")
+}
+
+model CareBooking {
+  id               String                 @id @default(uuid()) @db.Uuid
+  bookingReference String                 @unique @map("booking_reference") @db.VarChar(32)
+  fullName         String                 @map("full_name") @db.VarChar(150)
+  email            String?                @db.VarChar(255)
+  phone            String                 @db.VarChar(40)
+  careType         String                 @map("care_type") @db.VarChar(100)
+  patientDetails   Json                   @map("patient_details")
+  preferredDate    DateTime               @map("preferred_date") @db.Date
+  address          Json
+  additionalNotes  String?                @map("additional_notes") @db.Text
+  status           String                 @default("Pending Verification") @db.VarChar(50)
+  createdAt        DateTime               @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime               @updatedAt @map("updated_at") @db.Timestamptz(6)
+  statusHistory    BookingStatusHistory[]
+
+  @@index([bookingReference])
+  @@index([status])
+  @@index([preferredDate])
+  @@index([createdAt(sort: Desc)])
+  @@index([phone])
+  @@map("care_bookings")
+}
+
+model ContactEnquiry {
+  id        String   @id @default(uuid()) @db.Uuid
+  fullName  String   @map("full_name") @db.VarChar(150)
+  email     String   @db.VarChar(255)
+  phone     String   @db.VarChar(40)
+  subject   String   @db.VarChar(200)
+  message   String   @db.Text
+  status    String   @default("New") @db.VarChar(50)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("contact_enquiries")
+}
+
+model JobApplication {
+  id                   String   @id @default(uuid()) @db.Uuid
+  applicationReference String   @unique @map("application_reference") @db.VarChar(32)
+  fullName             String   @map("full_name") @db.VarChar(150)
+  email                String   @db.VarChar(255)
+  phone                String   @db.VarChar(40)
+  cprNo                String?  @map("cpr_no") @db.VarChar(40)
+  address              String   @db.Text
+  position             String   @db.VarChar(120)
+  experience           String   @db.VarChar(80)
+  qualification        String   @db.VarChar(180)
+  licenseNumber        String?  @map("license_number") @db.VarChar(100)
+  availability         String?  @map("availability") @db.VarChar(80)
+  message              String?  @db.Text
+  cvPath               String?  @map("cv_path") @db.VarChar(500)
+  cvOriginalName       String?  @map("cv_original_name") @db.VarChar(255)
+  certificatePath      String?  @map("certificate_path") @db.VarChar(500)
+  certificateName      String?  @map("certificate_name") @db.VarChar(255)
+  status               String   @default("Application Received") @db.VarChar(50)
+  createdAt            DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt            DateTime @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([applicationReference])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@map("job_applications")
+}
+
+model BookingStatusHistory {
+  id             String      @id @default(uuid()) @db.Uuid
+  bookingId      String      @map("booking_id") @db.Uuid
+  previousStatus String?     @map("previous_status") @db.VarChar(50)
+  newStatus      String      @map("new_status") @db.VarChar(50)
+  changedBy      String      @map("changed_by") @db.VarChar(255)
+  createdAt      DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
+  booking        CareBooking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, createdAt(sort: Desc)])
+  @@map("booking_status_history")
+}
