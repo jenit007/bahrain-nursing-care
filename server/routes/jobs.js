@@ -81,7 +81,8 @@ router.post(
       if (!email || !EMAIL_REGEX.test(email)) {
         errors.email = "Please enter a valid email address.";
       }
-      if (!phone || !PHONE_REGEX.test(phone)) {
+      const phoneDigits = phone.replace(/\D/g, "");
+      if (!phone || !PHONE_REGEX.test(phone) || phoneDigits.length < 7 || phoneDigits.length > 15) {
         errors.phone = "Please enter a valid phone number.";
       }
       if (!cprNo) errors.cprNo = "CPR No. is required.";

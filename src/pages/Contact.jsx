@@ -1,12 +1,24 @@
 import { useState } from "react";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
 import { Link } from "react-router-dom";
-import logoMark from "../assets/noor-al-afiya-mark.png";
+import logoMark from "../assets/noor-al-afiya-mark.webp";
 import { submitContactEnquiry } from "../utils/api";
+import usePageMeta from "../utils/usePageMeta";
 import "./Home.css";
 import "./Contact.css";
 
+const CONTACT_SUCCESS_MESSAGE =
+  "Thank you for contacting NOOR AL AFIYA. Your message has been submitted successfully. Our team will get back to you.";
+
 function Contact() {
+  usePageMeta({
+    title: "Contact NOOR AL AFIYA | Home Nursing Care in Bahrain",
+    description:
+      "Contact NOOR AL AFIYA Home Health Care for questions about home nursing services in Bahrain, or send us an enquiry online.",
+    path: "/contact",
+  });
   const [menuOpen, setMenuOpen] = useState(false);
+  const [fieldErrors, setFieldErrors] = useState({});
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -23,19 +35,54 @@ function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }));
     setSubmitError("");
     setSubmitSuccess("");
+    setFieldErrors((prev) => (prev[name] ? { ...prev, [name]: "" } : prev));
   };
 
   const handleEnquirySubmit = async (event) => {
     event.preventDefault();
-    setSubmitting(true);
     setSubmitError("");
     setSubmitSuccess("");
 
+    const trimmedName = formData.fullName.trim();
+    const trimmedEmail = formData.email.trim().toLowerCase();
+    const trimmedPhone = formData.phone.trim();
+    const trimmedSubject = formData.subject.trim();
+    const trimmedMessage = formData.message.trim();
+
+    const errors = {};
+    if (!trimmedName || trimmedName.length < 2) {
+      errors.fullName = "Please enter your full name.";
+    }
+    if (!trimmedEmail || !/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (!trimmedPhone || !/^[+\d][\d\s().-]{6,20}$/.test(trimmedPhone) || trimmedPhone.replace(/\D/g, "").length < 7) {
+      errors.phone = "Please enter a valid phone number.";
+    }
+    if (!trimmedSubject) {
+      errors.subject = "Please enter a subject for your enquiry.";
+    }
+    if (!trimmedMessage || trimmedMessage.length < 5) {
+      errors.message = "Please enter your enquiry message (at least 5 characters).";
+    }
+    setFieldErrors(errors);
+    if (Object.keys(errors).length > 0) {
+      setSubmitError("Please correct the highlighted fields and try again.");
+      return;
+    }
+
+    setSubmitting(true);
+
     try {
-      const response = await submitContactEnquiry(formData);
-      setSubmitSuccess(
-        response?.message || "Thank you. Your enquiry has been submitted."
-      );
+      await submitContactEnquiry({
+        fullName: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
+        subject: trimmedSubject,
+        message: trimmedMessage,
+      });
+      // Shown only after the backend has confirmed the enquiry was saved (HTTP 201).
+      setSubmitSuccess(CONTACT_SUCCESS_MESSAGE);
       setFormData({
         fullName: "",
         phone: "",
@@ -44,6 +91,9 @@ function Contact() {
         message: "",
       });
     } catch (err) {
+      if (err?.details && typeof err.details === "object") {
+        setFieldErrors(err.details);
+      }
       setSubmitError(
         err.message || "We could not submit your enquiry right now. Please try again."
       );
@@ -58,11 +108,13 @@ function Contact() {
         <div className="home-container top-strip-inner">
           <span>Professional home nursing care in Bahrain</span>
           <div className="top-contact">
-            <a href="tel:+97300000000">+973 0000 0000</a>
-            <span>•</span>
-            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
-            <span>•</span>
-            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
+            {HAS_CONTACT_PHONE && (
+<>
+<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
+<span>•</span>
+</>
+)}
+            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
           </div>
         </div>
       </div>
@@ -70,7 +122,7 @@ function Contact() {
       <header className="home-nav-wrap">
         <div className="home-container home-nav">
           <Link className="home-brand" to="/" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
               <small>Home Health Care WLL</small>
@@ -81,6 +133,7 @@ function Contact() {
             className={`nav-toggle ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen((value) => !value)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
             type="button"
           >
             <span />
@@ -155,9 +208,9 @@ function Contact() {
 
           <div className="contact-info-grid">
 
-            {/* PHONE */}
-
-            <div className="contact-info-card">
+            {/* PHONE (shown only when VITE_CONTACT_PHONE is configured) */}
+{HAS_CONTACT_PHONE && (
+<div className="contact-info-card">
 
               <div className="contact-info-icon">
                 ☎
@@ -174,13 +227,12 @@ function Contact() {
                   for assistance.
                 </p>
 
-                <a href="tel:+97300000000">
-                  +973 0000 0000
-                </a>
+                {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
 
               </div>
 
             </div>
+)}
 
             {/* EMAIL */}
 
@@ -201,7 +253,7 @@ function Contact() {
                   service enquiries.
                 </p>
 
-                <a href="mailto:nooralafiyahomecare@gmail.com">
+                <a href={`mailto:${CONTACT_EMAIL}`}>
                   nooralafiyahomecare@gmail.com
                 </a>
 
@@ -318,7 +370,7 @@ function Contact() {
 
           <div className="contact-form-card">
 
-            <form onSubmit={handleEnquirySubmit}>
+            <form onSubmit={handleEnquirySubmit} noValidate>
               {submitSuccess && (
                 <div
                   className="contact-success"
@@ -360,95 +412,104 @@ function Contact() {
               <div className="contact-form-row">
 
                 <div className="contact-field">
-
-                  <label>
-                    Full Name
-                  </label>
-
+                  <label htmlFor="contact-fullName">Full Name</label>
                   <input
-                    type="text"
+                    id="contact-fullName"
                     name="fullName"
                     value={formData.fullName}
                     onChange={handleFieldChange}
-                    placeholder="Enter your name"
+                    type="text" autoComplete="name" placeholder="Enter your name"
                     required
+                    aria-invalid={fieldErrors.fullName ? "true" : "false"}
+                    aria-describedby={fieldErrors.fullName ? "contact-fullName-error" : undefined}
                   />
-
+                  {fieldErrors.fullName && (
+                    <span id="contact-fullName-error" className="contact-field-error" role="alert">
+                      {fieldErrors.fullName}
+                    </span>
+                  )}
                 </div>
 
                 <div className="contact-field">
-
-                  <label>
-                    Phone Number
-                  </label>
-
+                  <label htmlFor="contact-phone">Phone Number</label>
                   <input
-                    type="tel"
+                    id="contact-phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleFieldChange}
-                    placeholder="Enter phone number"
+                    type="tel" autoComplete="tel" inputMode="tel" placeholder="Enter phone number"
                     required
+                    aria-invalid={fieldErrors.phone ? "true" : "false"}
+                    aria-describedby={fieldErrors.phone ? "contact-phone-error" : undefined}
                   />
-
+                  {fieldErrors.phone && (
+                    <span id="contact-phone-error" className="contact-field-error" role="alert">
+                      {fieldErrors.phone}
+                    </span>
+                  )}
                 </div>
-
               </div>
 
               <div className="contact-form-row">
 
                 <div className="contact-field">
-
-                  <label>
-                    Email
-                  </label>
-
+                  <label htmlFor="contact-email">Email</label>
                   <input
-                    type="email"
+                    id="contact-email"
                     name="email"
                     value={formData.email}
                     onChange={handleFieldChange}
-                    placeholder="Enter your email"
+                    type="email" autoComplete="email" placeholder="Enter your email"
                     required
+                    aria-invalid={fieldErrors.email ? "true" : "false"}
+                    aria-describedby={fieldErrors.email ? "contact-email-error" : undefined}
                   />
-
+                  {fieldErrors.email && (
+                    <span id="contact-email-error" className="contact-field-error" role="alert">
+                      {fieldErrors.email}
+                    </span>
+                  )}
                 </div>
 
                 <div className="contact-field">
-
-                  <label>
-                    Subject
-                  </label>
-
+                  <label htmlFor="contact-subject">Subject</label>
                   <input
-                    type="text"
+                    id="contact-subject"
                     name="subject"
                     value={formData.subject}
                     onChange={handleFieldChange}
-                    placeholder="What can we help with?"
+                    type="text" placeholder="What can we help with?"
                     required
+                    aria-invalid={fieldErrors.subject ? "true" : "false"}
+                    aria-describedby={fieldErrors.subject ? "contact-subject-error" : undefined}
                   />
-
+                  {fieldErrors.subject && (
+                    <span id="contact-subject-error" className="contact-field-error" role="alert">
+                      {fieldErrors.subject}
+                    </span>
+                  )}
                 </div>
-
               </div>
 
-              <div className="contact-field">
 
-                <label>
-                  Message
-                </label>
-
-                <textarea
-                  rows="6"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleFieldChange}
-                  placeholder="Write your message..."
-                  required
-                />
-
-              </div>
+                <div className="contact-field">
+                  <label htmlFor="contact-message">Message</label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleFieldChange}
+                    rows="6" placeholder="Write your message..."
+                    required
+                    aria-invalid={fieldErrors.message ? "true" : "false"}
+                    aria-describedby={fieldErrors.message ? "contact-message-error" : undefined}
+                  />
+                  {fieldErrors.message && (
+                    <span id="contact-message-error" className="contact-field-error" role="alert">
+                      {fieldErrors.message}
+                    </span>
+                  )}
+                </div>
 
               <button
                 type="submit"
@@ -479,7 +540,7 @@ function Contact() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <img
-                src={logoMark}
+                src={logoMark} width="256" height="256"
                 alt="NOOR AL AFIYA"
                 className="brand-mark-image"
               />
@@ -514,17 +575,17 @@ function Contact() {
 
           <div>
             <h4>Contact</h4>
-            <a href="tel:+97300000000">+973 0000 0000</a>
-            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
+            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
+            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
             <span>Bahrain</span>
           </div>
 
         </div>
 
         <div className="contact-footer-bottom">
-          <div className="contact-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div className="contact-container" style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '8px' }}>
             <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
+            <span>Home Nursing • Bahrain</span>
           </div>
         </div>
 

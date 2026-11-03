@@ -1,11 +1,13 @@
 import { useState } from "react";
+import usePageMeta from "../../utils/usePageMeta";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../../config/contact";
 import { Link, useNavigate } from "react-router-dom";
-import logoMark from "../../assets/noor-al-afiya-mark.png";
+import logoMark from "../../assets/noor-al-afiya-mark.webp";
 
-import patientCareImage from "../../assets/services/patient-care.jpg";
-import elderCareImage from "../../assets/services/elder-care.jpg";
-import newbornCareImage from "../../assets/services/newborn-care.jpg";
-import childrenCareImage from "../../assets/services/children-care.jpg";
+import patientCareImage from "../../assets/services/patient-care.webp";
+import elderCareImage from "../../assets/services/elder-care.webp";
+import newbornCareImage from "../../assets/services/newborn-care.webp";
+import childrenCareImage from "../../assets/services/children-care.webp";
 
 import "./Services.css";
 
@@ -81,6 +83,7 @@ const services = [
 ];
 
 function Services() {
+  usePageMeta({"title":"Services – Home Nursing Services in Bahrain | NOOR AL AFIYA","description":"Home nursing services in Bahrain from NOOR AL AFIYA: patient care, elder care, newborn baby care and children's care. Request care online.","path":"/services"});
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -107,21 +110,16 @@ function Services() {
 
           <div className="services-top-contact">
 
-            <a href="tel:+97300000000">
-              +973 0000 0000
-            </a>
+            {HAS_CONTACT_PHONE && (
+<>
+<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
+<span>•</span>
+</>
+)}
 
-            <span>•</span>
-
-            <a href="mailto:nooralafiyahomecare@gmail.com">
+            <a href={`mailto:${CONTACT_EMAIL}`}>
               nooralafiyahomecare@gmail.com
             </a>
-
-            <span>•</span>
-
-            <Link to="/admin/login" className="top-admin-link">
-              Admin Sign In
-            </Link>
 
           </div>
 
@@ -144,7 +142,7 @@ function Services() {
             onClick={() => setMenuOpen(false)}
           >
             <img
-              src={logoMark}
+              src={logoMark} width="256" height="256"
               alt="NOOR AL AFIYA"
               className="brand-mark-image"
             />
@@ -168,6 +166,7 @@ function Services() {
               setMenuOpen((value) => !value)
             }
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
           >
 
             <span />
@@ -327,7 +326,7 @@ function Services() {
                   <div className="service-card-image-wrap">
 
                     <img
-                      src={service.image}
+                      src={service.image} width="763" height="507" loading="lazy" decoding="async"
                       alt={`${service.title} home nursing care`}
                       className="service-card-image"
                     />
@@ -627,7 +626,7 @@ function Services() {
               className="home-brand"
             >
               <img
-                src={logoMark}
+                src={logoMark} width="256" height="256"
                 alt="NOOR AL AFIYA"
                 className="brand-mark-image"
               />
@@ -709,11 +708,9 @@ function Services() {
               Contact
             </h3>
 
-            <a href="tel:+97300000000">
-              +973 0000 0000
-            </a>
+            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
 
-            <a href="mailto:nooralafiyahomecare@gmail.com">
+            <a href={`mailto:${CONTACT_EMAIL}`}>
               nooralafiyahomecare@gmail.com
             </a>
 
@@ -735,10 +732,6 @@ function Services() {
 
           <span>
             Professional Home Care Services
-            {" • "}
-            <Link to="/admin/login" className="footer-admin-link">
-              Admin Sign In
-            </Link>
           </span>
 
         </div>

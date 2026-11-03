@@ -1,11 +1,13 @@
 import { useMemo, useRef, useState } from "react";
+import usePageMeta from "../utils/usePageMeta";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
 import { Link } from "react-router-dom";
 import { submitJobApplication } from "../utils/api";
 import "../pages/Home.css";
 import "./Careers.css";
 
-import logoMark from "../assets/noor-al-afiya-mark.png";
-import careersHero from "../assets/careers/careers-hero.png";
+import logoMark from "../assets/noor-al-afiya-mark.webp";
+import careersHero from "../assets/careers/careers-hero.webp";
 
 const positions = [
   "Registered Nurse",
@@ -30,6 +32,7 @@ const initialForm = {
 };
 
 function Careers() {
+  usePageMeta({"title":"Careers | NOOR AL AFIYA","description":"Explore job opportunities and apply to join the NOOR AL AFIYA Home Health Care nursing team in Bahrain.","path":"/careers"});
   const [menuOpen, setMenuOpen] = useState(false);
   const [form, setForm] = useState(initialForm);
   const [cvFile, setCvFile] = useState(null);
@@ -140,7 +143,7 @@ function Careers() {
       nextErrors.email = "Please enter a valid email address.";
     }
 
-    if (form.phone && !/^[+\d][\d\s().-]{7,18}$/.test(form.phone)) {
+    if (form.phone && (!/^[+\d][\d\s().-]{6,20}$/.test(form.phone) || form.phone.replace(/\D/g, "").length < 7)) {
       nextErrors.phone = "Please enter a valid phone number.";
     }
 
@@ -182,11 +185,13 @@ function Careers() {
         <div className="home-container top-strip-inner">
           <span>Professional home nursing care in Bahrain</span>
           <div className="top-contact">
-            <a href="tel:+97300000000">+973 0000 0000</a>
-            <span>•</span>
-            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
-            <span>•</span>
-            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
+            {HAS_CONTACT_PHONE && (
+<>
+<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
+<span>•</span>
+</>
+)}
+            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
           </div>
         </div>
       </div>
@@ -194,7 +199,7 @@ function Careers() {
       <header className="home-nav-wrap">
         <div className="home-container home-nav">
           <Link className="home-brand" to="/" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
               <small>Home Health Care WLL</small>
@@ -205,6 +210,7 @@ function Careers() {
             className={`nav-toggle ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen((value) => !value)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
             type="button"
           >
             <span />
@@ -258,7 +264,7 @@ function Careers() {
             <div className="careers-hero-visual">
               <div className="careers-image-card">
                 <img
-                  src={careersHero}
+                  src={careersHero} width="1672" height="941" fetchPriority="high" decoding="async"
                   alt="Healthcare professional preparing for home care work"
                 />
               </div>
@@ -462,7 +468,7 @@ function Careers() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <img
-                src={logoMark}
+                src={logoMark} width="256" height="256"
                 alt="NOOR AL AFIYA"
                 className="brand-mark-image"
               />
@@ -491,15 +497,15 @@ function Careers() {
           </div>
           <div>
             <h4>Contact</h4>
-            <a href="tel:+97300000000">+973 0000 0000</a>
-            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
+            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
+            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
             <span>Bahrain</span>
           </div>
         </div>
         <div className="careers-footer-bottom">
           <div className="careers-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
+            <span>Home Nursing • Bahrain</span>
           </div>
         </div>
       </footer>

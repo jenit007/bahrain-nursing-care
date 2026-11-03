@@ -1,58 +1,65 @@
 import { useEffect, useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import usePageMeta from "../../utils/usePageMeta";
+import { Link, useNavigate } from "react-router-dom";
 import {
-  fetchAdminSetupStatus,
+  clearAdminSessionState,
   fetchCurrentAdmin,
   getActiveAdminAccessToken,
-  loginAdmin,
   logoutAdmin,
   requestAdminPasswordReset,
 } from "../../utils/api";
+import { supabase } from "../../utils/supabaseClient";
 import "./AdminLogin.css";
 
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 
+function isNetworkFailure(err) {
+  const msg = String(err?.message || "").toLowerCase();
+  return (
+    Boolean(err?.isNetworkError) ||
+    msg.includes("failed to fetch") ||
+    msg.includes("fetch failed") ||
+    msg.includes("networkerror") ||
+    msg.includes("network request failed") ||
+    msg.includes("load failed")
+  );
+}
+
 export default function AdminLogin() {
+  usePageMeta({"title":"Admin Login | NOOR AL AFIYA","noindex":true});
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const justRegistered = searchParams.get("registered") === "1";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [notice, setNotice] = useState(
-    justRegistered
-      ? "Initial administrator account created and authorized. Please sign in below."
-      : ""
-  );
+  const [notice, setNotice] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [checkingSession, setCheckingSession] = useState(true);
-  const [registrationAllowed, setRegistrationAllowed] = useState(false);
   const [forgotMode, setForgotMode] = useState(false);
 
   useEffect(() => {
     let active = true;
 
-    async function checkExistingSessionAndSetup() {
+    async function checkExistingSession() {
       try {
-        const setupStatus = await fetchAdminSetupStatus().catch(() => null);
-        if (active && setupStatus) {
-          setRegistrationAllowed(Boolean(setupStatus.registrationAllowed));
-        }
-
         const accessToken = await getActiveAdminAccessToken();
         if (!accessToken) {
           if (active) setCheckingSession(false);
           return;
         }
 
-        await fetchCurrentAdmin();
+        await fetchCurrentAdmin(accessToken);
         if (active) {
           navigate("/admin", { replace: true });
         }
-      } catch {
+      } catch (err) {
         await logoutAdmin();
+        if (active && err?.status === 403) {
+          setError(
+            "You are authenticated, but you do not have administrator access."
+          );
+        }
       } finally {
         if (active) {
           setCheckingSession(false);
@@ -60,7 +67,7 @@ export default function AdminLogin() {
       }
     }
 
-    checkExistingSessionAndSetup();
+    checkExistingSession();
 
     return () => {
       active = false;
@@ -86,14 +93,63 @@ export default function AdminLogin() {
       return;
     }
 
+    if (!supabase) {
+      setError(
+        "Supabase Authentication is not configured. Please check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY."
+      );
+      return;
+    }
+
     setIsLoading(true);
     try {
-      await loginAdmin(trimmedEmail, password);
-      navigate("/admin", { replace: true });
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: trimmedEmail,
+        password,
+      });
+
+      if (authError || !data?.session?.access_token || !data?.user?.id) {
+        if (isNetworkFailure(authError)) {
+          setError(
+            "Network error. Unable to reach Supabase Authentication. Please check your connection and try again."
+          );
+        } else {
+          setError("Invalid email or password. Please try again.");
+        }
+        setIsLoading(false);
+        return;
+      }
+
+      // Verify database-backed administrator authorization in public.admins
+      try {
+        await fetchCurrentAdmin(data.session.access_token);
+        navigate("/admin", { replace: true });
+      } catch (verifyError) {
+        await supabase.auth.signOut().catch(() => {});
+        clearAdminSessionState();
+        if (verifyError?.status === 403) {
+          setError(
+            "You are authenticated, but you do not have administrator access."
+          );
+        } else if (isNetworkFailure(verifyError)) {
+          setError(
+            "Network error while verifying administrator access. Please try again."
+          );
+        } else {
+          setError(
+            verifyError?.message ||
+              "Unable to verify administrator authorization. Please try again."
+          );
+        }
+        setIsLoading(false);
+      }
     } catch (err) {
-      setError(
-        err.message || "Invalid email or password. Please try again."
-      );
+      if (isNetworkFailure(err)) {
+        setError(
+          "Network error. Unable to reach Supabase Authentication. Please check your connection and try again."
+        );
+      } else {
+        setError(err.message || "Invalid email or password. Please try again.");
+      }
       setIsLoading(false);
     }
   }
@@ -146,42 +202,11 @@ export default function AdminLogin() {
 
         {!forgotMode ? (
           <>
-            <h1 id="admin-login-title">Admin sign in</h1>
+            <h1 id="admin-login-title">Admin Login</h1>
             <p className="admin-login-intro">
-              Sign in to manage care bookings and job applications.
+              Login with your authorized administrator credentials to manage
+              care bookings, enquiries, and job applications.
             </p>
-
-            {registrationAllowed && (
-              <div
-                style={{
-                  marginBottom: "18px",
-                  padding: "12px 14px",
-                  borderRadius: "10px",
-                  background: "#FFF0F7",
-                  border: "1px solid rgba(255, 58, 148, 0.3)",
-                  fontSize: "13px",
-                  lineHeight: 1.5,
-                  color: "#252525",
-                }}
-              >
-                <strong style={{ display: "block", marginBottom: "4px", color: "#FF3A94" }}>
-                  First-Time Admin Setup
-                </strong>
-                <span>
-                  No administrator account has been created yet.{" "}
-                </span>
-                <Link
-                  to="/admin/register"
-                  style={{
-                    color: "#FF3A94",
-                    fontWeight: 700,
-                    textDecoration: "underline",
-                  }}
-                >
-                  Create First Admin Account →
-                </Link>
-              </div>
-            )}
 
             <form
               onSubmit={handleLoginSubmit}
@@ -195,7 +220,7 @@ export default function AdminLogin() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="nooralafiyahomecare@gmail.com"
+                placeholder="Enter administrator email"
                 disabled={isLoading || checkingSession}
                 required
               />
@@ -274,19 +299,17 @@ export default function AdminLogin() {
                 type="submit"
                 disabled={isLoading || checkingSession}
               >
-                {isLoading ? (
-                  "Signing in…"
-                ) : (
-                  <>
-                    Sign in to dashboard <span aria-hidden="true">→</span>
-                  </>
-                )}
+                {checkingSession
+                  ? "Checking session…"
+                  : isLoading
+                  ? "Logging in…"
+                  : "Login"}
               </button>
             </form>
           </>
         ) : (
           <>
-            <h1 id="admin-login-title">Reset password</h1>
+            <h1 id="admin-login-title">Reset Password</h1>
             <p className="admin-login-intro">
               Enter your administrator email address to receive a password reset
               link via Supabase Auth.
@@ -303,7 +326,7 @@ export default function AdminLogin() {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="nooralafiyahomecare@gmail.com"
+                placeholder="Enter administrator email"
                 disabled={isLoading}
                 required
               />
@@ -354,7 +377,7 @@ export default function AdminLogin() {
                   textAlign: "center",
                 }}
               >
-                ← Back to sign in
+                ← Back to Login
               </button>
             </form>
           </>

@@ -1,10 +1,13 @@
 import { useEffect, useState, useMemo, useCallback } from "react";
+import usePageMeta from "../../utils/usePageMeta";
 import { Link } from "react-router-dom";
-import logoMark from "../../assets/noor-al-afiya-mark.png";
+import logoMark from "../../assets/noor-al-afiya-mark.webp";
 import {
   fetchAdminBookings,
   fetchAdminBookingHistory,
   updateAdminBookingStatus,
+  fetchAdminContactEnquiries,
+  updateAdminContactEnquiryStatus,
   fetchAdminJobApplications,
   updateAdminJobApplicationStatus,
   fetchJobApplicationSignedDocumentUrl,
@@ -16,6 +19,12 @@ const BOOKING_STATUSES = [
   "Pending Verification",
   "Verified",
   "Completed",
+];
+
+const ENQUIRY_STATUSES = [
+  "New",
+  "In Progress",
+  "Resolved",
 ];
 
 const APPLICATION_STATUSES = [
@@ -33,6 +42,10 @@ const SECTION_META = {
   bookings: {
     title: "Care Bookings",
     subtitle: "Search, filter, verify, and manage submitted patient care bookings",
+  },
+  enquiries: {
+    title: "Contact Enquiries",
+    subtitle: "Review and manage customer enquiries submitted through the Contact Us page",
   },
   applications: {
     title: "Job Applications",
@@ -68,13 +81,25 @@ function formatDateTime(dateString) {
 
 function getStatusClass(status) {
   const normalized = (status || "").toLowerCase();
-  if (normalized.includes("pending") || normalized.includes("received")) {
+  if (
+    normalized.includes("pending") ||
+    normalized.includes("received") ||
+    normalized === "new"
+  ) {
     return "status-pending";
   }
-  if (normalized.includes("verified") || normalized.includes("review")) {
+  if (
+    normalized.includes("verified") ||
+    normalized.includes("review") ||
+    normalized.includes("progress")
+  ) {
     return "status-verified";
   }
-  if (normalized.includes("completed") || normalized.includes("approved")) {
+  if (
+    normalized.includes("completed") ||
+    normalized.includes("approved") ||
+    normalized.includes("resolved")
+  ) {
     return "status-positive";
   }
   if (normalized.includes("rejected")) {
@@ -84,11 +109,13 @@ function getStatusClass(status) {
 }
 
 function AdminDashboard() {
+  usePageMeta({"title":"Admin Dashboard | NOOR AL AFIYA","noindex":true});
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Real database data states
   const [requests, setRequests] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
   const [jobApplications, setJobApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState("");
@@ -98,6 +125,10 @@ function AdminDashboard() {
   const [bookingStatusFilter, setBookingStatusFilter] = useState("ALL");
   const [bookingDateFilter, setBookingDateFilter] = useState("");
 
+  // Contact Enquiries search & filters
+  const [enquirySearch, setEnquirySearch] = useState("");
+  const [enquiryStatusFilter, setEnquiryStatusFilter] = useState("ALL");
+
   // Job Applications search & filters
   const [jobSearch, setJobSearch] = useState("");
   const [jobStatusFilter, setJobStatusFilter] = useState("ALL");
@@ -106,6 +137,7 @@ function AdminDashboard() {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [bookingHistory, setBookingHistory] = useState([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [selectedEnquiry, setSelectedEnquiry] = useState(null);
   const [selectedJobApp, setSelectedJobApp] = useState(null);
 
   // Status notice banner
@@ -123,23 +155,29 @@ function AdminDashboard() {
       setIsLoading(true);
     }
     try {
-      const [storedReqs, storedJobs] = await Promise.all([
+      const [storedReqs, storedEnquiries, storedJobs] = await Promise.all([
         fetchAdminBookings(),
+        fetchAdminContactEnquiries(),
         fetchAdminJobApplications(),
       ]);
 
       setRequests(storedReqs);
+      setEnquiries(storedEnquiries);
       setJobApplications(storedJobs);
       setLoadError("");
 
       setSelectedBooking((prev) =>
         prev ? storedReqs.find((r) => r.id === prev.id) || prev : null
       );
+      setSelectedEnquiry((prev) =>
+        prev ? storedEnquiries.find((e) => e.id === prev.id) || prev : null
+      );
       setSelectedJobApp((prev) =>
         prev ? storedJobs.find((j) => j.id === prev.id) || prev : null
       );
     } catch (err) {
-      if (err.status === 401) {
+      if (err.status === 401 || err.status === 403) {
+        await logoutAdmin();
         window.location.replace("/admin/login");
         return;
       }
@@ -178,6 +216,7 @@ function AdminDashboard() {
       if (event.key === "Escape") {
         setSidebarOpen(false);
         setSelectedBooking(null);
+        setSelectedEnquiry(null);
         setSelectedJobApp(null);
       }
     };
@@ -195,8 +234,30 @@ function AdminDashboard() {
   };
 
   const handleLogout = async () => {
+    setRequests([]);
+    setEnquiries([]);
+    setJobApplications([]);
+    setSelectedBooking(null);
+    setSelectedEnquiry(null);
+    setSelectedJobApp(null);
     await logoutAdmin();
     window.location.replace("/admin/login");
+  };
+
+  // Contact Enquiry actions
+  const handleEnquiryStatusChange = async (enquiryId, newStatus) => {
+    try {
+      const updated = await updateAdminContactEnquiryStatus(enquiryId, newStatus);
+      setEnquiries((prev) =>
+        prev.map((item) => (item.id === enquiryId ? updated : item))
+      );
+      if (selectedEnquiry?.id === enquiryId) {
+        setSelectedEnquiry(updated);
+      }
+      showNotice(`Enquiry status updated to "${newStatus}".`);
+    } catch (err) {
+      showNotice(err.message || "Could not update enquiry status.", "error");
+    }
   };
 
   // Care Booking actions
@@ -292,7 +353,9 @@ function AdminDashboard() {
         !query ||
         (req.id || "").toLowerCase().includes(query) ||
         (req.name || "").toLowerCase().includes(query) ||
-        (req.phone || "").toLowerCase().includes(query);
+        (req.phone || "").toLowerCase().includes(query) ||
+        (req.email || "").toLowerCase().includes(query) ||
+        (req.service || "").toLowerCase().includes(query);
 
       const matchesStatus =
         bookingStatusFilter === "ALL" ||
@@ -307,6 +370,33 @@ function AdminDashboard() {
       return matchesSearch && matchesStatus && matchesDate;
     });
   }, [sortedRequests, bookingSearch, bookingStatusFilter, bookingDateFilter]);
+
+  const sortedEnquiries = useMemo(() => {
+    return [...enquiries].sort((a, b) => {
+      const timeA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const timeB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return timeB - timeA;
+    });
+  }, [enquiries]);
+
+  const filteredEnquiries = useMemo(() => {
+    const query = enquirySearch.trim().toLowerCase();
+    return sortedEnquiries.filter((enq) => {
+      const matchesSearch =
+        !query ||
+        (enq.fullName || "").toLowerCase().includes(query) ||
+        (enq.email || "").toLowerCase().includes(query) ||
+        (enq.phone || "").toLowerCase().includes(query) ||
+        (enq.subject || "").toLowerCase().includes(query) ||
+        (enq.message || "").toLowerCase().includes(query);
+
+      const matchesStatus =
+        enquiryStatusFilter === "ALL" ||
+        (enq.status || "").toLowerCase() === enquiryStatusFilter.toLowerCase();
+
+      return matchesSearch && matchesStatus;
+    });
+  }, [sortedEnquiries, enquirySearch, enquiryStatusFilter]);
 
   const sortedJobApplications = useMemo(() => {
     return [...jobApplications].sort((a, b) => {
@@ -357,7 +447,7 @@ function AdminDashboard() {
         <div className="admin-sidebar-header">
           <div className="admin-brand">
             <img
-              src={logoMark}
+              src={logoMark} width="256" height="256"
               alt="NOOR AL AFIYA"
               className="admin-brand-logo"
             />
@@ -423,6 +513,26 @@ function AdminDashboard() {
                 <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
               <span>Care Bookings</span>
+            </button>
+
+            <button
+              type="button"
+              className={`admin-nav-item ${
+                activeSection === "enquiries" ? "active" : ""
+              }`}
+              onClick={() => handleNavigateSection("enquiries")}
+            >
+              <svg
+                className="admin-nav-icon"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              <span>Contact Enquiries</span>
             </button>
 
             <button
@@ -1018,6 +1128,160 @@ function AdminDashboard() {
                 </div>
               )}
 
+              {/* ==================== 2B. CONTACT ENQUIRIES SECTION ==================== */}
+              {activeSection === "enquiries" && (
+                <div className="admin-section-stack">
+                  <section className="admin-card admin-filter-bar">
+                    <div className="admin-filter-field admin-filter-search">
+                      <label htmlFor="enquiry-search">Search Enquiries</label>
+                      <input
+                        id="enquiry-search"
+                        type="search"
+                        placeholder="Search by customer name, phone, email, subject, or message..."
+                        value={enquirySearch}
+                        onChange={(e) => setEnquirySearch(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="admin-filter-field">
+                      <label htmlFor="enquiry-status-filter">Status</label>
+                      <select
+                        id="enquiry-status-filter"
+                        value={enquiryStatusFilter}
+                        onChange={(e) => setEnquiryStatusFilter(e.target.value)}
+                      >
+                        <option value="ALL">All Statuses</option>
+                        {ENQUIRY_STATUSES.map((status) => (
+                          <option key={status} value={status}>
+                            {status}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {(enquirySearch || enquiryStatusFilter !== "ALL") && (
+                      <div className="admin-filter-actions">
+                        <button
+                          type="button"
+                          className="admin-btn admin-btn-secondary"
+                          onClick={() => {
+                            setEnquirySearch("");
+                            setEnquiryStatusFilter("ALL");
+                          }}
+                        >
+                          Clear Filters
+                        </button>
+                      </div>
+                    )}
+                  </section>
+
+                  <section className="admin-card">
+                    <div className="admin-card-header">
+                      <div>
+                        <h2>Submitted Contact Enquiries</h2>
+                        <p>
+                          Showing {filteredEnquiries.length} of{" "}
+                          {sortedEnquiries.length} enquiries from the Contact Us
+                          page
+                        </p>
+                      </div>
+                    </div>
+
+                    {filteredEnquiries.length === 0 ? (
+                      <div className="admin-empty-state">
+                        <h3>No contact enquiries found</h3>
+                        <p>
+                          {sortedEnquiries.length === 0
+                            ? "Enquiries submitted through the public Contact Us form will appear here."
+                            : "No enquiries match your current search or status filter."}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="admin-table-wrap">
+                        <table className="admin-table">
+                          <thead>
+                            <tr>
+                              <th>Customer</th>
+                              <th>Contact</th>
+                              <th>Subject</th>
+                              <th>Submitted</th>
+                              <th>Status</th>
+                              <th className="text-right">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {filteredEnquiries.map((enq) => (
+                              <tr key={enq.id}>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {enq.fullName || "N/A"}
+                                  </strong>
+                                </td>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {enq.phone || "N/A"}
+                                  </strong>
+                                  <span className="admin-cell-sub">
+                                    {enq.email || "N/A"}
+                                  </span>
+                                </td>
+                                <td>
+                                  <strong className="admin-cell-primary">
+                                    {enq.subject || "General Enquiry"}
+                                  </strong>
+                                  <span className="admin-cell-sub">
+                                    {(enq.message || "").length > 60
+                                      ? `${enq.message.slice(0, 60)}…`
+                                      : enq.message || ""}
+                                  </span>
+                                </td>
+                                <td>{formatDateTime(enq.createdAt)}</td>
+                                <td>
+                                  <select
+                                    aria-label={`Update status for enquiry from ${enq.fullName}`}
+                                    className={`admin-status-select ${getStatusClass(
+                                      enq.status
+                                    )}`}
+                                    value={
+                                      ENQUIRY_STATUSES.includes(enq.status)
+                                        ? enq.status
+                                        : "New"
+                                    }
+                                    onChange={(e) =>
+                                      handleEnquiryStatusChange(
+                                        enq.id,
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    {ENQUIRY_STATUSES.map((st) => (
+                                      <option key={st} value={st}>
+                                        {st}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </td>
+                                <td className="text-right">
+                                  <div className="admin-table-actions">
+                                    <button
+                                      type="button"
+                                      className="admin-action-btn"
+                                      onClick={() => setSelectedEnquiry(enq)}
+                                    >
+                                      View Details
+                                    </button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </section>
+                </div>
+              )}
+
               {/* ==================== 3. JOB APPLICATIONS SECTION ==================== */}
               {activeSection === "applications" && (
                 <div className="admin-section-stack">
@@ -1541,6 +1805,28 @@ function AdminDashboard() {
                       <p>No CV file uploaded.</p>
                     )}
                   </div>
+                  {selectedJobApp.hasCertificate && (
+                    <div className="admin-detail-item admin-detail-full">
+                      <span className="admin-detail-label">
+                        Uploaded Certification (Private Storage)
+                      </span>
+                      <p>
+                        <button
+                          type="button"
+                          className="admin-action-btn"
+                          onClick={() =>
+                            handleOpenPrivateDocument(
+                              selectedJobApp.id,
+                              "certificate"
+                            )
+                          }
+                        >
+                          Download / View Certificate (
+                          {selectedJobApp.certificateFileName || "Certificate"})
+                        </button>
+                      </p>
+                    </div>
+                  )}
                   <div className="admin-detail-item admin-detail-full">
                     <span className="admin-detail-label">
                       Cover Letter / Message
@@ -1560,6 +1846,118 @@ function AdminDashboard() {
                 type="button"
                 className="admin-btn admin-btn-secondary"
                 onClick={() => setSelectedJobApp(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ==================== MODAL 3: CONTACT ENQUIRY DETAILS ==================== */}
+      {selectedEnquiry && (
+        <div
+          className="admin-modal-overlay"
+          onClick={() => setSelectedEnquiry(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="enquiry-modal-title"
+        >
+          <div
+            className="admin-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="admin-modal-header">
+              <div>
+                <h2 id="enquiry-modal-title">Contact Enquiry Details</h2>
+                <p className="admin-modal-subtitle">
+                  Submitted: <strong>{formatDateTime(selectedEnquiry.createdAt)}</strong>
+                </p>
+              </div>
+              <button
+                type="button"
+                className="admin-modal-close"
+                onClick={() => setSelectedEnquiry(null)}
+                aria-label="Close contact enquiry modal"
+              >
+                ×
+              </button>
+            </div>
+
+            <div className="admin-modal-body">
+              <div className="admin-detail-banner">
+                <div>
+                  <span className="admin-detail-label">Subject</span>
+                  <strong>{selectedEnquiry.subject || "General Enquiry"}</strong>
+                </div>
+                <div>
+                  <label
+                    htmlFor="modal-enquiry-status"
+                    className="admin-detail-label"
+                  >
+                    Enquiry Status
+                  </label>
+                  <select
+                    id="modal-enquiry-status"
+                    className={`admin-status-select ${getStatusClass(
+                      selectedEnquiry.status
+                    )}`}
+                    value={
+                      ENQUIRY_STATUSES.includes(selectedEnquiry.status)
+                        ? selectedEnquiry.status
+                        : "New"
+                    }
+                    onChange={(e) =>
+                      handleEnquiryStatusChange(
+                        selectedEnquiry.id,
+                        e.target.value
+                      )
+                    }
+                  >
+                    {ENQUIRY_STATUSES.map((st) => (
+                      <option key={st} value={st}>
+                        {st}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="admin-detail-section">
+                <h3>Sender Information</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Full Name</span>
+                    <p>{selectedEnquiry.fullName || "N/A"}</p>
+                  </div>
+                  <div className="admin-detail-item">
+                    <span className="admin-detail-label">Phone Number</span>
+                    <p>{selectedEnquiry.phone || "N/A"}</p>
+                  </div>
+                  <div className="admin-detail-item admin-detail-full">
+                    <span className="admin-detail-label">Email Address</span>
+                    <p>{selectedEnquiry.email || "N/A"}</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="admin-detail-section">
+                <h3>Enquiry Message</h3>
+                <div className="admin-detail-grid">
+                  <div className="admin-detail-item admin-detail-full">
+                    <p className="admin-detail-notes">
+                      {selectedEnquiry.message || "No message content."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="admin-modal-footer">
+              <button
+                type="button"
+                className="admin-btn admin-btn-secondary"
+                onClick={() => setSelectedEnquiry(null)}
               >
                 Close
               </button>

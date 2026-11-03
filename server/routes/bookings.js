@@ -62,6 +62,14 @@ export function formatPublicTrackingResponse(booking) {
     status: booking.status,
     createdAt: booking.createdAt.toISOString(),
     updatedAt: booking.updatedAt.toISOString(),
+    statusHistory: Array.isArray(booking.statusHistory)
+      ? booking.statusHistory.map((h) => ({
+          id: h.id,
+          previousStatus: h.previousStatus,
+          newStatus: h.newStatus,
+          createdAt: h.createdAt.toISOString(),
+        }))
+      : undefined,
   };
 }
 
@@ -110,14 +118,16 @@ router.post("/", async (req, res, next) => {
     if (email && !EMAIL_REGEX.test(email)) {
       errors.email = "Please enter a valid email address.";
     }
-    if (!phone || !PHONE_REGEX.test(phone)) {
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (!phone || !PHONE_REGEX.test(phone) || phoneDigits.length < 7 || phoneDigits.length > 15) {
       errors.phone = "Please enter a valid phone number.";
     }
     if (!careType) {
       errors.careType = "Please select a care service.";
     }
-    const parsedDate = preferredDateRaw ? new Date(`${preferredDateRaw}T00:00:00.000Z`) : null;
-    if (!parsedDate || Number.isNaN(parsedDate.getTime())) {
+    const isIsoDate = /^\d{4}-\d{2}-\d{2}$/.test(preferredDateRaw);
+    const parsedDate = isIsoDate ? new Date(`${preferredDateRaw}T00:00:00.000Z`) : null;
+    if (!parsedDate || Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== preferredDateRaw) {
       errors.preferredDate = "Please provide a valid preferred date.";
     }
     if (!address.flatNo || !address.buildingNo || !address.area) {
@@ -203,6 +213,11 @@ router.get("/track/:reference", async (req, res, next) => {
 
     const booking = await prisma.careBooking.findUnique({
       where: { bookingReference: reference },
+      include: {
+        statusHistory: {
+          orderBy: { createdAt: "asc" },
+        },
+      },
     });
 
     if (!booking) {

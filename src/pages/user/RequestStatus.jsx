@@ -1,6 +1,8 @@
 import { useEffect, useState, useCallback } from "react";
+import usePageMeta from "../../utils/usePageMeta";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../../config/contact";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import logoMark from "../../assets/noor-al-afiya-mark.png";
+import logoMark from "../../assets/noor-al-afiya-mark.webp";
 import {
   getSavedBookingReference,
   trackCareBooking,
@@ -24,6 +26,7 @@ function getStatusIndex(status) {
 }
 
 function RequestStatus() {
+  usePageMeta({"title":"Track Your Care Request | NOOR AL AFIYA","description":"Check the status of your NOOR AL AFIYA home nursing care request using your reference code.","path":"/request-status"});
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryRef = searchParams.get("ref") || "";
@@ -311,7 +314,7 @@ function RequestStatus() {
         <div className="status-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', padding: '40px 0' }}>
           <div>
             <Link className="home-brand" to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-              <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+              <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
               <span>
                 <strong>NOOR AL AFIYA</strong>
                 <small>Home Health Care WLL</small>
@@ -344,15 +347,15 @@ function RequestStatus() {
           <div>
             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Contact</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#9AA5B6' }}>
-              <a href="tel:+97300000000" style={{ color: '#9AA5B6', textDecoration: 'none' }}>+973 0000 0000</a>
-              <a href="mailto:nooralafiyahomecare@gmail.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
+              {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF} style={{ color: '#9AA5B6', textDecoration: 'none' }}>{CONTACT_PHONE_DISPLAY}</a>}
+              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
               <span>Bahrain</span>
             </div>
           </div>
         </div>
         <div className="status-footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
           <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-          <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
+          <span>Home Nursing • Bahrain</span>
         </div>
       </footer>
     </div>
@@ -363,11 +366,11 @@ function StatusHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   return (
     <>
-      <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain • <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link></span></div></div>
+      <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain</span></div></div>
       <header className="status-navbar">
         <div className="status-container status-nav-inner">
           <Link to="/" className="home-brand" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
               <small>Home Health Care WLL</small>
@@ -379,6 +382,7 @@ function StatusHeader() {
             className={`status-menu-toggle ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen((value) => !value)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
           >
             <span />
             <span />

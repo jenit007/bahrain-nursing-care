@@ -1,38 +1,56 @@
-import { supabase, isSupabaseAuthConfigured } from "./supabaseClient";
+// The Supabase client is only needed for admin authentication, so it is loaded on demand
+// to keep it out of the public pages' initial JavaScript bundle.
+// NOTE: keep in sync with ADMIN_AUTH_STORAGE_KEY in ./supabaseClient.js
+const ADMIN_AUTH_STORAGE_KEY = "noor_supabase_admin_auth";
+
+async function loadSupabase() {
+  const mod = await import("./supabaseClient");
+  return mod.supabase;
+}
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 
 // Non-sensitive UI preference key: stores only the 12-char reference code (e.g., "REQ-12345678"),
 // never any patient, customer, or booking record.
 const LAST_BOOKING_REF_KEY = "noor_last_booking_ref";
-
-// Signed JWT access token key (never stores any password or credential)
-const ADMIN_SESSION_TOKEN_KEY = "noor_admin_access_token";
+const LEGACY_ADMIN_TOKEN_KEY = "noor_admin_access_token";
 
 export async function getActiveAdminAccessToken() {
-  if (supabase) {
-    const { data, error } = await supabase.auth.getSession();
-    if (!error && data?.session?.access_token) {
-      return data.session.access_token;
-    }
+  const supabase = await loadSupabase();
+  if (!supabase) {
+    return null;
   }
   try {
-    return sessionStorage.getItem(ADMIN_SESSION_TOKEN_KEY) || null;
+    const { data, error } = await supabase.auth.getSession();
+    if (error || !data?.session?.access_token) {
+      return null;
+    }
+    return data.session.access_token;
   } catch {
     return null;
   }
 }
 
-function setStoredAdminAccessToken(token) {
+export function clearAdminSessionState() {
   try {
-    if (token) {
-      sessionStorage.setItem(ADMIN_SESSION_TOKEN_KEY, token);
-    } else {
-      sessionStorage.removeItem(ADMIN_SESSION_TOKEN_KEY);
-    }
+    localStorage.removeItem(LEGACY_ADMIN_TOKEN_KEY);
+    localStorage.removeItem(ADMIN_AUTH_STORAGE_KEY);
+    sessionStorage.removeItem(LEGACY_ADMIN_TOKEN_KEY);
+    sessionStorage.removeItem(ADMIN_AUTH_STORAGE_KEY);
   } catch {
     // Ignore storage errors
   }
+}
+
+function isNetworkFailure(err) {
+  const msg = String(err?.message || "").toLowerCase();
+  return (
+    msg.includes("failed to fetch") ||
+    msg.includes("fetch failed") ||
+    msg.includes("networkerror") ||
+    msg.includes("network request failed") ||
+    msg.includes("load failed")
+  );
 }
 
 async function apiRequest(path, options = {}) {
@@ -61,9 +79,11 @@ async function apiRequest(path, options = {}) {
       credentials: "include",
     });
   } catch {
-    throw new Error(
-      "Unable to reach the server. Please ensure the backend API is running."
+    const netErr = new Error(
+      "Network error. Unable to reach the server. Please check your connection and try again."
     );
+    netErr.isNetworkError = true;
+    throw netErr;
   }
 
   const contentType = response.headers.get("content-type") || "";
@@ -167,152 +187,130 @@ export async function submitJobApplication(formValues, cvFile, certificateFile) 
 }
 
 // ============================================================================
-// SUPABASE ADMIN SETUP, REGISTRATION, LOGIN & AUTHORIZATION API
+// SUPABASE ADMIN LOGIN, SESSION & AUTHORIZATION API
 // ============================================================================
 
-/**
- * Checks whether the initial administrator account has already been created.
- */
-export async function fetchAdminSetupStatus() {
-  return apiRequest("/api/admin/auth/setup-status");
-}
-
-/**
- * Controlled first-admin registration:
- * Creates the initial administrator in Supabase `auth.users` and authorizes them in `public.admins`.
- * Automatically blocked by the backend with HTTP 403 once the first admin exists.
- */
-export async function registerFirstAdmin({
-  fullName,
-  email,
-  password,
-  confirmPassword,
-  setupKey,
-}) {
-  const normalizedEmail = String(email || "").trim().toLowerCase();
-  let clientAccessToken = null;
-  let requiresEmailConfirmation = false;
-
-  if (isSupabaseAuthConfigured && supabase) {
-    const { data, error } = await supabase.auth.signUp({
-      email: normalizedEmail,
-      password: String(password || ""),
-      options: {
-        data: {
-          full_name: String(fullName || "NOOR AL AFIYA Administrator").trim(),
-        },
-      },
-    });
-
-    if (!error && data?.user) {
-      if (data.session?.access_token) {
-        clientAccessToken = data.session.access_token;
-      } else if (!data.user.email_confirmed_at) {
-        requiresEmailConfirmation = true;
-      }
-    }
+export async function verifyAdminAuthorization(accessToken) {
+  if (!accessToken) {
+    const err = new Error("Authentication required. Please login with your administrator account.");
+    err.status = 401;
+    throw err;
   }
 
-  const response = await apiRequest("/api/admin/auth/register-first-admin", {
-    method: "POST",
-    body: JSON.stringify({
-      fullName: String(fullName || "NOOR AL AFIYA Administrator").trim(),
-      email: normalizedEmail,
-      password: String(password || ""),
-      confirmPassword: String(confirmPassword || ""),
-      setupKey: setupKey ? String(setupKey).trim() : undefined,
-      accessToken: clientAccessToken,
-    }),
+  return apiRequest("/api/admin/auth/me", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
   });
-
-  if (supabase) {
-    await supabase.auth.signOut().catch(() => {});
-  }
-  setStoredAdminAccessToken(null);
-
-  return {
-    ...response,
-    requiresEmailConfirmation,
-  };
 }
 
-/**
- * Signs in with Supabase Auth (`signInWithPassword` or backend Supabase `auth.users` authenticator)
- * and immediately verifies backend administrator authorization (`GET /api/admin/auth/me`).
- * If the user is authenticated in `auth.users` but is NOT an authorized admin in `public.admins`,
- * immediately signs out and throws a 403 error.
- */
 export async function loginAdmin(email, password) {
+  const supabase = await loadSupabase();
+  if (!supabase) {
+    throw new Error(
+      "Supabase Authentication is not configured. Please check VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY."
+    );
+  }
+
   const normalizedEmail = String(email || "").trim().toLowerCase();
   const cleanPassword = String(password || "");
 
-  if (isSupabaseAuthConfigured && supabase) {
-    const { data, error } = await supabase.auth.signInWithPassword({
+  let data;
+  let error;
+  try {
+    const response = await supabase.auth.signInWithPassword({
       email: normalizedEmail,
       password: cleanPassword,
     });
-
-    if (error || !data?.session?.access_token) {
-      throw new Error("Invalid email or password. Please try again.");
+    data = response.data;
+    error = response.error;
+  } catch (err) {
+    if (isNetworkFailure(err)) {
+      throw new Error(
+        "Network error. Unable to reach Supabase Authentication. Please check your internet connection and try again."
+      );
     }
-
-    try {
-      const authCheck = await apiRequest("/api/admin/auth/me", {
-        headers: {
-          Authorization: `Bearer ${data.session.access_token}`,
-        },
-      });
-      setStoredAdminAccessToken(data.session.access_token);
-      return authCheck;
-    } catch (verifyError) {
-      await supabase.auth.signOut().catch(() => {});
-      setStoredAdminAccessToken(null);
-      throw verifyError;
-    }
+    throw err;
   }
 
-  // Authenticate via backend against Supabase PostgreSQL `auth.users` & `public.admins`
-  const loginData = await apiRequest("/api/admin/auth/login", {
-    method: "POST",
-    body: JSON.stringify({
-      email: normalizedEmail,
-      password: cleanPassword,
-    }),
-  });
-
-  if (!loginData?.accessToken) {
-    throw new Error("Invalid email or password. Please try again.");
+  if (error || !data?.session?.access_token || !data?.user?.id) {
+    if (isNetworkFailure(error)) {
+      throw new Error(
+        "Network error. Unable to reach Supabase Authentication. Please check your internet connection and try again."
+      );
+    }
+    const isInvalidCreds =
+      error?.code === "invalid_credentials" ||
+      String(error?.message || "")
+        .toLowerCase()
+        .includes("invalid login credentials");
+    const authErr = new Error(
+      isInvalidCreds
+        ? "Invalid email or password. Please try again."
+        : error?.message || "Invalid email or password. Please try again."
+    );
+    authErr.status = error?.status || 401;
+    throw authErr;
   }
 
-  setStoredAdminAccessToken(loginData.accessToken);
-  return { admin: loginData.admin };
+  try {
+    const authCheck = await verifyAdminAuthorization(data.session.access_token);
+    return authCheck;
+  } catch (verifyError) {
+    await supabase.auth.signOut().catch(() => {});
+    clearAdminSessionState();
+    if (verifyError?.status === 403) {
+      const forbiddenErr = new Error(
+        "You are authenticated, but you do not have administrator access."
+      );
+      forbiddenErr.status = 403;
+      throw forbiddenErr;
+    }
+    throw verifyError;
+  }
 }
 
 export async function logoutAdmin() {
-  setStoredAdminAccessToken(null);
+  const supabase = await loadSupabase();
   if (supabase) {
     await supabase.auth.signOut().catch(() => {});
   }
+  clearAdminSessionState();
   await apiRequest("/api/admin/auth/logout", {
     method: "POST",
   }).catch(() => {});
 }
 
 export async function requestAdminPasswordReset(email) {
-  const normalizedEmail = String(email || "").trim().toLowerCase();
-  if (!isSupabaseAuthConfigured || !supabase) {
-    throw new Error(
-      "To send password reset emails from the browser, please configure VITE_SUPABASE_ANON_KEY in your .env file."
-    );
+  const supabase = await loadSupabase();
+  if (!supabase) {
+    throw new Error("Supabase Authentication is not configured.");
   }
 
+  const normalizedEmail = String(email || "").trim().toLowerCase();
   const redirectTo = `${window.location.origin}/admin/reset-password`;
 
-  const { error } = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
-    redirectTo,
-  });
+  let error;
+  try {
+    const res = await supabase.auth.resetPasswordForEmail(normalizedEmail, {
+      redirectTo,
+    });
+    error = res.error;
+  } catch (err) {
+    if (isNetworkFailure(err)) {
+      throw new Error(
+        "Network error. Unable to reach Supabase Authentication. Please try again."
+      );
+    }
+    throw err;
+  }
 
   if (error) {
+    if (isNetworkFailure(error)) {
+      throw new Error(
+        "Network error. Unable to reach Supabase Authentication. Please try again."
+      );
+    }
     throw new Error(error.message || "Unable to send password reset email.");
   }
 
@@ -323,10 +321,9 @@ export async function requestAdminPasswordReset(email) {
 }
 
 export async function updateAdminPassword(newPassword) {
-  if (!isSupabaseAuthConfigured || !supabase) {
-    throw new Error(
-      "Supabase Auth is not configured. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file."
-    );
+  const supabase = await loadSupabase();
+  if (!supabase) {
+    throw new Error("Supabase Authentication is not configured.");
   }
 
   const { error } = await supabase.auth.updateUser({
@@ -342,23 +339,20 @@ export async function updateAdminPassword(newPassword) {
   };
 }
 
-export async function fetchCurrentAdmin() {
-  const accessToken = await getActiveAdminAccessToken();
+export async function fetchCurrentAdmin(accessTokenOverride) {
+  const accessToken =
+    accessTokenOverride || (await getActiveAdminAccessToken());
   if (!accessToken) {
     const err = new Error("No active administrator session.");
     err.status = 401;
     throw err;
   }
 
-  return apiRequest("/api/admin/auth/me", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
+  return verifyAdminAuthorization(accessToken);
 }
 
 // ============================================================================
-// ADMIN BOOKING & JOB APPLICATION MANAGEMENT API
+// ADMIN BOOKING, ENQUIRY & JOB APPLICATION MANAGEMENT API
 // ============================================================================
 
 export async function fetchAdminBookings(params = {}) {
@@ -400,8 +394,40 @@ export async function updateAdminBookingStatus(idOrRef, status) {
   return data.booking;
 }
 
-export async function fetchAdminJobApplications() {
-  const data = await apiRequest("/api/admin/job-applications");
+export async function fetchAdminContactEnquiries(params = {}) {
+  const searchParams = new URLSearchParams();
+  if (params.search) searchParams.set("search", params.search);
+  if (params.status && params.status !== "ALL")
+    searchParams.set("status", params.status);
+
+  const query = searchParams.toString();
+  const data = await apiRequest(
+    `/api/admin/enquiries${query ? `?${query}` : ""}`
+  );
+  return data.enquiries || [];
+}
+
+export async function updateAdminContactEnquiryStatus(id, status) {
+  const data = await apiRequest(
+    `/api/admin/enquiries/${encodeURIComponent(id)}/status`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    }
+  );
+  return data.enquiry;
+}
+
+export async function fetchAdminJobApplications(params = {}) {
+  const searchParams = new URLSearchParams();
+  if (params.search) searchParams.set("search", params.search);
+  if (params.status && params.status !== "ALL")
+    searchParams.set("status", params.status);
+
+  const query = searchParams.toString();
+  const data = await apiRequest(
+    `/api/admin/job-applications${query ? `?${query}` : ""}`
+  );
   return data.applications || [];
 }
 

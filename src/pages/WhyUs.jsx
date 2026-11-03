@@ -1,10 +1,13 @@
 import { useState } from "react";
+import usePageMeta from "../utils/usePageMeta";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
 import { Link } from "react-router-dom";
-import logoMark from "../assets/noor-al-afiya-mark.png";
+import logoMark from "../assets/noor-al-afiya-mark.webp";
 import "./Home.css";
 import "./WhyUs.css";
 
 function WhyUs() {
+  usePageMeta({"title":"Why Choose Us – NOOR AL AFIYA | Home Nursing Care","description":"See why families in Bahrain choose NOOR AL AFIYA for dependable, professional and caring home nursing services.","path":"/why-us"});
   const [menuOpen, setMenuOpen] = useState(false);
   const reasons = [
     {
@@ -69,11 +72,13 @@ function WhyUs() {
         <div className="home-container top-strip-inner">
           <span>Professional home nursing care in Bahrain</span>
           <div className="top-contact">
-            <a href="tel:+97300000000">+973 0000 0000</a>
-            <span>•</span>
-            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
-            <span>•</span>
-            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
+            {HAS_CONTACT_PHONE && (
+<>
+<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
+<span>•</span>
+</>
+)}
+            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
           </div>
         </div>
       </div>
@@ -81,7 +86,7 @@ function WhyUs() {
       <header className="home-nav-wrap">
         <div className="home-container home-nav">
           <Link className="home-brand" to="/" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
               <small>Home Health Care WLL</small>
@@ -92,6 +97,7 @@ function WhyUs() {
             className={`nav-toggle ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen((value) => !value)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
             type="button"
           >
             <span />
@@ -407,7 +413,7 @@ function WhyUs() {
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
             >
               <img
-                src={logoMark}
+                src={logoMark} width="256" height="256"
                 alt="NOOR AL AFIYA"
                 className="brand-mark-image"
               />
@@ -442,8 +448,8 @@ function WhyUs() {
 
           <div>
             <h4>Contact</h4>
-            <a href="tel:+97300000000">+973 0000 0000</a>
-            <a href="mailto:nooralafiyahomecare@gmail.com">nooralafiyahomecare@gmail.com</a>
+            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
+            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
             <span>Bahrain</span>
           </div>
 
@@ -452,7 +458,7 @@ function WhyUs() {
         <div className="why-footer-bottom">
           <div className="why-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
             <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
+            <span>Home Nursing • Bahrain</span>
           </div>
         </div>
 

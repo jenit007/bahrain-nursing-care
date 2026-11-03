@@ -1,14 +1,16 @@
 import { useEffect, useRef, useState } from "react";
+import usePageMeta from "../utils/usePageMeta";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
 import { Link, useNavigate } from "react-router-dom";
-import logoMark from "../assets/noor-al-afiya-mark.png";
+import logoMark from "../assets/noor-al-afiya-mark.webp";
 import "./Home.css";
-import aboutCareImage from "../assets/about-care.png";
-import patientCareImage from "../assets/services/patient-care.jpg";
-import elderCareImage from "../assets/services/elder-care.jpg";
-import newbornCareImage from "../assets/services/newborn-care.jpg";
-import childrenCareImage from "../assets/services/children-care.jpg";
-import nhraApprovedImage from "../assets/nhra-approved.png";
-import homeCareSupportPhoto from "../assets/home-care-support-photo.png";
+import aboutCareImage from "../assets/about-care.webp";
+import patientCareImage from "../assets/services/patient-care.webp";
+import elderCareImage from "../assets/services/elder-care.webp";
+import newbornCareImage from "../assets/services/newborn-care.webp";
+import childrenCareImage from "../assets/services/children-care.webp";
+import nhraApprovedImage from "../assets/nhra-approved.webp";
+import homeCareSupportPhoto from "../assets/home-care-support-photo.webp";
 
 const services = [
   {
@@ -65,6 +67,7 @@ const benefits = [
 ];
 
 function Home() {
+  usePageMeta({"title":"Home – NOOR AL AFIYA | Home Nursing Care in Bahrain","description":"NOOR AL AFIYA Home Health Care provides professional home nursing care in Bahrain: patient care, elder care, newborn care and children's care delivered at home.","path":"/"});
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
   const [careServicesCount, setCareServicesCount] = useState(0);
@@ -182,21 +185,16 @@ function Home() {
 
           <div className="top-contact">
 
-            <a href="tel:+97300000000">
-              +973 0000 0000
-            </a>
+            {HAS_CONTACT_PHONE && (
+<>
+<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
+<span>•</span>
+</>
+)}
 
-            <span>•</span>
-
-            <a href="mailto:nooralafiyahomecare@gmail.com">
+            <a href={`mailto:${CONTACT_EMAIL}`}>
               nooralafiyahomecare@gmail.com
             </a>
-
-            <span>•</span>
-
-            <Link to="/admin/login" className="top-admin-link">
-              Admin Sign In
-            </Link>
 
           </div>
 
@@ -218,7 +216,7 @@ function Home() {
           >
 
             <img
-              src={logoMark}
+              src={logoMark} width="256" height="256"
               alt="NOOR AL AFIYA"
               className="brand-mark-image"
             />
@@ -248,6 +246,7 @@ function Home() {
               setMenuOpen((value) => !value)
             }
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
             type="button"
           >
 
@@ -377,7 +376,7 @@ function Home() {
                   </div>
 
                   <img
-                    src={nhraApprovedImage}
+                    src={nhraApprovedImage} width="400" height="83" decoding="async"
                     alt="NHRA Bahrain approved"
                   />
                 </div>
@@ -543,7 +542,7 @@ function Home() {
             <div className="why-visual">
 
               <img
-                src={homeCareSupportPhoto}
+                src={homeCareSupportPhoto} width="1400" height="1400" loading="lazy" decoding="async"
                 alt="24/7 Home-care support"
                 className="why-visual-bg-img"
               />
@@ -615,7 +614,7 @@ function Home() {
             <div className="about-image-wrap">
 
               <img
-                src={aboutCareImage}
+                src={aboutCareImage} width="1400" height="933" loading="lazy" decoding="async"
                 alt="Caregiver supporting an elderly person at home"
               />
 
@@ -686,7 +685,7 @@ function Home() {
             >
 
               <img
-                src={logoMark}
+                src={logoMark} width="256" height="256"
                 alt="NOOR AL AFIYA"
                 className="brand-mark-image"
               />
@@ -781,11 +780,9 @@ function Home() {
               Contact
             </h3>
 
-            <a href="tel:+97300000000">
-              +973 0000 0000
-            </a>
+            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
 
-            <a href="mailto:nooralafiyahomecare@gmail.com">
+            <a href={`mailto:${CONTACT_EMAIL}`}>
               nooralafiyahomecare@gmail.com
             </a>
 
@@ -807,10 +804,6 @@ function Home() {
 
           <span>
             Home Nursing • Bahrain
-            {" • "}
-            <Link to="/admin/login" className="footer-admin-link">
-              Admin Sign In
-            </Link>
           </span>
 
         </div>

@@ -8,7 +8,9 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const PRIVATE_UPLOADS_ROOT = path.resolve(__dirname, "..", ".private_uploads");
+const PRIVATE_UPLOADS_ROOT = process.env.VERCEL
+  ? path.resolve("/tmp", "noor_private_uploads")
+  : path.resolve(__dirname, "..", ".private_uploads");
 
 const ALLOWED_CV_MIME_TYPES = new Set([
   "application/pdf",
@@ -28,8 +30,11 @@ const SAFE_EXTENSIONS = new Set([".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png
 const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 export function getSupabaseAdminClient() {
-  const supabaseUrl = process.env.SUPABASE_URL;
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const supabaseUrl = (process.env.SUPABASE_URL || "")
+    .trim()
+    .replace(/\/+(rest|auth)\/v1\/?$/i, "")
+    .replace(/\/+$/, "");
+  const serviceRoleKey = (process.env.SUPABASE_SERVICE_ROLE_KEY || "").trim();
 
   if (
     !supabaseUrl ||

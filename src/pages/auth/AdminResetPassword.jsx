@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import usePageMeta from "../../utils/usePageMeta";
 import { Link, useNavigate } from "react-router-dom";
 import { logoutAdmin, updateAdminPassword } from "../../utils/api";
 import { supabase } from "../../utils/supabaseClient";
 import "./AdminLogin.css";
 
 export default function AdminResetPassword() {
+  usePageMeta({"title":"Reset Admin Password | NOOR AL AFIYA","noindex":true});
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -19,6 +21,21 @@ export default function AdminResetPassword() {
     let active = true;
 
     async function checkRecoverySession() {
+      const hashParams = new URLSearchParams(
+        window.location.hash.replace(/^#/, "")
+      );
+      const hasHashRecovery =
+        hashParams.get("type") === "recovery" ||
+        Boolean(hashParams.get("access_token"));
+
+      if (hasHashRecovery) {
+        if (active) {
+          setHasRecoverySession(true);
+          setCheckingSession(false);
+        }
+        return;
+      }
+
       if (!supabase) {
         if (active) setCheckingSession(false);
         return;
@@ -54,8 +71,8 @@ export default function AdminResetPassword() {
     setError("");
     setSuccess("");
 
-    if (!password || password.length < 10) {
-      setError("New password must be at least 10 characters long.");
+    if (!password || password.length < 8) {
+      setError("New password must be at least 8 characters long.");
       return;
     }
 
@@ -68,15 +85,16 @@ export default function AdminResetPassword() {
     try {
       const result = await updateAdminPassword(password);
       setSuccess(
-        result.message || "Your password has been updated. Redirecting to sign in…"
+        result.message || "Your password has been updated. Redirecting to login…"
       );
       await logoutAdmin();
       setTimeout(() => {
         navigate("/admin/login", { replace: true });
-      }, 1800);
+      }, 1500);
     } catch (err) {
       setError(
-        err.message || "Unable to update your password. Your recovery link may have expired."
+        err.message ||
+          "Unable to update your password. Your recovery link may have expired."
       );
     } finally {
       setIsLoading(false);
@@ -109,16 +127,16 @@ export default function AdminResetPassword() {
             </p>
             <p className="admin-login-error" role="alert">
               No active password recovery session found. Please request a new
-              password reset link from the admin sign-in page.
+              password reset link from the Admin Login page.
             </p>
             <Link className="admin-login-back" to="/admin/login">
-              ← Return to Admin Sign In
+              ← Return to Admin Login
             </Link>
           </>
         ) : (
           <>
             <p className="admin-login-intro">
-              Choose a strong password (at least 10 characters) for your
+              Choose a strong password (at least 8 characters) for your
               NOOR AL AFIYA administrator account.
             </p>
             <form onSubmit={handleSubmit} className="admin-login-form" noValidate>
@@ -188,7 +206,7 @@ export default function AdminResetPassword() {
               </button>
             </form>
             <Link className="admin-login-back" to="/admin/login">
-              ← Back to Admin Sign In
+              ← Back to Admin Login
             </Link>
           </>
         )}

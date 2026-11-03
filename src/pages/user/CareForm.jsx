@@ -1,6 +1,8 @@
 import { useState } from "react";
+import usePageMeta from "../../utils/usePageMeta";
+import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../../config/contact";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import logoMark from "../../assets/noor-al-afiya-mark.png";
+import logoMark from "../../assets/noor-al-afiya-mark.webp";
 import { createCareBooking } from "../../utils/api";
 import "./CareForm.css";
 
@@ -44,6 +46,11 @@ function CareForm() {
   const { service } = useParams();
   const navigate = useNavigate();
   const currentService = careData[service];
+  usePageMeta({
+    title: currentService ? `Request ${currentService.title} at Home | NOOR AL AFIYA` : `Care Request | NOOR AL AFIYA`,
+    description: currentService?.description,
+    path: `/care/${service}`,
+  });
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -100,30 +107,64 @@ function CareForm() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitError("");
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedPhone = formData.phone.trim();
+    const trimmedFlat = formData.address.flatNo.trim();
+    const trimmedBuilding = formData.address.buildingNo.trim();
+    const trimmedArea = formData.address.area.trim();
+
+    if (!trimmedName || trimmedName.length < 2) {
+      setSubmitError("Please enter the patient or contact full name.");
+      return;
+    }
+    if (trimmedEmail && !/^\S+@\S+\.\S+$/.test(trimmedEmail)) {
+      setSubmitError("Please enter a valid email address.");
+      return;
+    }
+    if (!trimmedPhone || !/^[+\d][\d\s().-]{6,20}$/.test(trimmedPhone) || trimmedPhone.replace(/\D/g, "").length < 7) {
+      setSubmitError("Please enter a valid phone number.");
+      return;
+    }
+    if (!formData.preferredDate) {
+      setSubmitError("Please select a preferred date for care.");
+      return;
+    }
+    if (!trimmedFlat || !trimmedBuilding || !trimmedArea) {
+      setSubmitError("Please enter the block number, building number, and area.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
       const booking = await createCareBooking({
         service: currentService.title,
         careType: currentService.title,
-        name: formData.name,
-        fullName: formData.name,
-        email: formData.email,
-        phone: formData.phone,
+        name: trimmedName,
+        fullName: trimmedName,
+        email: trimmedEmail,
+        phone: trimmedPhone,
         preferredDate: formData.preferredDate,
         preferredTime: formData.preferredTime || "",
         notes: formData.notes,
         additionalNotes: formData.notes,
-        condition: formData.condition,
-        shift: formData.shift,
+        condition: formData.condition || "Normal",
+        shift: formData.shift || "12h",
         shiftOther: formData.shift === "Other" ? formData.shiftOther : "",
         patientDetails: {
-          condition: formData.condition,
-          shift: formData.shift,
+          condition: formData.condition || "Normal",
+          shift: formData.shift || "12h",
           shiftOther: formData.shift === "Other" ? formData.shiftOther : "",
           preferredTime: formData.preferredTime || "",
         },
-        address: formData.address,
+        address: {
+          ...formData.address,
+          flatNo: trimmedFlat,
+          buildingNo: trimmedBuilding,
+          area: trimmedArea,
+        },
       });
 
       navigate(`/request-status?ref=${encodeURIComponent(booking.bookingReference)}`);
@@ -136,7 +177,8 @@ function CareForm() {
     }
   };
 
-  const today = new Date().toISOString().split("T")[0];
+  const now = new Date();
+  const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
 
   return (
     <div className="care-form-page">
@@ -147,8 +189,6 @@ function CareForm() {
             <span>24/7 Home Care Support</span>
             <span>•</span>
             <span>Bahrain</span>
-            <span>•</span>
-            <Link to="/admin/login" className="top-admin-link">Admin Sign In</Link>
           </div>
         </div>
       </div>
@@ -156,7 +196,7 @@ function CareForm() {
       <header className="care-form-navbar">
         <div className="care-form-container care-form-nav-inner">
           <Link to="/" className="home-brand" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
             <span>
               <strong>NOOR AL AFIYA</strong>
               <small>Home Health Care WLL</small>
@@ -168,6 +208,7 @@ function CareForm() {
             className={`care-menu-toggle ${menuOpen ? "open" : ""}`}
             onClick={() => setMenuOpen((value) => !value)}
             aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
           >
             <span />
             <span />
@@ -477,7 +518,7 @@ function CareForm() {
         <div className="care-form-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', padding: '40px 0' }}>
           <div>
             <Link className="home-brand" to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-              <img src={logoMark} alt="NOOR AL AFIYA" className="brand-mark-image" />
+              <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
               <span>
                 <strong>NOOR AL AFIYA</strong>
                 <small>Home Health Care WLL</small>
@@ -510,15 +551,15 @@ function CareForm() {
           <div>
             <h4 style={{ color: '#fff', marginBottom: '15px' }}>Contact</h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#9AA5B6' }}>
-              <a href="tel:+97300000000" style={{ color: '#9AA5B6', textDecoration: 'none' }}>+973 0000 0000</a>
-              <a href="mailto:nooralafiyahomecare@gmail.com" style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
+              {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF} style={{ color: '#9AA5B6', textDecoration: 'none' }}>{CONTACT_PHONE_DISPLAY}</a>}
+              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
               <span>Bahrain</span>
             </div>
           </div>
         </div>
         <div className="care-footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
           <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-          <span>Home Nursing • Bahrain • <Link to="/admin/login" className="footer-admin-link">Admin Sign In</Link></span>
+          <span>Home Nursing • Bahrain</span>
         </div>
       </footer>
     </div>

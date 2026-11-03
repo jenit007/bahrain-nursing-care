@@ -6,23 +6,24 @@ import {
   useLocation,
 } from "react-router-dom";
 
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 
+// Home is loaded eagerly (first paint); every other route is code-split.
 import Home from "./pages/Home";
-import About from "./pages/About";
-import WhyUs from "./pages/WhyUs";
-import Contact from "./pages/Contact";
-import Careers from "./pages/Careers";
 
-import Services from "./pages/user/Services";
-import CareForm from "./pages/user/CareForm";
-import RequestStatus from "./pages/user/RequestStatus";
+const About = lazy(() => import("./pages/About"));
+const WhyUs = lazy(() => import("./pages/WhyUs"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Careers = lazy(() => import("./pages/Careers"));
 
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminLogin from "./pages/auth/AdminLogin";
-import AdminRegister from "./pages/auth/AdminRegister";
-import AdminResetPassword from "./pages/auth/AdminResetPassword";
-import AdminProtected from "./pages/auth/AdminProtected";
+const Services = lazy(() => import("./pages/user/Services"));
+const CareForm = lazy(() => import("./pages/user/CareForm"));
+const RequestStatus = lazy(() => import("./pages/user/RequestStatus"));
+
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
+const AdminProtected = lazy(() => import("./pages/auth/AdminProtected"));
+const AdminLogin = lazy(() => import("./pages/auth/AdminLogin"));
+const AdminResetPassword = lazy(() => import("./pages/auth/AdminResetPassword"));
 
 import "./responsive.css";
 
@@ -41,57 +42,52 @@ function ScrollToTop() {
 }
 
 function App() {
-  useEffect(() => {
-    document.title = "NOOR AL AFIYA | Home Health Care Service";
-  }, []);
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <Routes>
-        {/* ================= PUBLIC PAGES ================= */}
+      <Suspense
+        fallback={
+          <div className="route-loading" role="status" aria-live="polite">
+            Loading…
+          </div>
+        }
+      >
+        <Routes>
+          {/* ================= PUBLIC PAGES ================= */}
 
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/why-us" element={<WhyUs />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/careers" element={<Careers />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/why-us" element={<WhyUs />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/careers" element={<Careers />} />
 
-        {/* ================= CARE FORMS ================= */}
+          {/* ================= CARE FORMS ================= */}
 
-        <Route
-          path="/care/:service"
-          element={<CareForm />}
-        />
+          <Route path="/care/:service" element={<CareForm />} />
 
-        {/* ================= USER PAGES ================= */}
+          {/* ================= USER PAGES ================= */}
 
-        <Route
-          path="/request-status"
-          element={<RequestStatus />}
-        />
+          <Route path="/request-status" element={<RequestStatus />} />
 
-        {/* ================= ADMIN ================= */}
+          {/* ================= ADMIN ================= */}
 
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/register" element={<AdminRegister />} />
-        <Route path="/admin/reset-password" element={<AdminResetPassword />} />
-        <Route
-          path="/admin/*"
-          element={
-            <AdminProtected>
-              <AdminDashboard />
-            </AdminProtected>
-          }
-        />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/reset-password" element={<AdminResetPassword />} />
+          <Route
+            path="/admin/*"
+            element={
+              <AdminProtected>
+                <AdminDashboard />
+              </AdminProtected>
+            }
+          />
 
-        {/* ================= FALLBACK ================= */}
+          {/* ================= FALLBACK ================= */}
 
-        <Route
-          path="*"
-          element={<Navigate to="/" replace />}
-        />
-      </Routes>
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </Suspense>
     </BrowserRouter>
   );
 }

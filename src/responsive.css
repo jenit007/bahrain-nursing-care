@@ -1093,3 +1093,37 @@ input, select, textarea, button {
   }
 }
 
+
+/* =========================================================
+   ACCESSIBILITY: visible keyboard focus (does not affect mouse/touch)
+========================================================= */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #ff3a94;
+  outline-offset: 2px;
+}
+
+.route-loading {
+  min-height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #55708f;
+  font-size: 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

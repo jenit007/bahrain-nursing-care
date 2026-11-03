@@ -280,7 +280,7 @@
       rgba(255, 240, 247, 0.90) 45%,
       rgba(146,197,83,0.12) 78%
     ),
-    url("../assets/home-hero.png");
+    url("../assets/home-hero.webp");
 
   background-size: cover;
 
@@ -1341,7 +1341,7 @@
         rgba(202, 240, 248, 0.93) 48%,
         rgba(146, 197, 83, 0.16) 100%
       ),
-      url("../assets/home-hero.png");
+      url("../assets/home-hero.webp");
   }
 
   .hero-content {

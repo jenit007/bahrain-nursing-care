@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import {
   fetchCurrentAdmin,
   getActiveAdminAccessToken,
@@ -9,50 +9,81 @@ import { supabase } from "../../utils/supabaseClient";
 
 export default function AdminProtected({ children }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [status, setStatus] = useState("checking"); // "checking" | "authenticated" | "forbidden" | "unauthenticated"
+
+  const verifyAccess = useCallback(async () => {
+    const accessToken = await getActiveAdminAccessToken();
+    if (!accessToken) {
+      setStatus("unauthenticated");
+      return;
+    }
+
+    try {
+      await fetchCurrentAdmin(accessToken);
+      setStatus("authenticated");
+    } catch (err) {
+      if (err.status === 403) {
+        setStatus("forbidden");
+      } else {
+        await logoutAdmin();
+        setStatus("unauthenticated");
+      }
+    }
+  }, []);
 
   useEffect(() => {
     let active = true;
 
-    async function verifyAccess() {
-      const accessToken = await getActiveAdminAccessToken();
-      if (!accessToken) {
-        if (active) setStatus("unauthenticated");
-        return;
-      }
-
-      try {
-        await fetchCurrentAdmin();
-        if (active) setStatus("authenticated");
-      } catch (err) {
-        if (!active) return;
-        if (err.status === 403) {
-          setStatus("forbidden");
-        } else {
-          await logoutAdmin();
-          setStatus("unauthenticated");
-        }
-      }
+    async function checkSession() {
+      if (!active) return;
+      await verifyAccess();
     }
 
-    verifyAccess();
+    checkSession();
 
     const { data: authListener } = supabase
       ? supabase.auth.onAuthStateChange((event, session) => {
           if (!active) return;
           if (event === "SIGNED_OUT" || !session) {
             setStatus("unauthenticated");
-          } else if (event === "TOKEN_REFRESHED" || event === "SIGNED_IN") {
+          } else if (
+            event === "TOKEN_REFRESHED" ||
+            event === "SIGNED_IN" ||
+            event === "USER_UPDATED"
+          ) {
             verifyAccess();
           }
         })
       : { data: { subscription: null } };
 
+    // Recheck authentication when the admin revisits the dashboard tab or uses browser back/forward navigation
+    const handleVisibilityOrFocus = () => {
+      if (document.visibilityState === "visible" && active) {
+        verifyAccess();
+      }
+    };
+
+    const handlePageShow = () => {
+      if (active) {
+        verifyAccess();
+      }
+    };
+
+    window.addEventListener("focus", handleVisibilityOrFocus);
+    document.addEventListener("visibilitychange", handleVisibilityOrFocus);
+    window.addEventListener("pageshow", handlePageShow);
+    window.addEventListener("popstate", handlePageShow);
+
     return () => {
       active = false;
       authListener?.subscription?.unsubscribe?.();
+      window.removeEventListener("focus", handleVisibilityOrFocus);
+      document.removeEventListener("visibilitychange", handleVisibilityOrFocus);
+      window.removeEventListener("pageshow", handlePageShow);
+      window.removeEventListener("popstate", handlePageShow);
     };
-  }, []);
+  }, [verifyAccess, location.pathname]);
 
   if (status === "checking") {
     return (
@@ -114,8 +145,7 @@ export default function AdminProtected({ children }) {
             Administrator authorization required
           </h1>
           <p style={{ margin: "0 0 20px", fontSize: "14px", color: "#4F4F4F", lineHeight: 1.5 }}>
-            Your account is signed in, but it does not have administrator
-            privileges for the NOOR AL AFIYA dashboard.
+            You are authenticated, but you do not have administrator access.
           </p>
           <button
             type="button"
@@ -135,7 +165,7 @@ export default function AdminProtected({ children }) {
               cursor: "pointer",
             }}
           >
-            Sign out & return to login
+            Logout & return to login
           </button>
         </div>
       </div>

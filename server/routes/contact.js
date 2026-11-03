@@ -26,7 +26,8 @@ router.post("/", async (req, res, next) => {
     if (!email || !EMAIL_REGEX.test(email)) {
       errors.email = "Please enter a valid email address.";
     }
-    if (!phone || !PHONE_REGEX.test(phone)) {
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (!phone || !PHONE_REGEX.test(phone) || phoneDigits.length < 7 || phoneDigits.length > 15) {
       errors.phone = "Please enter a valid phone number.";
     }
     if (!subject) {
@@ -73,6 +74,15 @@ router.post("/", async (req, res, next) => {
     return res.status(201).json({
       message: "Thank you. Your enquiry has been submitted.",
       enquiryId: enquiry.id,
+      enquiry: {
+        id: enquiry.id,
+        fullName: enquiry.fullName,
+        email: enquiry.email,
+        phone: enquiry.phone,
+        subject: enquiry.subject,
+        status: enquiry.status,
+        createdAt: enquiry.createdAt.toISOString(),
+      },
     });
   } catch (error) {
     return next(error);

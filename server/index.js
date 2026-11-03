@@ -125,7 +125,7 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-if (process.env.NODE_ENV !== "test") {
+if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`NOOR AL AFIYA Express API listening on http://localhost:${PORT}`);
   });

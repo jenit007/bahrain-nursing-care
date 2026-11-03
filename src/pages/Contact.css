@@ -749,3 +749,15 @@
   .contact-logo-text strong { font-size: 14px; }
   .contact-logo-text small { font-size: 8px; }
 }
+
+.contact-field-error {
+  display: block;
+  margin-top: 6px;
+  color: #b3125f;
+  font-size: 13px;
+  font-weight: 600;
+}
+.contact-field input[aria-invalid="true"],
+.contact-field textarea[aria-invalid="true"] {
+  border-color: #ff3a94;
+}
