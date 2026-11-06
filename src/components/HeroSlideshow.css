@@ -1,0 +1,326 @@
+/* ==========================================================
+   HERO SLIDESHOW  –  HeroSlideshow.css
+   NOOR AL AFIYA Home Health Care WLL
+   Full-bleed background slideshow with right-to-left slide transition
+   ========================================================== */
+
+/* ── Root Container ── */
+.hs-root {
+  /* Fills its parent completely – parent sets exact dimensions */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  /* No border-radius – this IS the hero background */
+  border-radius: 0;
+  overflow: hidden;
+
+  background: #FFF0F7;   /* Fallback while images load */
+
+  outline: none;
+}
+
+.hs-root:focus-visible {
+  box-shadow: inset 0 0 0 3px rgba(255, 58, 148, 0.5);
+}
+
+/* ── Track: clips both slides during horizontal motion ── */
+.hs-track {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;   /* Clips outgoing slide as it exits left */
+}
+
+/* ── Individual Slide ── */
+.hs-slide {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  will-change: transform;
+
+  /* Flex center so the img anchors to the middle of the slide */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── OUTGOING slide (resting, before transition starts) ── */
+.hs-slide--out {
+  z-index: 1;
+  transform: translateX(0);
+}
+
+/* ── INCOMING slide (resting, before transition starts) ── */
+.hs-slide--in {
+  z-index: 2;
+  transform: translateX(0);
+}
+
+/* ─────────────────────────────────────────────────────────
+   HORIZONTAL SLIDE ANIMATION  –  Right to Left
+   Outgoing: 0% → -100%  (slides away left)
+   Incoming: 100% → 0%   (enters from right)
+───────────────────────────────────────────────────────── */
+
+/* Outgoing slide animates out to the left */
+.hs-slide--out.hs-slide--animating-out {
+  animation: hsSlideOut 700ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  z-index: 1;
+}
+
+/* Incoming slide animates in from the right */
+.hs-slide--in.hs-slide--animating-in {
+  animation: hsSlideIn 700ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
+  z-index: 2;
+}
+
+@keyframes hsSlideOut {
+  from { transform: translateX(0%); }
+  to   { transform: translateX(-100%); }
+}
+
+@keyframes hsSlideIn {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0%); }
+}
+
+/* ── Slide Image ── */
+.hs-img {
+  /* Absolute fill: guarantees the image covers every pixel of the slide */
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+
+  /* Cover + center: fills the frame, keeps the focal point centred */
+  object-fit: cover;
+  object-position: center center;
+
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+}
+
+/* ── Light Pink Gradient Overlay ──
+   Stronger on the LEFT (behind hero text), fades toward RIGHT.
+   Lives above images (z-index 10) but below any UI controls.
+   This overlay does NOT move with slides; it stays fixed on top.
+───────────────────────────────────────────────────────── */
+.hs-gradient {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      to right,
+      rgba(255, 240, 247, 0.92) 0%,
+      rgba(255, 240, 247, 0.80) 25%,
+      rgba(255, 240, 247, 0.55) 48%,
+      rgba(255, 240, 247, 0.22) 68%,
+      rgba(255, 240, 247, 0.06) 85%,
+      rgba(255, 240, 247, 0.00) 100%
+    );
+}
+
+/* ── Prev / Next Navigation Arrows ── */
+.hs-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 30;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  color: #252525;
+  cursor: pointer;
+
+  box-shadow: 0 4px 14px rgba(37, 48, 71, 0.18);
+
+  transition:
+    background 0.20s ease,
+    color 0.20s ease,
+    transform 0.20s ease,
+    box-shadow 0.20s ease;
+}
+
+.hs-arrow:hover {
+  background: #FF3A94;
+  color: #ffffff;
+  transform: translateY(-50%) scale(1.08);
+  box-shadow: 0 6px 20px rgba(255, 58, 148, 0.38);
+}
+
+.hs-arrow:focus-visible {
+  outline: 2px solid #FF3A94;
+  outline-offset: 2px;
+}
+
+.hs-arrow svg {
+  width: 17px;
+  height: 17px;
+}
+
+.hs-arrow--prev { left: 16px; }
+.hs-arrow--next { right: 16px; }
+
+/* ── Slide Indicator Dots ── */
+.hs-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 30;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.hs-dot {
+  width: 7px;
+  height: 7px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: rgba(255, 58, 148, 0.30);
+  cursor: pointer;
+
+  transition:
+    background 0.25s ease,
+    transform 0.25s ease,
+    width 0.25s ease;
+}
+
+.hs-dot--active {
+  background: #FF3A94;
+  width: 22px;
+  border-radius: 4px;
+  box-shadow: 0 0 8px rgba(255, 58, 148, 0.45);
+}
+
+.hs-dot:hover:not(.hs-dot--active) {
+  background: rgba(255, 58, 148, 0.65);
+  transform: scale(1.15);
+}
+
+.hs-dot:focus-visible {
+  outline: 2px solid #FF3A94;
+  outline-offset: 2px;
+}
+
+/* ── Reduced Motion Accessibility ── */
+@media (prefers-reduced-motion: reduce) {
+  .hs-slide--animating-out,
+  .hs-slide--animating-in {
+    animation: none !important;
+    transform: translateX(0%) !important;
+  }
+}
+
+/* ==========================================================
+   RESPONSIVE BREAKPOINTS
+   ========================================================== */
+
+/* Tablet (max 900px) */
+@media (max-width: 900px) {
+  .hs-arrow {
+    width: 34px;
+    height: 34px;
+  }
+
+  .hs-arrow svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .hs-arrow--prev { left: 12px; }
+  .hs-arrow--next { right: 12px; }
+
+  /* On tablet/mobile keep gradient strong all the way across */
+  .hs-gradient {
+    background:
+      linear-gradient(
+        to right,
+        rgba(255, 240, 247, 0.95) 0%,
+        rgba(255, 240, 247, 0.85) 40%,
+        rgba(255, 240, 247, 0.60) 65%,
+        rgba(255, 240, 247, 0.30) 85%,
+        rgba(255, 240, 247, 0.10) 100%
+      );
+  }
+}
+
+/* Mobile (max 600px) */
+@media (max-width: 600px) {
+  .hs-arrow {
+    width: 30px;
+    height: 30px;
+  }
+
+  .hs-arrow svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .hs-arrow--prev { left: 10px; }
+  .hs-arrow--next { right: 10px; }
+
+  .hs-dots {
+    bottom: 14px;
+    gap: 5px;
+    padding: 4px 10px;
+  }
+
+  .hs-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .hs-dot--active {
+    width: 18px;
+  }
+
+  /* Full gradient coverage on small portrait screens */
+  .hs-gradient {
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(255, 240, 247, 0.90) 0%,
+        rgba(255, 240, 247, 0.75) 40%,
+        rgba(255, 240, 247, 0.50) 70%,
+        rgba(255, 240, 247, 0.20) 100%
+      ),
+      linear-gradient(
+        to right,
+        rgba(255, 240, 247, 0.70) 0%,
+        rgba(255, 240, 247, 0.00) 100%
+      );
+  }
+}

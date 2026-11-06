@@ -1,0 +1,256 @@
+/* =========================================================
+   SHARED GLOBAL HEADER STYLES
+   Header background: #151b2e
+   ========================================================= */
+
+.home-container {
+  width: min(1180px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+/* =========================================================
+   TOP CONTACT STRIP (#151b2e)
+   ========================================================= */
+
+.top-strip {
+  background: #151b2e !important;
+  color: #ffffff !important;
+  font-size: 12px;
+}
+
+.top-strip-inner {
+  min-height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.top-strip-tagline {
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  color: #ffffff;
+}
+
+.top-contact {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.top-contact a {
+  color: #ffffff;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.top-contact a:hover {
+  opacity: 0.85;
+}
+
+/* =========================================================
+   NAVIGATION BAR
+   ========================================================= */
+
+.home-nav-wrap {
+  position: relative;
+  z-index: 1000;
+  background: #ffffff;
+  border-bottom: 1px solid #e4f2f6;
+  box-shadow: 0 4px 18px rgba(37, 48, 71, 0.05);
+}
+
+.home-nav {
+  height: 98px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}
+
+/* BRAND */
+
+.home-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #FF3A94;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.home-brand > span:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-brand strong {
+  font-size: 17px;
+  line-height: 1.2;
+  color: #FF3A94;
+  font-weight: 800;
+}
+
+.home-brand small {
+  margin-top: 3px;
+  color: #55708F;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 600;
+}
+
+.brand-mark-image {
+  width: 57px;
+  height: 57px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+  display: block;
+  flex-shrink: 0;
+}
+
+/* NAV LINKS */
+
+.home-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.home-nav-links a {
+  color: #151b2e;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: color 0.2s ease;
+  padding: 6px 0;
+  position: relative;
+}
+
+.home-nav-links a:hover,
+.home-nav-links a.active {
+  color: #FF3A94;
+}
+
+.home-nav-links a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #FF3A94;
+  border-radius: 2px;
+}
+
+/* NAV TOGGLE */
+
+.nav-toggle {
+  display: none;
+  border: 0;
+  background: transparent;
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  cursor: pointer;
+}
+
+.nav-toggle span {
+  display: block;
+  height: 2px;
+  background: #FF3A94;
+  margin: 6px 0;
+  border-radius: 4px;
+  transition: 0.25s ease;
+}
+
+.nav-toggle.open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.nav-toggle.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle.open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .home-nav {
+    height: 72px;
+  }
+
+  .nav-toggle {
+    display: block;
+  }
+
+  .home-nav-links {
+    display: none;
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    top: 76px;
+    background: #ffffff;
+    border: 1px solid #E7EEE2;
+    border-radius: 14px;
+    padding: 16px;
+    box-shadow: 0 20px 40px rgba(37, 48, 71, 0.14);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+    z-index: 1001;
+  }
+
+  .home-nav-links.show {
+    display: flex;
+  }
+
+  .home-nav-links a {
+    text-align: center;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .home-nav-links a.active::after {
+    display: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .home-container {
+    width: calc(100% - 32px);
+  }
+
+  .top-strip-inner {
+    justify-content: center;
+    min-height: 32px;
+    text-align: center;
+  }
+
+  .top-strip-tagline {
+    display: none;
+  }
+
+  .top-contact {
+    font-size: 11px;
+  }
+
+  .home-brand strong {
+    font-size: 14px;
+  }
+
+  .home-brand small {
+    font-size: 8px;
+  }
+
+  .brand-mark-image {
+    width: 48px;
+    height: 48px;
+  }
+}

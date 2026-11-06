@@ -12,6 +12,10 @@
   --theme-green-dark: #719E3D;
   --theme-green-soft: #F3F9EA;
 
+  --theme-blue: #05A6F0;
+  --theme-blue-hover: #048dce;
+  --theme-blue-soft: rgba(5, 166, 240, 0.10);
+
   --theme-hero-bg: #FFF8FC;
   --theme-white: #FFFFFF;
   --theme-surface: #FFFFFF;
@@ -30,6 +34,22 @@
   --theme-radius-sm: 8px;
   --theme-radius-md: 12px;
   --theme-radius-lg: 18px;
+}
+
+/* =========================================================
+   TOP STRIP & HEADER BRANDING (#151B2E)
+   ========================================================= */
+
+.top-strip,
+.about-top-strip,
+.services-top-strip,
+.why-topbar,
+.contact-topbar,
+.careers-topbar,
+.care-form-topbar,
+.status-topbar {
+  background: #151b2e !important;
+  color: #ffffff !important;
 }
 
 /* Professional defaults */

@@ -1,0 +1,88 @@
+/* ================================
+   SCROLL REVEAL ANIMATIONS
+================================ */
+
+.scroll-reveal {
+  opacity: 0;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
+  will-change: opacity, transform;
+}
+
+/* Fade Up */
+
+.scroll-reveal-fade-up {
+  transform: translateY(45px);
+}
+
+.scroll-reveal-fade-up.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Down */
+
+.scroll-reveal-fade-down {
+  transform: translateY(-45px);
+}
+
+.scroll-reveal-fade-down.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Fade Left */
+
+.scroll-reveal-fade-left {
+  transform: translateX(-50px);
+}
+
+.scroll-reveal-fade-left.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Fade Right */
+
+.scroll-reveal-fade-right {
+  transform: translateX(50px);
+}
+
+.scroll-reveal-fade-right.scroll-reveal-visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Zoom */
+
+.scroll-reveal-zoom {
+  transform: scale(0.92);
+}
+
+.scroll-reveal-zoom.scroll-reveal-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Simple Fade */
+
+.scroll-reveal-fade {
+  transform: none;
+}
+
+.scroll-reveal-fade.scroll-reveal-visible {
+  opacity: 1;
+}
+
+/* ================================
+   ACCESSIBILITY
+================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

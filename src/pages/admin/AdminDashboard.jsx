@@ -21,6 +21,17 @@ const BOOKING_STATUSES = [
   "Completed",
 ];
 
+const ALL_CARE_SERVICES = [
+  "Patient Care",
+  "Elder Care",
+  "Newborn Care",
+  "Children's Care",
+  "ICU Patient Care",
+  "Cancer Patient Care",
+  "Ventilator Patient Care",
+  "Blood Collection Service",
+];
+
 const ENQUIRY_STATUSES = [
   "New",
   "In Progress",
@@ -123,6 +134,7 @@ function AdminDashboard() {
   // Care Bookings search & filters
   const [bookingSearch, setBookingSearch] = useState("");
   const [bookingStatusFilter, setBookingStatusFilter] = useState("ALL");
+  const [bookingServiceFilter, setBookingServiceFilter] = useState("ALL");
   const [bookingDateFilter, setBookingDateFilter] = useState("");
 
   // Contact Enquiries search & filters
@@ -361,15 +373,19 @@ function AdminDashboard() {
         bookingStatusFilter === "ALL" ||
         (req.status || "").toLowerCase() === bookingStatusFilter.toLowerCase();
 
+      const matchesService =
+        bookingServiceFilter === "ALL" ||
+        (req.service || "").toLowerCase() === bookingServiceFilter.toLowerCase();
+
       const createdDate = req.createdAt ? req.createdAt.split("T")[0] : "";
       const matchesDate =
         !bookingDateFilter ||
         req.preferredDate === bookingDateFilter ||
         createdDate === bookingDateFilter;
 
-      return matchesSearch && matchesStatus && matchesDate;
+      return matchesSearch && matchesStatus && matchesService && matchesDate;
     });
-  }, [sortedRequests, bookingSearch, bookingStatusFilter, bookingDateFilter]);
+  }, [sortedRequests, bookingSearch, bookingStatusFilter, bookingServiceFilter, bookingDateFilter]);
 
   const sortedEnquiries = useMemo(() => {
     return [...enquiries].sort((a, b) => {
@@ -979,6 +995,22 @@ function AdminDashboard() {
                     </div>
 
                     <div className="admin-filter-field">
+                      <label htmlFor="booking-service-filter">Service</label>
+                      <select
+                        id="booking-service-filter"
+                        value={bookingServiceFilter}
+                        onChange={(e) => setBookingServiceFilter(e.target.value)}
+                      >
+                        <option value="ALL">All Services</option>
+                        {ALL_CARE_SERVICES.map((srv) => (
+                          <option key={srv} value={srv}>
+                            {srv}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="admin-filter-field">
                       <label htmlFor="booking-date-filter">Date</label>
                       <input
                         id="booking-date-filter"
@@ -990,6 +1022,7 @@ function AdminDashboard() {
 
                     {(bookingSearch ||
                       bookingStatusFilter !== "ALL" ||
+                      bookingServiceFilter !== "ALL" ||
                       bookingDateFilter) && (
                       <div className="admin-filter-actions">
                         <button
@@ -998,6 +1031,7 @@ function AdminDashboard() {
                           onClick={() => {
                             setBookingSearch("");
                             setBookingStatusFilter("ALL");
+                            setBookingServiceFilter("ALL");
                             setBookingDateFilter("");
                           }}
                         >
@@ -1065,9 +1099,11 @@ function AdminDashboard() {
                                     {req.service || "N/A"}
                                   </strong>
                                   <span className="admin-cell-sub">
-                                    {req.shift === "Other" && req.shiftOther
-                                      ? req.shiftOther
-                                      : req.shift || "Standard shift"}
+                                    {req.service === "Blood Collection Service"
+                                      ? (req.cprNumber ? `CPR: ${req.cprNumber}` : "Phlebotomy Visit")
+                                      : (req.shift === "Other" && req.shiftOther
+                                        ? req.shiftOther
+                                        : req.shift || "Standard shift")}
                                   </span>
                                 </td>
                                 <td>{formatDate(req.preferredDate)}</td>
@@ -1549,27 +1585,43 @@ function AdminDashboard() {
                     <span className="admin-detail-label">Customer Name</span>
                     <p>{selectedBooking.name || "N/A"}</p>
                   </div>
+                  {selectedBooking.service === "Blood Collection Service" && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">CPR Number</span>
+                      <p><strong>{selectedBooking.cprNumber || selectedBooking.patientDetails?.cprNumber || "N/A"}</strong></p>
+                    </div>
+                  )}
                   <div className="admin-detail-item">
                     <span className="admin-detail-label">Phone Number</span>
                     <p>{selectedBooking.phone || "N/A"}</p>
                   </div>
-                  <div className="admin-detail-item">
-                    <span className="admin-detail-label">Email Address</span>
-                    <p>{selectedBooking.email || "N/A"}</p>
-                  </div>
+                  {selectedBooking.service !== "Blood Collection Service" && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">Email Address</span>
+                      <p>{selectedBooking.email || "Not provided"}</p>
+                    </div>
+                  )}
                   <div className="admin-detail-item">
                     <span className="admin-detail-label">Preferred Date</span>
                     <p>{formatDate(selectedBooking.preferredDate)}</p>
                   </div>
-                  <div className="admin-detail-item">
-                    <span className="admin-detail-label">Shift / Timing</span>
-                    <p>
-                      {selectedBooking.shift === "Other" &&
-                      selectedBooking.shiftOther
-                        ? selectedBooking.shiftOther
-                        : selectedBooking.shift || "Not specified"}
-                    </p>
-                  </div>
+                  {selectedBooking.service !== "Blood Collection Service" && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">Shift / Timing</span>
+                      <p>
+                        {selectedBooking.shift === "Other" &&
+                        selectedBooking.shiftOther
+                          ? selectedBooking.shiftOther
+                          : selectedBooking.shift || "Not specified"}
+                      </p>
+                    </div>
+                  )}
+                  {selectedBooking.service !== "Blood Collection Service" && (
+                    <div className="admin-detail-item">
+                      <span className="admin-detail-label">Preferred Time</span>
+                      <p>{selectedBooking.preferredTime || "Not specified"}</p>
+                    </div>
+                  )}
                   <div className="admin-detail-item">
                     <span className="admin-detail-label">Submitted At</span>
                     <p>{formatDateTime(selectedBooking.createdAt)}</p>
@@ -1580,16 +1632,27 @@ function AdminDashboard() {
               <div className="admin-detail-section">
                 <h3>Clinical Details & Address</h3>
                 <div className="admin-detail-grid">
-                  <div className="admin-detail-item admin-detail-full">
-                    <span className="admin-detail-label">
-                      Patient Condition / Care Need
-                    </span>
-                    <p>{selectedBooking.condition || "Not specified"}</p>
-                  </div>
+                  {selectedBooking.service === "Blood Collection Service" && (
+                    <div className="admin-detail-item admin-detail-full">
+                      <span className="admin-detail-label">Preferred Tests</span>
+                      <p style={{ whiteSpace: "pre-wrap", fontWeight: 500, lineHeight: 1.6 }}>
+                        {selectedBooking.preferredTests || selectedBooking.patientDetails?.preferredTests || "Not specified"}
+                      </p>
+                    </div>
+                  )}
+                  {selectedBooking.service !== "Ventilator Patient Care" && selectedBooking.service !== "Blood Collection Service" && (
+                    <div className="admin-detail-item admin-detail-full">
+                      <span className="admin-detail-label">
+                        Patient Condition / Care Need
+                      </span>
+                      <p>{selectedBooking.condition || "Not specified"}</p>
+                    </div>
+                  )}
                   <div className="admin-detail-item">
-                    <span className="admin-detail-label">Flat / Villa No.</span>
+                    <span className="admin-detail-label">Block Number</span>
                     <p>
-                      {selectedBooking.address?.flatNo ||
+                      {selectedBooking.address?.blockNo ||
+                        selectedBooking.address?.flatNo ||
                         selectedBooking.address?.flatVilla ||
                         "N/A"}
                     </p>
@@ -1603,12 +1666,12 @@ function AdminDashboard() {
                     </p>
                   </div>
                   <div className="admin-detail-item">
-                    <span className="admin-detail-label">Area / Block</span>
+                    <span className="admin-detail-label">Area</span>
                     <p>{selectedBooking.address?.area || "N/A"}</p>
                   </div>
                   <div className="admin-detail-item">
                     <span className="admin-detail-label">Governorate</span>
-                    <p>{selectedBooking.address?.governorate || "Bahrain"}</p>
+                    <p>{selectedBooking.address?.governorate || "Not specified"}</p>
                   </div>
                   <div className="admin-detail-item admin-detail-full">
                     <span className="admin-detail-label">Additional Notes</span>

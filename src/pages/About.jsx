@@ -1,618 +1,258 @@
-import { useState } from "react";
 import usePageMeta from "../utils/usePageMeta";
-import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
 import { Link, useNavigate } from "react-router-dom";
-import logoMark from "../assets/noor-al-afiya-mark.webp";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "./About.css";
 import aboutCarePhoto from "../assets/about-care-photo.webp";
+import { useTranslation } from "../hooks/useTranslation";
 
 function About() {
   usePageMeta({"title":"About Us – NOOR AL AFIYA | Home Health Care in Bahrain","description":"Learn about NOOR AL AFIYA Home Health Care and our commitment to compassionate, professional home nursing care for families in Bahrain.","path":"/about"});
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { t } = useTranslation();
 
   return (
     <div className="about-page">
-
-      {/* ================= TOP BAR ================= */}
-
-      <div className="about-top-strip">
-
-        <div className="about-container about-top-inner">
-
-          <span>
-            Professional home nursing care in Bahrain
-          </span>
-
-          <div className="about-top-contact">
-
-            {HAS_CONTACT_PHONE && (
-<>
-<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
-<span>•</span>
-</>
-)}
-
-            <a href={`mailto:${CONTACT_EMAIL}`}>
-              nooralafiyahomecare@gmail.com
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* ================= NAVIGATION ================= */}
-
-      <header className="about-nav-wrap">
-
-        <div className="about-container about-nav">
-
-          <Link
-            to="/"
-            className="home-brand"
-            onClick={() => setMenuOpen(false)}
-          >
-            <img
-              src={logoMark} width="256" height="256"
-              alt="NOOR AL AFIYA"
-              className="brand-mark-image"
-            />
-            <span>
-              <strong>
-                NOOR AL AFIYA
-              </strong>
-              <small>
-                Home Health Care WLL
-              </small>
-            </span>
-          </Link>
-
-
-          <button
-            type="button"
-            className={`about-menu-toggle ${
-              menuOpen ? "open" : ""
-            }`}
-            onClick={() =>
-              setMenuOpen((value) => !value)
-            }
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
-          >
-
-            <span />
-            <span />
-            <span />
-
-          </button>
-
-
-          <nav
-            className={`about-nav-links ${
-              menuOpen ? "show" : ""
-            }`}
-          >
-
-            <Link
-              to="/"
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </Link>
-
-            <Link
-              to="/about"
-              className="active"
-              onClick={() => setMenuOpen(false)}
-            >
-              About Us
-            </Link>
-
-            <Link
-              to="/services"
-              onClick={() => setMenuOpen(false)}
-            >
-              Our Services
-            </Link>
-
-            <Link
-              to="/why-us"
-              onClick={() => setMenuOpen(false)}
-            >
-              Why Choose Us
-            </Link>
-
-            <Link
-              to="/contact"
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact Us
-            </Link>
-
-            <Link
-              to="/careers"
-              onClick={() => setMenuOpen(false)}
-            >
-              Job Opportunities
-            </Link>
-
-          </nav>
-
-        </div>
-
-      </header>
+      <Header />
 
 
       {/* ================= PAGE HERO ================= */}
 
       <main>
-
         <section className="about-hero">
-
           <div className="about-container about-hero-content">
-
             <div className="about-hero-copy">
-
-              <span className="about-eyebrow">
-                ABOUT BAHRAIN NURSING CARE
-              </span>
-
+              <span className="about-eyebrow">{t("about.heroEyebrow")}</span>
               <h1>
-                Care built around
-                <span> people.</span>
+                {t("about.heroHeading")}
+                <span> {t("about.heroHeadingSpan")}</span>
               </h1>
-
-              <p>
-                We are creating a simple and reliable
-                way for families in Bahrain to access
-                professional home-care services.
-              </p>
-
+              <p>{t("about.heroDesc")}</p>
               <div className="about-breadcrumb">
-
-                <Link to="/">
-                  Home
-                </Link>
-
-                <span>
-                  /
-                </span>
-
-                <strong>
-                  About Us
-                </strong>
-
+                <Link to="/">{t("common.home")}</Link>
+                <span>/</span>
+                <strong>{t("about.breadcrumb")}</strong>
               </div>
-
             </div>
-
           </div>
-
         </section>
 
 
-        {/* ================= INTRODUCTION ================= */}
+        {/* ================= WHO WE ARE ================= */}
 
         <section className="about-intro about-section">
-
           <div className="about-container about-intro-grid">
-
             <div className="about-intro-image">
-
               <img
                 src={aboutCarePhoto} width="1400" height="933" loading="lazy" decoding="async"
                 alt="Professional nurse providing home care"
                 className="about-intro-bg-img"
               />
-
             </div>
 
-
             <div className="about-intro-content">
-
-              <span className="about-eyebrow">
-                WHO WE ARE
-              </span>
-
-              <h2>
-                Professional home care,
-                with a human approach.
-              </h2>
-
-              <p>
-                NOOR AL AFIYA is a home-care
-                service platform designed to make it
-                easier for families to request the care
-                support they need.
-              </p>
-
-              <p>
-                Our platform brings together essential
-                care services in one simple experience,
-                allowing users to select a service,
-                provide care requirements and follow
-                the progress of their request.
-              </p>
-
-              <p>
-                We focus on making the journey clear,
-                respectful and convenient for families
-                looking for support at home.
-              </p>
-
+              <span className="about-eyebrow">{t("about.introEyebrow")}</span>
+              <h2>{t("about.introHeading")}</h2>
+              <p>{t("about.introP1")}</p>
+              <p>{t("about.introP2")}</p>
+              <p>{t("about.introP3")}</p>
 
               <button
                 type="button"
                 className="about-primary-button"
                 onClick={() => navigate("/services")}
               >
-                Explore Our Services
-                <span>
-                  →
-                </span>
+                {t("about.exploreServices")}
+                <span>→</span>
               </button>
-
             </div>
-
           </div>
-
         </section>
 
 
-        {/* ================= MISSION ================= */}
+        {/* ================= OUR APPROACH ================= */}
 
         <section className="about-mission">
-
           <div className="about-container about-mission-grid">
-
             <div className="about-mission-copy">
-
-              <span className="about-eyebrow">
-                OUR APPROACH
-              </span>
-
-              <h2>
-                Making home care
-                easier to navigate.
-              </h2>
-
-              <p>
-                Care needs can be different for every
-                family. Our goal is to provide a clear
-                digital journey where users can choose
-                the right service and communicate the
-                information needed for their request.
-              </p>
-
+              <span className="about-eyebrow">{t("about.approachEyebrow")}</span>
+              <h2>{t("about.approachHeading")}</h2>
+              <p>{t("about.approachP1")}</p>
+              <p>{t("about.approachP2")}</p>
+              <p>{t("about.approachP3")}</p>
             </div>
-
 
             <div className="about-values">
-
               <div className="about-value-card">
-
-                <div className="about-value-icon">
-                  ♡
-                </div>
-
+                <div className="about-value-icon">♡</div>
                 <div>
-
-                  <h3>
-                    Compassion
-                  </h3>
-
-                  <p>
-                    We keep the person and their
-                    comfort at the center of the
-                    care journey.
-                  </p>
-
+                  <h3>{t("about.compassionTitle")}</h3>
+                  <p>{t("about.compassionDesc")}</p>
                 </div>
-
               </div>
 
-
               <div className="about-value-card">
-
-                <div className="about-value-icon">
-                  ✓
-                </div>
-
+                <div className="about-value-icon">✓</div>
                 <div>
-
-                  <h3>
-                    Transparency
-                  </h3>
-
-                  <p>
-                    Request progress can be followed
-                    through a clear status journey.
-                  </p>
-
+                  <h3>{t("about.professionalismTitle")}</h3>
+                  <p>{t("about.professionalismDesc")}</p>
                 </div>
-
               </div>
 
-
               <div className="about-value-card">
-
-                <div className="about-value-icon">
-                  ◷
-                </div>
-
+                <div className="about-value-icon">◷</div>
                 <div>
-
-                  <h3>
-                    Convenience
-                  </h3>
-
-                  <p>
-                    A straightforward online process
-                    makes requesting care easier.
-                  </p>
-
+                  <h3>{t("about.personalisedTitle")}</h3>
+                  <p>{t("about.personalisedDesc")}</p>
                 </div>
-
               </div>
-
             </div>
-
           </div>
-
         </section>
 
 
-        {/* ================= SERVICES SUMMARY ================= */}
+        {/* ================= ADVANCED CARE AT HOME ================= */}
 
         <section className="about-services about-section">
-
           <div className="about-container">
-
             <div className="about-section-heading">
-
-              <span className="about-eyebrow">
-                OUR CARE AREAS
-              </span>
-
-              <h2>
-                Support for different stages of life.
-              </h2>
-
-              <p>
-                Our current care services are designed
-                around four key areas.
-              </p>
-
+              <span className="about-eyebrow">{t("about.advancedEyebrow")}</span>
+              <h2>{t("about.advancedHeading")}</h2>
+              <p>{t("about.advancedDesc")}</p>
             </div>
-
 
             <div className="about-care-grid">
-
               <div className="about-care-card">
-
-                <span className="care-number">
-                  01
-                </span>
-
-                <div className="care-icon">
-                  ✚
-                </div>
-
-                <h3>
-                  Patient Care
-                </h3>
-
-                <p>
-                  Personalized support for patients
-                  requiring care at home.
-                </p>
-
+                <span className="care-number">01</span>
+                <div className="care-icon">⊡</div>
+                <h3>{t("about.card1Title")}</h3>
+                <p>{t("about.card1Desc")}</p>
               </div>
 
-
               <div className="about-care-card">
-
-                <span className="care-number">
-                  02
-                </span>
-
-                <div className="care-icon">
-                  ♡
-                </div>
-
-                <h3>
-                  Elder Care
-                </h3>
-
-                <p>
-                  Support focused on comfort,
-                  assistance and daily needs.
-                </p>
-
+                <span className="care-number">02</span>
+                <div className="care-icon">✚</div>
+                <h3>{t("about.card2Title")}</h3>
+                <p>{t("about.card2Desc")}</p>
               </div>
 
-
               <div className="about-care-card">
-
-                <span className="care-number">
-                  03
-                </span>
-
-                <div className="care-icon">
-                  ✦
-                </div>
-
-                <h3>
-                  Newborn Care
-                </h3>
-
-                <p>
-                  Gentle care and support for
-                  newborn babies.
-                </p>
-
+                <span className="care-number">03</span>
+                <div className="care-icon">◷</div>
+                <h3>{t("about.card3Title")}</h3>
+                <p>{t("about.card3Desc")}</p>
               </div>
 
-
               <div className="about-care-card">
-
-                <span className="care-number">
-                  04
-                </span>
-
-                <div className="care-icon">
-                  ◉
-                </div>
-
-                <h3>
-                  Children's Care
-                </h3>
-
-                <p>
-                  Caring support designed around
-                  children's needs.
-                </p>
-
+                <span className="care-number">04</span>
+                <div className="care-icon">♡</div>
+                <h3>{t("about.card4Title")}</h3>
+                <p>{t("about.card4Desc")}</p>
               </div>
+            </div>
+          </div>
+        </section>
 
+
+        {/* ================= PATIENT MONITORING ================= */}
+
+        <section className="about-mission about-monitoring-section">
+          <div className="about-container about-mission-grid">
+            <div className="about-mission-copy">
+              <span className="about-eyebrow">{t("about.monitoringEyebrow")}</span>
+              <h2>{t("about.monitoringHeading")}</h2>
+              <p>{t("about.monitoringP1")}</p>
+              <p>{t("about.monitoringP2")}</p>
+              <div className="about-monitoring-actions">
+                <button
+                  type="button"
+                  className="about-primary-button"
+                  onClick={() => navigate("/services")}
+                >
+                  {t("about.viewServices")}
+                  <span>→</span>
+                </button>
+                <button
+                  type="button"
+                  className="about-secondary-link-button"
+                  onClick={() => navigate("/contact")}
+                >
+                  {t("nav.contact")}
+                  <span>→</span>
+                </button>
+              </div>
             </div>
 
-          </div>
+            <div className="about-values">
+              <div className="about-value-card">
+                <div className="about-value-icon">✓</div>
+                <div>
+                  <h3>{t("about.healthRecordsTitle")}</h3>
+                  <p>{t("about.healthRecordsDesc")}</p>
+                </div>
+              </div>
 
+              <div className="about-value-card">
+                <div className="about-value-icon">✚</div>
+                <div>
+                  <h3>{t("about.supervisoryTitle")}</h3>
+                  <p>{t("about.supervisoryDesc")}</p>
+                </div>
+              </div>
+
+              <div className="about-value-card">
+                <div className="about-value-icon">◉</div>
+                <div>
+                  <h3>{t("about.specialistTitle")}</h3>
+                  <p>{t("about.specialistDesc")}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        {/* ================= COMMITMENT TO FAMILIES ================= */}
+
+        <section className="about-commitment-section about-section">
+          <div className="about-container">
+            <div className="about-commitment-inner">
+              <div className="about-commitment-copy">
+                <span className="about-eyebrow">{t("about.commitmentEyebrow")}</span>
+                <h2>{t("about.commitmentHeading")}</h2>
+                <p>{t("about.commitmentP1")}</p>
+                <p>{t("about.commitmentP2")}</p>
+                <p className="about-disclaimer">{t("about.commitmentDisclaimer")}</p>
+                <p className="about-tagline">
+                  <strong>{t("about.commitmentTagline")}</strong>
+                </p>
+                <div className="about-commitment-actions">
+                  <button
+                    type="button"
+                    className="about-primary-button"
+                    onClick={() => navigate("/care/patient")}
+                  >
+                    {t("common.bookCareService")}
+                    <span>→</span>
+                  </button>
+                  <button
+                    type="button"
+                    className="about-secondary-link-button"
+                    onClick={() => navigate("/contact")}
+                  >
+                    {t("common.getInTouch")}
+                    <span>→</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </section>
 
 
       </main>
 
-
-      {/* ================= FOOTER ================= */}
-
-      <footer className="about-footer">
-
-        <div className="about-container about-footer-grid">
-
-
-          <div className="about-footer-brand">
-            <Link
-              to="/"
-              className="home-brand"
-            >
-              <img
-                src={logoMark} width="256" height="256"
-                alt="NOOR AL AFIYA"
-                className="brand-mark-image"
-              />
-              <span>
-                <strong>
-                  NOOR AL AFIYA
-                </strong>
-                <small>
-                  Home Health Care WLL
-                </small>
-              </span>
-            </Link>
-
-            <p>
-              Compassionate home-care services
-              for families in Bahrain.
-            </p>
-          </div>
-
-          <div>
-            <h3>
-              Quick Links
-            </h3>
-
-            <Link to="/">
-              Home
-            </Link>
-
-            <Link to="/about">
-              About Us
-            </Link>
-
-            <Link to="/services">
-              Our Services
-            </Link>
-
-            <Link to="/why-us">
-              Why Choose Us
-            </Link>
-
-            <Link to="/contact">
-              Contact Us
-            </Link>
-
-            <Link to="/careers">
-              Job Opportunities
-            </Link>
-          </div>
-
-
-          <div>
-
-            <h3>
-              Care Services
-            </h3>
-
-            <Link to="/care/patient">
-              Patient Care
-            </Link>
-
-            <Link to="/care/elder">
-              Elder Care
-            </Link>
-
-            <Link to="/care/newborn">
-              Newborn Care
-            </Link>
-
-            <Link to="/care/children">
-              Children's Care
-            </Link>
-
-          </div>
-
-
-          <div>
-
-            <h3>
-              Contact
-            </h3>
-
-            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
-
-            <a href={`mailto:${CONTACT_EMAIL}`}>
-              nooralafiyahomecare@gmail.com
-            </a>
-
-            <span>
-              Bahrain
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div className="about-container about-footer-bottom">
-
-          <span>
-            © 2026 NOOR AL AFIYA.
-            All rights reserved.
-          </span>
-
-          <span>
-            Professional Home Care Services
-          </span>
-
-        </div>
-
-      </footer>
-
+      <Footer />
     </div>
   );
 }

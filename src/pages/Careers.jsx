@@ -1,21 +1,13 @@
 import { useMemo, useRef, useState } from "react";
 import usePageMeta from "../utils/usePageMeta";
-import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
-import { Link } from "react-router-dom";
 import { submitJobApplication } from "../utils/api";
+import { useTranslation } from "../hooks/useTranslation";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "../pages/Home.css";
 import "./Careers.css";
 
-import logoMark from "../assets/noor-al-afiya-mark.webp";
 import careersHero from "../assets/careers/careers-hero.webp";
-
-const positions = [
-  "Registered Nurse",
-  "Caregiver",
-  "Newborn Care Specialist",
-  "Patient Care Assistant",
-  "Other Healthcare Position",
-];
 
 const initialForm = {
   fullName: "",
@@ -32,8 +24,13 @@ const initialForm = {
 };
 
 function Careers() {
-  usePageMeta({"title":"Careers | NOOR AL AFIYA","description":"Explore job opportunities and apply to join the NOOR AL AFIYA Home Health Care nursing team in Bahrain.","path":"/careers"});
-  const [menuOpen, setMenuOpen] = useState(false);
+  usePageMeta({
+    title: "Careers | NOOR AL AFIYA",
+    description: "Explore job opportunities and apply to join the NOOR AL AFIYA Home Health Care nursing team in Bahrain.",
+    path: "/careers"
+  });
+
+  const { t } = useTranslation();
   const [form, setForm] = useState(initialForm);
   const [cvFile, setCvFile] = useState(null);
   const [certificateFile, setCertificateFile] = useState(null);
@@ -43,14 +40,37 @@ function Careers() {
   const cvInputRef = useRef(null);
   const certificateInputRef = useRef(null);
 
+  const positions = [
+    t("careers.positions.0"),
+    t("careers.positions.1"),
+    t("careers.positions.2"),
+    t("careers.positions.3"),
+    t("careers.positions.4"),
+  ];
+
+  const experienceOptions = [
+    t("careers.experienceOptions.0"),
+    t("careers.experienceOptions.1"),
+    t("careers.experienceOptions.2"),
+    t("careers.experienceOptions.3"),
+    t("careers.experienceOptions.4"),
+  ];
+
+  const availabilityOptions = [
+    t("careers.availabilityOptions.0"),
+    t("careers.availabilityOptions.1"),
+    t("careers.availabilityOptions.2"),
+    t("careers.availabilityOptions.3"),
+  ];
+
   const selectedFiles = useMemo(
     () => ({
-      cv: cvFile ? `${cvFile.name} (${formatFileSize(cvFile.size)})` : "No CV selected",
+      cv: cvFile ? `${cvFile.name} (${formatFileSize(cvFile.size)})` : t("careers.noCV"),
       certificate: certificateFile
         ? `${certificateFile.name} (${formatFileSize(certificateFile.size)})`
-        : "No certification selected",
+        : t("careers.noCert"),
     }),
-    [cvFile, certificateFile]
+    [cvFile, certificateFile, t]
   );
 
   const updateField = (event) => {
@@ -80,13 +100,13 @@ function Careers() {
           ];
 
     if (file.size > maxSize) {
-      return "Please choose a file smaller than 5 MB.";
+      return t("careers.fileTooLarge");
     }
 
     if (!allowed.includes(file.type)) {
       return type === "cv"
-        ? "CV must be a PDF, DOC or DOCX file."
-        : "Certification must be a PDF, JPG, PNG, DOC or DOCX file.";
+        ? t("careers.cvFileType")
+        : t("careers.certFileType");
     }
 
     return true;
@@ -124,15 +144,15 @@ function Careers() {
   const validate = () => {
     const nextErrors = {};
     const required = [
-      ["fullName", "Full name is required."],
-      ["email", "Email address is required."],
-      ["phone", "Phone number is required."],
-      ["cprNo", "CPR No. is required."],
-      ["address", "Address is required."],
-      ["position", "Please select a position."],
-      ["experience", "Please select your experience level."],
-      ["qualification", "Professional qualification is required."],
-      ["availability", "Please select your availability."],
+      ["fullName", t("careers.validFullName")],
+      ["email", t("careers.validEmail")],
+      ["phone", t("careers.validPhone")],
+      ["cprNo", t("careers.validCpr")],
+      ["address", t("careers.validAddress")],
+      ["position", t("careers.validPosition")],
+      ["experience", t("careers.validExperience")],
+      ["qualification", t("careers.validQualification")],
+      ["availability", t("careers.validAvailability")],
     ];
 
     required.forEach(([field, message]) => {
@@ -140,11 +160,11 @@ function Careers() {
     });
 
     if (form.email && !/^\S+@\S+\.\S+$/.test(form.email)) {
-      nextErrors.email = "Please enter a valid email address.";
+      nextErrors.email = t("careers.validEmailFormat");
     }
 
     if (form.phone && (!/^[+\d][\d\s().-]{6,20}$/.test(form.phone) || form.phone.replace(/\D/g, "").length < 7)) {
-      nextErrors.phone = "Please enter a valid phone number.";
+      nextErrors.phone = t("careers.validPhoneFormat");
     }
 
     setErrors(nextErrors);
@@ -172,7 +192,7 @@ function Careers() {
         ...err.details,
         form:
           err.message ||
-          "We could not submit your application right now. Please try again.",
+          t("careers.appError"),
       });
     } finally {
       setSubmitting(false);
@@ -181,53 +201,7 @@ function Careers() {
 
   return (
     <div className="careers-page">
-      <div className="top-strip">
-        <div className="home-container top-strip-inner">
-          <span>Professional home nursing care in Bahrain</span>
-          <div className="top-contact">
-            {HAS_CONTACT_PHONE && (
-<>
-<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
-<span>•</span>
-</>
-)}
-            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
-          </div>
-        </div>
-      </div>
-
-      <header className="home-nav-wrap">
-        <div className="home-container home-nav">
-          <Link className="home-brand" to="/" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
-            <span>
-              <strong>NOOR AL AFIYA</strong>
-              <small>Home Health Care WLL</small>
-            </span>
-          </Link>
-
-          <button
-            className={`nav-toggle ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen((value) => !value)}
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
-            type="button"
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-
-          <nav className={`home-nav-links ${menuOpen ? "show" : ""}`}>
-            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
-            <Link to="/services" onClick={() => setMenuOpen(false)}>Our Services</Link>
-            <Link to="/why-us" onClick={() => setMenuOpen(false)}>Why Choose Us</Link>
-            <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link>
-            <Link to="/careers" className="active" onClick={() => setMenuOpen(false)}>Job Opportunities</Link>
-          </nav>
-        </div>
-      </header>
+      <Header />
 
       <main>
         <section className="careers-hero">
@@ -235,44 +209,44 @@ function Careers() {
             <div className="careers-hero-copy">
               <span className="careers-eyebrow">
                 <span className="careers-eyebrow-dot" />
-                CAREERS AT NOOR AL AFIYA
+                {t("careers.heroEyebrow")}
               </span>
               <h1>
-                Make a difference,
-                <span>one home at a time.</span>
+                {t("careers.heroHeading")}
+                <span> {t("careers.heroHeadingSpan")}</span>
               </h1>
-              <p>
-                Join a caring healthcare team where your skills, compassion and
-                professionalism can directly improve the lives of patients and
-                families across Bahrain.
-              </p>
+              <p>{t("careers.heroDesc")}</p>
               <div className="careers-hero-actions">
                 <a href="#application" className="careers-primary-button">
-                  Apply Now <span>↓</span>
+                  {t("common.applyNow")} <span>↓</span>
                 </a>
                 <a href="#open-roles" className="careers-secondary-button">
-                  Explore Opportunities <span>↗</span>
+                  {t("common.exploreOpportunities")} <span>↗</span>
                 </a>
               </div>
               <div className="careers-hero-points">
-                <span><b>✓</b> Professional growth</span>
-                <span><b>✓</b> Meaningful patient care</span>
-                <span><b>✓</b> Bahrain-based opportunities</span>
+                <span><b>✓</b> {t("careers.point1")}</span>
+                <span><b>✓</b> {t("careers.point2")}</span>
+                <span><b>✓</b> {t("careers.point3")}</span>
               </div>
             </div>
 
             <div className="careers-hero-visual">
               <div className="careers-image-card">
                 <img
-                  src={careersHero} width="1672" height="941" fetchPriority="high" decoding="async"
+                  src={careersHero}
+                  width="1672"
+                  height="941"
+                  fetchPriority="high"
+                  decoding="async"
                   alt="Healthcare professional preparing for home care work"
                 />
               </div>
               <div className="careers-image-badge">
                 <span className="badge-icon">✦</span>
                 <div>
-                  <strong>Care starts with people.</strong>
-                  <small>Bring your expertise to a team that values it.</small>
+                  <strong>{t("careers.badgeTitle")}</strong>
+                  <small>{t("careers.badgeSubtitle")}</small>
                 </div>
               </div>
             </div>
@@ -283,54 +257,41 @@ function Careers() {
           <div className="careers-container">
             <div className="careers-section-heading">
               <div>
-                <span className="section-kicker">OPPORTUNITIES</span>
-                <h2>Find your place in our care team.</h2>
+                <span className="section-kicker">{t("careers.oppLabel")}</span>
+                <h2>{t("careers.oppHeading")}</h2>
               </div>
-              <p>
-                We welcome qualified healthcare professionals and caring
-                support staff who want to build meaningful careers in home
-                healthcare.
-              </p>
+              <p>{t("careers.oppDesc")}</p>
             </div>
 
             <div className="careers-role-grid">
               <article className="careers-role-card featured">
                 <div className="role-icon">✚</div>
                 <div>
-                  <span className="role-tag">CLINICAL</span>
-                  <h3>Registered Nurse</h3>
-                  <p>
-                    Support patients at home with professional nursing care,
-                    clinical attention and compassionate communication.
-                  </p>
+                  <span className="role-tag">{t("careers.role1Tag")}</span>
+                  <h3>{t("careers.role1Title")}</h3>
+                  <p>{t("careers.role1Desc")}</p>
                 </div>
-                <a href="#application">Apply for this role <span>→</span></a>
+                <a href="#application">{t("common.applyRole")} <span>→</span></a>
               </article>
 
               <article className="careers-role-card">
                 <div className="role-icon">♡</div>
                 <div>
-                  <span className="role-tag">CARE SUPPORT</span>
-                  <h3>Caregiver</h3>
-                  <p>
-                    Help clients with daily living, companionship, comfort and
-                    respectful home-based support.
-                  </p>
+                  <span className="role-tag">{t("careers.role2Tag")}</span>
+                  <h3>{t("careers.role2Title")}</h3>
+                  <p>{t("careers.role2Desc")}</p>
                 </div>
-                <a href="#application">Apply for this role <span>→</span></a>
+                <a href="#application">{t("common.applyRole")} <span>→</span></a>
               </article>
 
               <article className="careers-role-card">
                 <div className="role-icon">✦</div>
                 <div>
-                  <span className="role-tag">CHILD & FAMILY</span>
-                  <h3>Newborn Care Specialist</h3>
-                  <p>
-                    Provide attentive support for newborns and help families
-                    feel confident during the early stages of care.
-                  </p>
+                  <span className="role-tag">{t("careers.role3Tag")}</span>
+                  <h3>{t("careers.role3Title")}</h3>
+                  <p>{t("careers.role3Desc")}</p>
                 </div>
-                <a href="#application">Apply for this role <span>→</span></a>
+                <a href="#application">{t("common.applyRole")} <span>→</span></a>
               </article>
             </div>
           </div>
@@ -339,18 +300,14 @@ function Careers() {
         <section className="careers-values">
           <div className="careers-container careers-values-grid">
             <div>
-              <span className="section-kicker">WHY JOIN US</span>
-              <h2>Bring your skills. Grow with purpose.</h2>
-              <p>
-                Home healthcare is personal. We are building a team that puts
-                professionalism, dignity and human connection at the centre
-                of every visit.
-              </p>
+              <span className="section-kicker">{t("careers.whyLabel")}</span>
+              <h2>{t("careers.whyHeading")}</h2>
+              <p>{t("careers.whyDesc")}</p>
             </div>
             <div className="careers-benefit-list">
-              <div><span>01</span><strong>People-first culture</strong><p>Work in an environment built around respect and compassionate care.</p></div>
-              <div><span>02</span><strong>Continuous development</strong><p>Keep strengthening your professional knowledge and practical skills.</p></div>
-              <div><span>03</span><strong>Meaningful work</strong><p>Use your expertise where it can make a direct difference to families.</p></div>
+              <div><span>01</span><strong>{t("careers.benefit1Title")}</strong><p>{t("careers.benefit1Desc")}</p></div>
+              <div><span>02</span><strong>{t("careers.benefit2Title")}</strong><p>{t("careers.benefit2Desc")}</p></div>
+              <div><span>03</span><strong>{t("careers.benefit3Title")}</strong><p>{t("careers.benefit3Desc")}</p></div>
             </div>
           </div>
         </section>
@@ -358,21 +315,17 @@ function Careers() {
         <section className="careers-application" id="application">
           <div className="careers-container">
             <div className="application-heading">
-              <span className="section-kicker">JOIN OUR TEAM</span>
-              <h2>Submit your application</h2>
-              <p>
-                Tell us about yourself and your professional background. Your
-                CV and nursing certification are welcome, but they are optional
-                at this stage.
-              </p>
+              <span className="section-kicker">{t("careers.appLabel")}</span>
+              <h2>{t("careers.appHeading")}</h2>
+              <p>{t("careers.appDesc")}</p>
             </div>
 
             {submitted && (
               <div className="application-success" role="status">
                 <span>✓</span>
                 <div>
-                  <strong>Application received.</strong>
-                  <p>Thank you for your interest in NOOR AL AFIYA. Our team can review your details and contact you if your profile matches an opportunity.</p>
+                  <strong>{t("careers.appSuccess")}</strong>
+                  <p>{t("careers.appSuccessDesc")}</p>
                 </div>
               </div>
             )}
@@ -382,48 +335,51 @@ function Careers() {
             <form className="career-form" onSubmit={handleSubmit} noValidate>
               <div className="form-section-title">
                 <span>01</span>
-                <div><h3>Personal information</h3><p>Fields marked with * are required.</p></div>
+                <div><h3>{t("careers.personalTitle")}</h3><p>{t("careers.personalDesc")}</p></div>
               </div>
 
               <div className="career-form-grid">
-                <Field label="Full Name" name="fullName" value={form.fullName} onChange={updateField} required placeholder="Enter your full name" error={errors.fullName} />
-                <Field label="Email Address" name="email" type="email" value={form.email} onChange={updateField} required placeholder="you@example.com" error={errors.email} />
-                <Field label="Phone Number" name="phone" value={form.phone} onChange={updateField} required placeholder="+973 XXXX XXXX" error={errors.phone} />
-                <Field label="CPR No." name="cprNo" value={form.cprNo} onChange={updateField} required placeholder="Enter CPR No." error={errors.cprNo} />
+                <Field label={t("careers.fullName")} name="fullName" value={form.fullName} onChange={updateField} required placeholder={t("careers.fullNamePlaceholder")} error={errors.fullName} />
+                <Field label={t("careers.emailAddress")} name="email" type="email" value={form.email} onChange={updateField} required placeholder={t("careers.emailPlaceholder")} error={errors.email} />
+                <Field label={t("careers.phoneNumber")} name="phone" value={form.phone} onChange={updateField} required placeholder={t("careers.phonePlaceholder")} error={errors.phone} />
+                <Field label={t("careers.cprNo")} name="cprNo" value={form.cprNo} onChange={updateField} required placeholder={t("careers.cprPlaceholder")} error={errors.cprNo} />
                 <div className="career-field full-width">
-                  <label htmlFor="address">Address <span>*</span></label>
-                  <textarea id="address" name="address" value={form.address} onChange={updateField} required rows="3" placeholder="Flat / building, area and additional address details" />
+                  <label htmlFor="address">{t("careers.address")} <span>*</span></label>
+                  <textarea id="address" name="address" value={form.address} onChange={updateField} required rows="3" placeholder={t("careers.addressPlaceholder")} />
                   {errors.address && <small className="field-error">{errors.address}</small>}
                 </div>
               </div>
 
               <div className="form-section-title second">
                 <span>02</span>
-                <div><h3>Professional profile</h3><p>Help us understand where your experience fits.</p></div>
+                <div><h3>{t("careers.profileTitle")}</h3><p>{t("careers.profileDesc")}</p></div>
               </div>
 
               <div className="career-form-grid">
-                <SelectField label="Position Applying For" name="position" value={form.position} onChange={updateField} required options={positions} placeholder="Select a position" error={errors.position} />
-                <SelectField label="Years of Experience" name="experience" value={form.experience} onChange={updateField} required options={["Less than 1 year", "1–2 years", "3–5 years", "6–10 years", "10+ years"]} placeholder="Select experience" error={errors.experience} />
-                <Field label="Professional Qualification" name="qualification" value={form.qualification} onChange={updateField} required placeholder="e.g. BSN, GNM, Caregiver Certificate" error={errors.qualification} />
-                <Field label="Nursing / Professional License No." name="licenseNumber" value={form.licenseNumber} onChange={updateField} placeholder="Optional" />
-                <SelectField label="Availability" name="availability" value={form.availability} onChange={updateField} required options={["Immediately", "Within 2 weeks", "Within 1 month", "More than 1 month"]} placeholder="Select availability" error={errors.availability} />
+                <SelectField label={t("careers.positionApplying")} name="position" value={form.position} onChange={updateField} required options={positions} placeholder={t("careers.positionPlaceholder")} error={errors.position} />
+                <SelectField label={t("careers.yearsExperience")} name="experience" value={form.experience} onChange={updateField} required options={experienceOptions} placeholder={t("careers.experiencePlaceholder")} error={errors.experience} />
+                <Field label={t("careers.qualification")} name="qualification" value={form.qualification} onChange={updateField} required placeholder={t("careers.qualificationPlaceholder")} error={errors.qualification} />
+                <Field label={t("careers.licenseNo")} name="licenseNumber" value={form.licenseNumber} onChange={updateField} placeholder={t("careers.licensePlaceholder")} />
+                <SelectField label={t("careers.availability")} name="availability" value={form.availability} onChange={updateField} required options={availabilityOptions} placeholder={t("careers.availabilityPlaceholder")} error={errors.availability} />
                 <div className="career-field full-width">
-                  <label htmlFor="message">About You <span className="optional">Optional</span></label>
-                  <textarea id="message" name="message" value={form.message} onChange={updateField} rows="4" placeholder="Briefly tell us about your experience, strengths or the type of care you are interested in." />
+                  <label htmlFor="message">{t("careers.aboutYou")} <span className="optional">{t("common.optional")}</span></label>
+                  <textarea id="message" name="message" value={form.message} onChange={updateField} rows="4" placeholder={t("careers.aboutYouPlaceholder")} />
                 </div>
               </div>
 
               <div className="form-section-title second">
                 <span>03</span>
-                <div><h3>Documents</h3><p>Optional now. You can provide them if available.</p></div>
+                <div><h3>{t("careers.docsTitle")}</h3><p>{t("careers.docsDesc")}</p></div>
               </div>
 
               <div className="upload-grid">
                 <UploadBox
                   id="career-cv"
-                  title="Upload your CV"
-                  hint="PDF, DOC or DOCX • up to 5 MB"
+                  title={t("careers.uploadCV")}
+                  optionalLabel={t("common.optional")}
+                  chooseFileLabel={t("common.chooseFile")}
+                  removeLabel={t("common.remove")}
+                  hint={t("careers.uploadCVHint")}
                   file={cvFile}
                   fileText={selectedFiles.cv}
                   inputRef={cvInputRef}
@@ -433,8 +389,11 @@ function Careers() {
                 />
                 <UploadBox
                   id="career-certificate"
-                  title="Nursing certification / credential"
-                  hint="PDF, JPG, PNG, DOC or DOCX • up to 5 MB"
+                  title={t("careers.uploadCert")}
+                  optionalLabel={t("common.optional")}
+                  chooseFileLabel={t("common.chooseFile")}
+                  removeLabel={t("common.remove")}
+                  hint={t("careers.uploadCertHint")}
                   file={certificateFile}
                   fileText={selectedFiles.certificate}
                   inputRef={certificateInputRef}
@@ -445,70 +404,18 @@ function Careers() {
               </div>
 
               <div className="career-form-footer">
-                <p>
-                  By submitting this application, you confirm that the information provided is accurate to the best of your knowledge.
-                </p>
+                <p>{t("careers.submitConfirm")}</p>
                 <button type="submit" className="career-submit-button" disabled={submitting}>
-                  {submitting ? "Submitting…" : "Submit Application"}
+                  {submitting ? t("careers.submitting") : t("careers.submitBtn")}
                   <span>→</span>
                 </button>
               </div>
             </form>
           </div>
         </section>
-
       </main>
 
-      <footer className="careers-footer">
-        <div className="careers-container careers-footer-grid">
-          <div>
-            <Link
-              className="home-brand"
-              to="/"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-              <img
-                src={logoMark} width="256" height="256"
-                alt="NOOR AL AFIYA"
-                className="brand-mark-image"
-              />
-              <span>
-                <strong>NOOR AL AFIYA</strong>
-                <small>Home Health Care WLL</small>
-              </span>
-            </Link>
-            <p>Compassionate home-care services for families in Bahrain.</p>
-          </div>
-          <div>
-            <h4>Quick Links</h4>
-            <Link to="/">Home</Link>
-            <Link to="/about">About Us</Link>
-            <Link to="/services">Our Services</Link>
-            <Link to="/why-us">Why Choose Us</Link>
-            <Link to="/contact">Contact Us</Link>
-            <Link to="/careers">Job Opportunities</Link>
-          </div>
-          <div>
-            <h4>Services</h4>
-            <Link to="/care/patient">Patient Care</Link>
-            <Link to="/care/elder">Elder Care</Link>
-            <Link to="/care/newborn">Newborn Care</Link>
-            <Link to="/care/children">Children's Care</Link>
-          </div>
-          <div>
-            <h4>Contact</h4>
-            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
-            <a href={`mailto:${CONTACT_EMAIL}`}>nooralafiyahomecare@gmail.com</a>
-            <span>Bahrain</span>
-          </div>
-        </div>
-        <div className="careers-footer-bottom">
-          <div className="careers-container" style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-            <span>Home Nursing • Bahrain</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
@@ -536,20 +443,20 @@ function SelectField({ label, name, value, onChange, required, options, placehol
   );
 }
 
-function UploadBox({ id, title, hint, file, fileText, inputRef, onChange, onClear, error }) {
+function UploadBox({ id, title, optionalLabel, chooseFileLabel, removeLabel, hint, file, fileText, inputRef, onChange, onClear, error }) {
   return (
     <div className={`upload-box ${file ? "has-file" : ""}`}>
       <input ref={inputRef} id={id} type="file" onChange={onChange} hidden />
       <label htmlFor={id} className="upload-label">
         <span className="upload-icon">↑</span>
         <span className="upload-content">
-          <strong>{title} <em>Optional</em></strong>
+          <strong>{title} <em>{optionalLabel}</em></strong>
           <small>{hint}</small>
           <span className="upload-file-name">{fileText}</span>
         </span>
-        <span className="upload-action">Choose file</span>
+        <span className="upload-action">{chooseFileLabel}</span>
       </label>
-      {file && <button type="button" className="upload-remove" onClick={onClear}>Remove</button>}
+      {file && <button type="button" className="upload-remove" onClick={onClear}>{removeLabel}</button>}
       {error && <small className="field-error upload-error">{error}</small>}
     </div>
   );

@@ -1,0 +1,51 @@
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-inline-start: 10px;
+}
+
+.lang-switcher-globe {
+  font-size: 13px;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+.lang-btn {
+  background: none;
+  border: none;
+  padding: 2px 5px;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  color: rgba(255,255,255,0.78);
+  border-radius: 4px;
+  transition: color 0.18s, background 0.18s;
+  font-family: inherit;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.lang-btn:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.12);
+}
+
+.lang-btn--active {
+  color: #fff;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.lang-sep {
+  color: rgba(255,255,255,0.35);
+  font-size: 11px;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Arabic font-family for buttons when RTL */
+[dir="rtl"] .lang-btn {
+  font-family: 'Tajawal', Arial, sans-serif;
+}

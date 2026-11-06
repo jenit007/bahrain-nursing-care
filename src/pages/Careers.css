@@ -16,7 +16,7 @@
 
 .careers-container { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
 .careers-page a { color: inherit; }
-.careers-topbar { background: var(--career-pink); color: #fff; font-size: 12px; }
+.careers-topbar { background: #151b2e; color: #fff; font-size: 12px; }
 .careers-topbar-inner { min-height: 38px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
 .careers-topbar-inner > div { display:flex; gap:12px; align-items:center; }
 .careers-topbar a { text-decoration:none; opacity:.92; }

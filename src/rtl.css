@@ -1,0 +1,891 @@
+/* =================================================================
+   RTL.CSS — Right-to-left layout overrides for Arabic mode
+   Applied via [dir="rtl"] selector when lang="ar"
+   Uses CSS logical properties throughout for full RTL compliance.
+   ================================================================= */
+
+/* ── Arabic Typography ── */
+@import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700&display=swap');
+
+[dir="rtl"] body {
+  font-family: 'Tajawal', Arial, Helvetica, sans-serif;
+  line-height: 1.85;
+  letter-spacing: 0;
+}
+
+[dir="rtl"] h1,
+[dir="rtl"] h2,
+[dir="rtl"] h3,
+[dir="rtl"] h4,
+[dir="rtl"] h5,
+[dir="rtl"] h6 {
+  font-family: 'Tajawal', Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+[dir="rtl"] button,
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select,
+[dir="rtl"] label {
+  font-family: 'Tajawal', Arial, Helvetica, sans-serif;
+}
+
+/* ── Text alignment defaults ── */
+[dir="rtl"] p,
+[dir="rtl"] span,
+[dir="rtl"] li,
+[dir="rtl"] td,
+[dir="rtl"] th {
+  text-align: start;
+}
+
+/* ── Top Strip / Info Bar ── */
+[dir="rtl"] .top-strip-inner,
+[dir="rtl"] .about-top-inner,
+[dir="rtl"] .services-top-inner,
+[dir="rtl"] .care-form-topbar-inner {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .top-contact,
+[dir="rtl"] .about-top-contact,
+[dir="rtl"] .services-top-contact {
+  flex-direction: row-reverse;
+}
+
+/* ── Navigation ── */
+[dir="rtl"] .home-nav,
+[dir="rtl"] .about-nav,
+[dir="rtl"] .services-nav,
+[dir="rtl"] .why-container .home-nav,
+[dir="rtl"] .care-form-nav-inner,
+[dir="rtl"] .status-nav-inner {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .home-nav-links,
+[dir="rtl"] .about-nav-links,
+[dir="rtl"] .services-nav-links,
+[dir="rtl"] .care-form-nav-links,
+[dir="rtl"] .status-nav-links {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .home-brand {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .brand-mark-image {
+  margin-inline-end: 10px;
+  margin-inline-start: 0;
+}
+
+[dir="rtl"] .home-brand span {
+  text-align: start;
+}
+
+/* ── Hero section ── */
+[dir="rtl"] .hero-content {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .hero-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .hero-actions {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .hero-approval-badge {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .hero-trust {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .hero-approval-copy {
+  text-align: start;
+}
+
+/* ── Service Grid / Cards ── */
+[dir="rtl"] .service-card-content {
+  text-align: start;
+}
+
+[dir="rtl"] .service-card-button,
+[dir="rtl"] .service-select-button {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .service-feature {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .service-feature p {
+  text-align: start;
+}
+
+/* ── Why Choose Us (home section) ── */
+[dir="rtl"] .why-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .why-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .benefit-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .benefit {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+/* ── Stats ── */
+[dir="rtl"] .stats-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .stats-grid > div {
+  text-align: center;
+  border-right: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+[dir="rtl"] .stats-grid > div:last-child {
+  border-left: 0;
+}
+
+@media (max-width: 900px) {
+  [dir="rtl"] .stats-grid > div:nth-child(2) {
+    border-left: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  [dir="rtl"] .stats-grid > div:nth-child(even) {
+    border-left: 0;
+  }
+}
+
+/* ── About Preview (home) ── */
+[dir="rtl"] .about-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .about-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .outline-cta {
+  flex-direction: row-reverse;
+}
+
+/* ── Section headings ── */
+[dir="rtl"] .section-heading {
+  text-align: center;
+}
+
+[dir="rtl"] .section-heading.center {
+  text-align: center;
+}
+
+/* ── Footer ── */
+[dir="rtl"] .footer-grid,
+[dir="rtl"] .about-footer-grid,
+[dir="rtl"] .services-footer-grid,
+[dir="rtl"] .contact-footer-grid,
+[dir="rtl"] .careers-footer-grid,
+[dir="rtl"] .why-footer-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .footer-brand,
+[dir="rtl"] .about-footer-brand,
+[dir="rtl"] .services-footer-brand {
+  text-align: start;
+}
+
+[dir="rtl"] .footer-grid div,
+[dir="rtl"] .about-footer-grid div,
+[dir="rtl"] .services-footer-grid div {
+  text-align: start;
+}
+
+[dir="rtl"] .footer-bottom,
+[dir="rtl"] .about-footer-bottom,
+[dir="rtl"] .contact-footer-bottom > div,
+[dir="rtl"] .careers-footer-bottom > div,
+[dir="rtl"] .why-footer-bottom > div,
+[dir="rtl"] .care-footer-bottom,
+[dir="rtl"] .status-footer-bottom {
+  flex-direction: row-reverse;
+}
+
+/* ── About Page ── */
+[dir="rtl"] .about-intro-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .about-intro-content {
+  text-align: start;
+}
+
+[dir="rtl"] .about-mission-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .about-mission-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .about-value-card {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .about-care-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .about-care-card {
+  text-align: start;
+}
+
+[dir="rtl"] .about-commitment-inner {
+  direction: rtl;
+}
+
+[dir="rtl"] .about-commitment-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .about-commitment-actions,
+[dir="rtl"] .about-monitoring-actions {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .about-primary-button,
+[dir="rtl"] .about-secondary-link-button {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .about-hero-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .about-breadcrumb {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .about-section-heading {
+  text-align: center;
+}
+
+/* ── Services Page ── */
+[dir="rtl"] .services-hero-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .services-breadcrumb {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .services-section-heading {
+  text-align: center;
+}
+
+[dir="rtl"] .services-card-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .new-service-card {
+  text-align: start;
+}
+
+[dir="rtl"] .service-card-top {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .process-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .process-step {
+  text-align: center;
+}
+
+[dir="rtl"] .services-detail-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .services-detail-points {
+  text-align: start;
+}
+
+[dir="rtl"] .services-detail-points div {
+  flex-direction: row-reverse;
+  align-items: flex-start;
+}
+
+/* ── Why Choose Us Page ── */
+[dir="rtl"] .why-hero-content {
+  text-align: start;
+}
+
+[dir="rtl"] .why-breadcrumb {
+  direction: rtl;
+  text-align: start;
+}
+
+[dir="rtl"] .why-hero-buttons {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .why-intro-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .why-intro-left {
+  text-align: start;
+}
+
+[dir="rtl"] .why-intro-right {
+  text-align: start;
+}
+
+[dir="rtl"] .why-heading {
+  text-align: center;
+}
+
+[dir="rtl"] .why-reasons-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .why-reason-card {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .why-care-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .why-care-card {
+  text-align: start;
+}
+
+[dir="rtl"] .why-care-card a {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .why-process-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .why-process-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .why-process-card {
+  text-align: center;
+}
+
+/* ── Contact Page ── */
+[dir="rtl"] .contact-hero-content {
+  text-align: start;
+}
+
+[dir="rtl"] .contact-breadcrumb {
+  direction: rtl;
+  text-align: start;
+}
+
+[dir="rtl"] .contact-intro-heading {
+  text-align: center;
+}
+
+[dir="rtl"] .contact-info-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .contact-info-card {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .contact-form-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .contact-form-content {
+  text-align: start;
+}
+
+[dir="rtl"] .contact-form-note {
+  text-align: start;
+}
+
+[dir="rtl"] .contact-form-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .contact-field {
+  text-align: start;
+}
+
+[dir="rtl"] .contact-field label {
+  text-align: start;
+}
+
+[dir="rtl"] .contact-field input,
+[dir="rtl"] .contact-field textarea {
+  text-align: start;
+  direction: rtl;
+}
+
+/* ── Careers Page ── */
+[dir="rtl"] .careers-hero-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .careers-hero-copy {
+  text-align: start;
+}
+
+[dir="rtl"] .careers-hero-actions {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .careers-hero-points {
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+[dir="rtl"] .careers-section-heading {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .careers-role-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .careers-role-card {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .careers-role-card a {
+  flex-direction: row-reverse;
+  align-self: flex-start;
+}
+
+[dir="rtl"] .careers-values-grid {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .careers-benefit-list {
+  text-align: start;
+}
+
+[dir="rtl"] .careers-benefit-list div {
+  direction: rtl;
+}
+
+[dir="rtl"] .application-heading {
+  text-align: center;
+}
+
+[dir="rtl"] .career-form-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .career-field {
+  text-align: start;
+}
+
+[dir="rtl"] .career-field label {
+  text-align: start;
+}
+
+[dir="rtl"] .career-field input,
+[dir="rtl"] .career-field textarea,
+[dir="rtl"] .career-field select {
+  text-align: start;
+  direction: rtl;
+}
+
+[dir="rtl"] .form-section-title {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .upload-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .upload-label {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .upload-content {
+  text-align: start;
+}
+
+[dir="rtl"] .career-form-footer {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .career-form-footer p {
+  text-align: start;
+}
+
+[dir="rtl"] .career-submit-button {
+  flex-direction: row-reverse;
+}
+
+/* ── CareForm Page ── */
+[dir="rtl"] .care-form-topbar-inner {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-form-nav-inner {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-form-hero-inner {
+  text-align: start;
+}
+
+[dir="rtl"] .care-form-layout {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-sidebar-card {
+  text-align: start;
+}
+
+[dir="rtl"] .care-sidebar-points {
+  text-align: start;
+  align-items: flex-start;
+}
+
+[dir="rtl"] .care-sidebar-points span {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-help-card {
+  text-align: start;
+}
+
+[dir="rtl"] .care-form-card-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-form-card-header div {
+  text-align: start;
+}
+
+[dir="rtl"] .care-form-fields {
+  direction: rtl;
+}
+
+[dir="rtl"] .care-field {
+  text-align: start;
+}
+
+[dir="rtl"] .care-field label {
+  text-align: start;
+}
+
+[dir="rtl"] .care-field input,
+[dir="rtl"] .care-field textarea,
+[dir="rtl"] .care-field select {
+  text-align: start;
+  direction: rtl;
+}
+
+[dir="rtl"] .care-form-section-heading {
+  text-align: start;
+}
+
+[dir="rtl"] .care-choice-group {
+  text-align: start;
+}
+
+[dir="rtl"] .care-choice-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .care-choice-card {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-address-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .care-address-note {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-submit-area {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .care-submit-area div {
+  text-align: start;
+}
+
+[dir="rtl"] .care-primary-btn {
+  flex-direction: row-reverse;
+}
+
+/* ── Request Status Page ── */
+[dir="rtl"] .status-topbar > div {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-nav-inner {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-hero-inner {
+  text-align: start;
+}
+
+[dir="rtl"] .status-hero-inner form {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-empty-card {
+  text-align: center;
+}
+
+[dir="rtl"] .status-empty-card form {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-request-card {
+  text-align: start;
+  direction: rtl;
+}
+
+[dir="rtl"] .status-request-head {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-request-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .status-request-grid div {
+  text-align: start;
+}
+
+[dir="rtl"] .status-tracking-card {
+  text-align: start;
+  direction: rtl;
+}
+
+[dir="rtl"] .status-section-heading {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .status-timeline {
+  direction: rtl;
+}
+
+[dir="rtl"] .status-step {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-step-content {
+  text-align: start;
+}
+
+[dir="rtl"] .status-step-title-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .status-details-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .status-detail-card {
+  text-align: start;
+}
+
+[dir="rtl"] .status-address {
+  direction: rtl;
+  text-align: start;
+}
+
+[dir="rtl"] .status-complete-note {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+[dir="rtl"] .status-complete-note div {
+  text-align: start;
+}
+
+[dir="rtl"] .status-actions {
+  flex-direction: row-reverse;
+}
+
+/* ── Buttons with arrows ── */
+[dir="rtl"] .primary-cta span,
+[dir="rtl"] .secondary-cta span,
+[dir="rtl"] .outline-cta span,
+[dir="rtl"] .about-primary-button span,
+[dir="rtl"] .about-secondary-link-button span,
+[dir="rtl"] .careers-primary-button span,
+[dir="rtl"] .careers-secondary-button span,
+[dir="rtl"] .why-primary-btn span,
+[dir="rtl"] .why-secondary-btn span,
+[dir="rtl"] .contact-primary-btn span,
+[dir="rtl"] .contact-submit-btn span,
+[dir="rtl"] .career-submit-button span,
+[dir="rtl"] .care-primary-btn span,
+[dir="rtl"] .service-select-button span,
+[dir="rtl"] .service-card-button span,
+[dir="rtl"] .status-primary-btn span,
+[dir="rtl"] .status-secondary-btn span {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+/* ── Eyebrow / Label tags ── */
+[dir="rtl"] .eyebrow,
+[dir="rtl"] .about-eyebrow,
+[dir="rtl"] .services-eyebrow,
+[dir="rtl"] .careers-eyebrow,
+[dir="rtl"] .section-kicker,
+[dir="rtl"] .why-section-label,
+[dir="rtl"] .contact-section-label,
+[dir="rtl"] .care-section-label,
+[dir="rtl"] .status-eyebrow,
+[dir="rtl"] .status-section-label,
+[dir="rtl"] .status-small-label {
+  display: block;
+  text-align: start;
+}
+
+[dir="rtl"] .section-heading.center .eyebrow,
+[dir="rtl"] .services-section-heading .services-eyebrow,
+[dir="rtl"] .about-section-heading .about-eyebrow,
+[dir="rtl"] .why-heading .why-section-label,
+[dir="rtl"] .application-heading .section-kicker {
+  text-align: center;
+}
+
+/* ── Mobile nav toggle position ── */
+[dir="rtl"] .nav-toggle,
+[dir="rtl"] .about-menu-toggle,
+[dir="rtl"] .services-menu-toggle,
+[dir="rtl"] .care-menu-toggle,
+[dir="rtl"] .status-menu-toggle {
+  margin-inline-start: auto;
+  margin-inline-end: 0;
+}
+
+/* ── Careers image badge ── */
+[dir="rtl"] .careers-image-badge {
+  flex-direction: row-reverse;
+  text-align: start;
+}
+
+/* ── Why care card links ── */
+[dir="rtl"] .why-care-card a {
+  justify-content: flex-start;
+}
+
+/* ── Lang switcher position in top bar ── */
+[dir="rtl"] .top-strip-inner .lang-switcher,
+[dir="rtl"] .about-top-inner .lang-switcher,
+[dir="rtl"] .services-top-inner .lang-switcher {
+  margin-inline-end: 0;
+  margin-inline-start: 10px;
+}
+
+/* ── Input placeholder alignment ── */
+[dir="rtl"] input::placeholder,
+[dir="rtl"] textarea::placeholder {
+  text-align: start;
+}
+
+/* ── Select arrow direction ── */
+[dir="rtl"] select {
+  direction: rtl;
+  text-align: start;
+}
+
+/* ── Responsive RTL adjustments ── */
+@media (max-width: 768px) {
+  [dir="rtl"] .home-nav,
+  [dir="rtl"] .about-nav,
+  [dir="rtl"] .services-nav,
+  [dir="rtl"] .care-form-nav-inner,
+  [dir="rtl"] .status-nav-inner {
+    flex-wrap: wrap;
+  }
+
+  [dir="rtl"] .hero-actions {
+    flex-wrap: wrap;
+  }
+
+  [dir="rtl"] .footer-bottom,
+  [dir="rtl"] .about-footer-bottom,
+  [dir="rtl"] .contact-footer-bottom > div,
+  [dir="rtl"] .careers-footer-bottom > div {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+  }
+
+  [dir="rtl"] .careers-hero-grid {
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .why-process-header {
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .contact-form-grid {
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .care-form-layout {
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .about-intro-grid,
+  [dir="rtl"] .about-mission-grid {
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .why-grid {
+    flex-direction: column;
+  }
+
+  [dir="rtl"] .about-grid {
+    flex-direction: column;
+  }
+}

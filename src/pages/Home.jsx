@@ -1,105 +1,147 @@
 import { useEffect, useRef, useState } from "react";
 import usePageMeta from "../utils/usePageMeta";
-import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
 import { Link, useNavigate } from "react-router-dom";
-import logoMark from "../assets/noor-al-afiya-mark.webp";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 import "./Home.css";
 import aboutCareImage from "../assets/about-care.webp";
 import patientCareImage from "../assets/services/patient-care.webp";
 import elderCareImage from "../assets/services/elder-care.webp";
 import newbornCareImage from "../assets/services/newborn-care.webp";
 import childrenCareImage from "../assets/services/children-care.webp";
+import icuCareImage from "../assets/services/icu-patient-care.jpg";
+import cancerCareImage from "../assets/services/cancer-patient-care.jpg";
+import ventilatorCareImage from "../assets/services/ventilator-patient-care.jpg";
+import bloodCollectionImage from "../assets/services/blood-collection-service.jpg";
 import nhraApprovedImage from "../assets/nhra-approved.webp";
 import homeCareSupportPhoto from "../assets/home-care-support-photo.webp";
-
-const services = [
-  {
-    id: "patient",
-    title: "Patient Care",
-    text: "Personalized support for patients who need dependable care at home.",
-    icon: "✚",
-    image: patientCareImage,
-  },
-  {
-    id: "elder",
-    title: "Elder Care",
-    text: "Comfort-focused assistance that helps older adults stay independent at home.",
-    icon: "♡",
-    image: elderCareImage,
-  },
-  {
-    id: "newborn",
-    title: "Newborn Care",
-    text: "Gentle, attentive support for newborn babies and their families.",
-    icon: "✦",
-    image: newbornCareImage,
-  },
-  {
-    id: "children",
-    title: "Children's Care",
-    text: "Safe and caring support tailored to the needs of children.",
-    icon: "◉",
-    image: childrenCareImage,
-  },
-];
-
-const benefits = [
-  {
-    icon: "✓",
-    title: "Personalized Care",
-    text: "Care plans designed around each person's needs and routine.",
-  },
-  {
-    icon: "◷",
-    title: "Flexible Support",
-    text: "Choose care arrangements and shifts that fit your family.",
-  },
-  {
-    icon: "⌂",
-    title: "Care at Home",
-    text: "Receive support in the comfort and familiarity of your home.",
-  },
-  {
-    icon: "♡",
-    title: "Family Focused",
-    text: "A respectful approach that keeps families informed and involved.",
-  },
-];
+import HeroSlideshow from "../components/HeroSlideshow";
+import { useTranslation } from "../hooks/useTranslation";
 
 function Home() {
-  usePageMeta({"title":"Home – NOOR AL AFIYA | Home Nursing Care in Bahrain","description":"NOOR AL AFIYA Home Health Care provides professional home nursing care in Bahrain: patient care, elder care, newborn care and children's care delivered at home.","path":"/"});
+  usePageMeta({
+    title: "Home – NOOR AL AFIYA | Home Nursing Care in Bahrain",
+    description: "NOOR AL AFIYA Home Health Care provides professional home nursing care in Bahrain: patient care, elder care, newborn care and children's care delivered at home.",
+    path: "/"
+  });
+
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [careServicesCount, setCareServicesCount] = useState(0);
-  const [bookingFlowCount, setBookingFlowCount] = useState(0);
+  // Illustrative placeholder demo statistics (pending company verification & approval)
+  const [yearsExpCount, setYearsExpCount] = useState(0);
+  const [patientsCount, setPatientsCount] = useState(0);
+  const [caregiversCount, setCaregiversCount] = useState(0);
+  const [satisfactionCount, setSatisfactionCount] = useState(0);
   const statsRef = useRef(null);
+
+  const services = [
+    {
+      id: "patient",
+      title: t("services.patient.title"),
+      text: t("services.patient.text"),
+      icon: "✚",
+      image: patientCareImage,
+    },
+    {
+      id: "elder",
+      title: t("services.elder.title"),
+      text: t("services.elder.text"),
+      icon: "♡",
+      image: elderCareImage,
+    },
+    {
+      id: "newborn",
+      title: t("services.newborn.title"),
+      text: t("services.newborn.text"),
+      icon: "✦",
+      image: newbornCareImage,
+    },
+    {
+      id: "children",
+      title: t("services.children.title"),
+      text: t("services.children.text"),
+      icon: "◉",
+      image: childrenCareImage,
+    },
+    {
+      id: "icu",
+      title: t("services.icu.title"),
+      text: t("services.icu.text"),
+      icon: "✚",
+      image: icuCareImage,
+    },
+    {
+      id: "cancer",
+      title: t("services.cancer.title"),
+      text: t("services.cancer.text"),
+      icon: "♡",
+      image: cancerCareImage,
+    },
+    {
+      id: "ventilator",
+      title: t("services.ventilator.title"),
+      text: t("services.ventilator.text"),
+      icon: "◈",
+      image: ventilatorCareImage,
+    },
+    {
+      id: "blood-collection",
+      title: t("services.bloodCollection.title"),
+      text: t("services.bloodCollection.text"),
+      icon: "✦",
+      image: bloodCollectionImage,
+    },
+  ];
+
+  const benefits = [
+    {
+      icon: "✓",
+      title: t("benefits.personalizedCare"),
+      text: t("benefits.personalizedCareDesc"),
+    },
+    {
+      icon: "◷",
+      title: t("benefits.flexibleSupport"),
+      text: t("benefits.flexibleSupportDesc"),
+    },
+    {
+      icon: "⌂",
+      title: t("benefits.careAtHome"),
+      text: t("benefits.careAtHomeDesc"),
+    },
+    {
+      icon: "♡",
+      title: t("benefits.familyFocused"),
+      text: t("benefits.familyFocusedDesc"),
+    },
+  ];
 
   useEffect(() => {
     const statsElement = statsRef.current;
-
     if (!statsElement) return;
 
     let animationFrame;
-    let started = false;
 
-    const animateCount = (setter, target, duration = 1600) => {
+    const animateAll = (duration = 3000) => {
+      cancelAnimationFrame(animationFrame);
       const startTime = performance.now();
 
       const update = (currentTime) => {
-        const progress = Math.min(
-          (currentTime - startTime) / duration,
-          1
-        );
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
 
-        const easedProgress =
-          1 - Math.pow(1 - progress, 3);
-
-        setter(Math.floor(target * easedProgress));
+        setYearsExpCount(Math.floor(10 * easedProgress));
+        setPatientsCount(Math.floor(5000 * easedProgress));
+        setCaregiversCount(Math.floor(20 * easedProgress));
+        setSatisfactionCount(Math.floor(97 * easedProgress));
 
         if (progress < 1) {
           animationFrame = requestAnimationFrame(update);
         } else {
-          setter(target);
+          setYearsExpCount(10);
+          setPatientsCount(5000);
+          setCaregiversCount(20);
+          setSatisfactionCount(97);
         }
       };
 
@@ -108,14 +150,20 @@ function Home() {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting && !started) {
-          started = true;
-          animateCount(setCareServicesCount, 4, 600);
-          animateCount(setBookingFlowCount, 3, 600);
-          observer.unobserve(statsElement);
+        if (entry.isIntersecting) {
+          animateAll(3000);
+        } else {
+          cancelAnimationFrame(animationFrame);
+          setYearsExpCount(0);
+          setPatientsCount(0);
+          setCaregiversCount(0);
+          setSatisfactionCount(0);
         }
       },
-      { threshold: 0.35 }
+      {
+        threshold: 0.3,
+        rootMargin: "0px 0px -60px 0px",
+      }
     );
 
     observer.observe(statsElement);
@@ -128,7 +176,6 @@ function Home() {
 
   useEffect(() => {
     const elements = document.querySelectorAll(".home-scroll-reveal");
-
     if (!elements.length) return;
 
     const observer = new IntersectionObserver(
@@ -153,663 +200,213 @@ function Home() {
     };
   }, []);
 
-  useEffect(() => {
-    const closeMenu = () => {
-      setMenuOpen(false);
-    };
-
-    window.addEventListener("resize", closeMenu);
-
-    return () => {
-      window.removeEventListener("resize", closeMenu);
-    };
-  }, []);
-
   const goToService = (serviceId) => {
-    setMenuOpen(false);
     navigate(`/care/${serviceId}`);
   };
 
   return (
     <div className="home-page">
-
-      {/* ================= TOP CONTACT BAR ================= */}
-
-      <div className="top-strip">
-
-        <div className="home-container top-strip-inner">
-
-          <span>
-            Professional home nursing care in Bahrain
-          </span>
-
-          <div className="top-contact">
-
-            {HAS_CONTACT_PHONE && (
-<>
-<a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
-<span>•</span>
-</>
-)}
-
-            <a href={`mailto:${CONTACT_EMAIL}`}>
-              nooralafiyahomecare@gmail.com
-            </a>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      {/* ================= NAVIGATION ================= */}
-
-      <header className="home-nav-wrap">
-
-        <div className="home-container home-nav">
-
-          <Link
-            className="home-brand"
-            to="/"
-            onClick={() => setMenuOpen(false)}
-          >
-
-            <img
-              src={logoMark} width="256" height="256"
-              alt="NOOR AL AFIYA"
-              className="brand-mark-image"
-            />
-
-            <span>
-
-              <strong>
-                NOOR AL AFIYA
-              </strong>
-
-              <small>
-                Home Health Care WLL
-              </small>
-
-            </span>
-
-          </Link>
-
-
-          {/* MOBILE MENU BUTTON */}
-
-          <button
-            className={`nav-toggle ${
-              menuOpen ? "open" : ""
-            }`}
-            onClick={() =>
-              setMenuOpen((value) => !value)
-            }
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
-            type="button"
-          >
-
-            <span />
-            <span />
-            <span />
-
-          </button>
-
-
-          {/* NAVIGATION LINKS */}
-
-          <nav
-            className={`home-nav-links ${
-              menuOpen ? "show" : ""
-            }`}
-          >
-
-            <Link
-              to="/"
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </Link>
-
-            <Link
-              to="/about"
-              onClick={() => setMenuOpen(false)}
-            >
-              About Us
-            </Link>
-
-            <Link
-              to="/services"
-              onClick={() => setMenuOpen(false)}
-            >
-              Our Services
-            </Link>
-
-            <Link
-              to="/why-us"
-              onClick={() => setMenuOpen(false)}
-            >
-              Why Choose Us
-            </Link>
-
-            <Link
-              to="/contact"
-              onClick={() => setMenuOpen(false)}
-            >
-              Contact Us
-            </Link>
-
-            <Link
-              to="/careers"
-              onClick={() => setMenuOpen(false)}
-            >
-              Job Opportunities
-            </Link>
-
-          </nav>
-
-        </div>
-
-      </header>
-
+      <Header />
 
       {/* ================= HERO ================= */}
-
       <main>
-
         <section className="home-hero">
+          {/* ── FULL-BLEED BACKGROUND SLIDESHOW ── */}
+          <div className="hero-slideshow-bg" aria-hidden="true">
+            <HeroSlideshow />
+          </div>
 
           <div className="home-container hero-content">
-
             <div className="hero-copy">
-
-              <span className="eyebrow">
-                CARE THAT FEELS LIKE HOME
-              </span>
+              <span className="eyebrow">{t("home.heroEyebrow")}</span>
 
               <h1>
-                Professional care,
-                <br />
-                <span>
-                  right at your home.
-                </span>
+                {t("home.heroHeading")}
+                <span> {t("home.heroHeadingSpan")}</span>
               </h1>
 
-              <p>
-                Compassionate home nursing and care
-                services designed to support you and
-                your loved ones with comfort, dignity
-                and confidence.
-              </p>
-
+              <p>{t("home.heroDesc")}</p>
 
               <div className="hero-actions">
-
                 <button
                   className="primary-cta"
                   onClick={() => navigate("/services")}
                   type="button"
                 >
-                  Choose a Care Service
+                  {t("home.chooseService")}
                   <span>→</span>
                 </button>
 
-                <Link
-                  className="secondary-cta"
-                  to="/services"
-                >
-                  Explore Services
+                <Link className="secondary-cta" to="/services">
+                  {t("common.exploreServices")}
                 </Link>
-
               </div>
 
-
               <div className="hero-approval">
-
                 <div className="hero-approval-badge">
                   <span className="hero-approval-dot" aria-hidden="true" />
-
                   <div className="hero-approval-copy">
-                    <strong>NHRA APPROVED</strong>
-                    <span>Approval mark</span>
+                    <strong>{t("common.nhraApproved")}</strong>
+                    <span>{t("common.nhraApprovalMark")}</span>
                   </div>
-
                   <img
-                    src={nhraApprovedImage} width="400" height="83" decoding="async"
+                    src={nhraApprovedImage}
+                    width="400"
+                    height="83"
+                    decoding="async"
                     alt="NHRA Bahrain approved"
                   />
                 </div>
-
               </div>
 
               <div className="hero-trust">
-
-                <span className="trust-icon">
-                  ✓
-                </span>
-
+                <span className="trust-icon">✓</span>
                 <span>
-                  Simple booking
+                  {t("common.simpleBooking")}
                   &nbsp;•&nbsp;
-                  Bahrain-focused home care
+                  {t("common.bahrainFocused")}
                 </span>
-
               </div>
-
             </div>
-
           </div>
-
         </section>
 
-
         {/* ================= SERVICES ================= */}
-
         <section className="service-section section-pad home-scroll-reveal">
-
           <div className="home-container">
-
             <div className="section-heading center">
-
-              <span className="eyebrow">
-                OUR SERVICES
-              </span>
-
-              <h2>
-                Care designed around your needs
-              </h2>
-
-              <p>
-                Choose the home-care service that
-                best matches your family's requirements.
-              </p>
-
+              <span className="eyebrow">{t("home.servicesEyebrow")}</span>
+              <h2>{t("home.servicesHeading")}</h2>
+              <p>{t("home.servicesDesc")}</p>
             </div>
 
-
             <div className="service-grid">
-
               {services.map((service) => (
-
-                <article
-                  className="service-card"
-                  key={service.id}
-                >
-
+                <article className="service-card" key={service.id}>
                   <div
                     className="service-card-image-background"
                     style={{ backgroundImage: `url(${service.image})` }}
                     aria-hidden="true"
                   />
-
                   <div className="service-card-content">
-
-                    <div className="service-card-icon">
-                      {service.icon}
-                    </div>
-
-                  <h3>
-                    {service.title}
-                  </h3>
-
-                  <p>
-                    {service.text}
-                  </p>
-
-                  <button
-                    className="service-card-button"
-                    onClick={() =>
-                      goToService(service.id)
-                    }
-                    type="button"
-                  >
-                    Book Appointment
-                    <span>→</span>
-                  </button>
-
+                    <div className="service-card-icon">{service.icon}</div>
+                    <h3>{service.title}</h3>
+                    <p>{service.text}</p>
+                    <button
+                      className="service-card-button"
+                      onClick={() => goToService(service.id)}
+                      type="button"
+                    >
+                      {t("common.bookAppointment")}
+                      <span>→</span>
+                    </button>
                   </div>
-
                 </article>
-
               ))}
-
             </div>
-
           </div>
-
         </section>
 
-
         {/* ================= WHY CHOOSE US ================= */}
-
         <section className="why-section section-pad home-scroll-reveal home-scroll-delay-1">
-
           <div className="home-container why-grid">
-
             <div className="why-copy">
-
-              <span className="eyebrow">
-                WHY CHOOSE US
-              </span>
-
-              <h2>
-                Support you can feel comfortable
-                bringing home.
-              </h2>
-
-              <p>
-                Our experience is built around making
-                home care clear, accessible and centered
-                on the person receiving it.
-              </p>
-
+              <span className="eyebrow">{t("home.whyEyebrow")}</span>
+              <h2>{t("home.whyHeading")}</h2>
+              <p>{t("home.whyDesc")}</p>
 
               <div className="benefit-grid">
-
                 {benefits.map((item) => (
-
-                  <div
-                    className="benefit"
-                    key={item.title}
-                  >
-
-                    <span className="benefit-icon">
-                      {item.icon}
-                    </span>
-
+                  <div className="benefit" key={item.title}>
+                    <span className="benefit-icon">{item.icon}</span>
                     <div>
-
-                      <h3>
-                        {item.title}
-                      </h3>
-
-                      <p>
-                        {item.text}
-                      </p>
-
+                      <h3>{item.title}</h3>
+                      <p>{item.text}</p>
                     </div>
-
                   </div>
-
                 ))}
-
               </div>
-
             </div>
 
-
             <div className="why-visual">
-
               <img
-                src={homeCareSupportPhoto} width="1400" height="1400" loading="lazy" decoding="async"
+                src={homeCareSupportPhoto}
+                width="1400"
+                height="1400"
+                loading="lazy"
+                decoding="async"
                 alt="24/7 Home-care support"
                 className="why-visual-bg-img"
               />
-
             </div>
-
           </div>
-
         </section>
 
-
-        {/* ================= STATISTICS ================= */}
-
-        <section className="stats-section home-scroll-reveal home-scroll-delay-2" ref={statsRef}>
-
+        {/* ================= STATISTICS (DEMO PLACEHOLDER VALUES - PENDING COMPANY APPROVAL) ================= */}
+        <section
+          className="stats-section home-scroll-reveal home-scroll-delay-2"
+          ref={statsRef}
+          data-stats-status="demo-placeholder"
+          aria-label="Key Statistics (Illustrative Demo Figures)"
+        >
           <div className="home-container stats-grid">
-
-            <div>
-              <strong>
-                {careServicesCount}
-              </strong>
-
-              <span>
-                Care Services
-              </span>
+            <div className="stats-item" data-demo="true">
+              <strong>{yearsExpCount}+</strong>
+              <span>{t("home.statsYearsExp")}</span>
             </div>
-
-            <div>
-              <strong>
-                24/7
-              </strong>
-
-              <span>
-                Care Options
-              </span>
+            <div className="stats-item" data-demo="true">
+              <strong>{patientsCount.toLocaleString()}+</strong>
+              <span>{t("home.statsPatientsServed")}</span>
             </div>
-
-            <div>
-              <strong>
-                {bookingFlowCount}
-              </strong>
-
-              <span>
-                Simple Booking Flow
-              </span>
+            <div className="stats-item" data-demo="true">
+              <strong>{caregiversCount}+</strong>
+              <span>{t("home.statsNursesCaregivers")}</span>
             </div>
-
-            <div>
-              <strong>
-                100%
-              </strong>
-
-              <span>
-                Home-focused
-              </span>
+            <div className="stats-item" data-demo="true">
+              <strong>{satisfactionCount}%</strong>
+              <span>{t("home.statsSatisfactionRate")}</span>
             </div>
-
           </div>
-
         </section>
-
 
         {/* ================= ABOUT PREVIEW ================= */}
-
         <section className="about-section section-pad home-scroll-reveal home-scroll-delay-1">
-
           <div className="home-container about-grid">
-
             <div className="about-image-wrap">
-
               <img
-                src={aboutCareImage} width="1400" height="933" loading="lazy" decoding="async"
+                src={aboutCareImage}
+                width="1400"
+                height="933"
+                loading="lazy"
+                decoding="async"
                 alt="Caregiver supporting an elderly person at home"
               />
-
             </div>
 
-
             <div className="about-copy">
-
-              <span className="eyebrow">
-                GET TO KNOW US
-              </span>
-
-              <h2>
-                Professional care in the
-                comfort of home.
-              </h2>
-
-              <p>
-                We are building a straightforward way
-                for families in Bahrain to request
-                home-care services and follow their
-                request from submission through
-                completion.
+              <span className="eyebrow">{t("home.aboutEyebrow")}</span>
+              <h2>{t("home.aboutHeading")}</h2>
+              <p>{t("home.aboutP1")}</p>
+              <p>{t("home.aboutP2")}</p>
+              <p>{t("home.aboutP3")}</p>
+              <p className="about-copy-commitment">
+                {t("home.aboutCommitment")}
               </p>
-
-              <p>
-                From patient and elder care to newborn
-                and children's care, the experience is
-                designed to keep the booking journey
-                simple and transparent.
-              </p>
-
 
               <button
                 className="outline-cta"
                 onClick={() => navigate("/about")}
                 type="button"
               >
-                Learn About Us
+                {t("common.learnMore")}
                 <span>→</span>
               </button>
-
             </div>
-
           </div>
-
         </section>
-
-
       </main>
 
-
-      {/* ================= FOOTER ================= */}
-
-      <footer className="home-footer">
-
-        <div className="home-container footer-grid">
-
-
-          {/* BRAND */}
-
-          <div className="footer-brand">
-
-            <Link
-              className="home-brand"
-              to="/"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            >
-
-              <img
-                src={logoMark} width="256" height="256"
-                alt="NOOR AL AFIYA"
-                className="brand-mark-image"
-              />
-
-              <span>
-
-                <strong>
-                  NOOR AL AFIYA
-                </strong>
-
-                <small>
-                  Home Health Care WLL
-                </small>
-
-              </span>
-
-            </Link>
-
-            <p>
-              Compassionate home-care services
-              for families in Bahrain.
-            </p>
-
-          </div>
-
-
-          {/* QUICK LINKS */}
-
-          <div>
-
-            <h3>
-              Quick Links
-            </h3>
-
-            <Link to="/">
-              Home
-            </Link>
-
-            <Link to="/about">
-              About Us
-            </Link>
-
-            <Link to="/services">
-              Our Services
-            </Link>
-
-            <Link to="/why-us">
-              Why Choose Us
-            </Link>
-
-            <Link to="/contact">
-              Contact Us
-            </Link>
-
-            <Link to="/careers">
-              Job Opportunities
-            </Link>
-
-          </div>
-
-
-          {/* SERVICES */}
-
-          <div>
-
-            <h3>
-              Services
-            </h3>
-
-            {services.map((service) => (
-
-              <button
-                key={service.id}
-                onClick={() =>
-                  goToService(service.id)
-                }
-                type="button"
-              >
-                {service.title}
-              </button>
-
-            ))}
-
-          </div>
-
-
-          {/* CONTACT */}
-
-          <div>
-
-            <h3>
-              Contact
-            </h3>
-
-            {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>}
-
-            <a href={`mailto:${CONTACT_EMAIL}`}>
-              nooralafiyahomecare@gmail.com
-            </a>
-
-            <span>
-              Bahrain
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div className="home-container footer-bottom">
-
-          <span>
-            © 2026 NOOR AL AFIYA.
-            All rights reserved.
-          </span>
-
-          <span>
-            Home Nursing • Bahrain
-          </span>
-
-        </div>
-
-      </footer>
-
+      <Footer />
     </div>
   );
 }

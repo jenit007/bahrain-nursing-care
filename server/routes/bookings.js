@@ -7,6 +7,18 @@ const router = express.Router();
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/;
 const PHONE_REGEX = /^[+\d][\d\s().-]{6,20}$/;
 
+const SUPPORTED_CARE_TYPES = [
+  "Patient Care",
+  "Elder Care",
+  "Newborn Care",
+  "Newborn Baby Care",
+  "Children's Care",
+  "ICU Patient Care",
+  "Cancer Patient Care",
+  "Ventilator Patient Care",
+  "Blood Collection Service",
+];
+
 function generateBookingReference() {
   const num = crypto.randomInt(10000000, 99999999);
   return `REQ-${num}`;
@@ -51,8 +63,11 @@ export function formatPublicTrackingResponse(booking) {
     shift: patientDetails.shift || "",
     shiftOther: patientDetails.shiftOther || "",
     preferredTime: patientDetails.preferredTime || "",
+    cprNumber: patientDetails.cprNumber || patientDetails.cprNo || "",
+    preferredTests: patientDetails.preferredTests || "",
     address: {
-      flatNo: address.flatNo || "",
+      flatNo: address.flatNo || address.blockNo || "",
+      blockNo: address.blockNo || address.flatNo || "",
       buildingNo: address.buildingNo || "",
       area: address.area || "",
       governorate: address.governorate || "",
@@ -90,8 +105,10 @@ router.post("/", async (req, res, next) => {
     const additionalNotes = String(body.additionalNotes ?? body.notes ?? "").trim() || null;
 
     const rawAddress = body.address && typeof body.address === "object" ? body.address : {};
+    const flatNo = String(rawAddress.flatNo || rawAddress.blockNo || rawAddress.flatVilla || "").trim();
     const address = {
-      flatNo: String(rawAddress.flatNo || rawAddress.flatVilla || "").trim(),
+      flatNo,
+      blockNo: flatNo,
       buildingNo: String(rawAddress.buildingNo || rawAddress.buildingNumber || "").trim(),
       area: String(rawAddress.area || "").trim(),
       governorate: String(rawAddress.governorate || "").trim(),
@@ -102,12 +119,25 @@ router.post("/", async (req, res, next) => {
       body.patientDetails && typeof body.patientDetails === "object"
         ? body.patientDetails
         : {};
+    const cprNumber = String(rawPatient.cprNumber ?? body.cprNumber ?? body.cprNo ?? "").trim();
+    const preferredTests = String(rawPatient.preferredTests ?? body.preferredTests ?? "").trim();
+
     const patientDetails = {
-      condition: String(rawPatient.condition ?? body.condition ?? "").trim(),
-      shift: String(rawPatient.shift ?? body.shift ?? "").trim(),
-      shiftOther: String(rawPatient.shiftOther ?? body.shiftOther ?? "").trim(),
-      preferredTime: String(rawPatient.preferredTime ?? body.preferredTime ?? "").trim(),
+      condition: careType === "Ventilator Patient Care" || careType === "Blood Collection Service"
+        ? ""
+        : String(rawPatient.condition ?? body.condition ?? "").trim(),
+      shift: careType === "Blood Collection Service"
+        ? ""
+        : String(rawPatient.shift ?? body.shift ?? "").trim(),
+      shiftOther: careType === "Blood Collection Service"
+        ? ""
+        : String(rawPatient.shiftOther ?? body.shiftOther ?? "").trim(),
+      preferredTime: careType === "Blood Collection Service"
+        ? ""
+        : String(rawPatient.preferredTime ?? body.preferredTime ?? "").trim(),
       urgency: String(rawPatient.urgency ?? body.urgency ?? "Normal").trim(),
+      ...(cprNumber ? { cprNumber, cprNo: cprNumber } : {}),
+      ...(preferredTests ? { preferredTests } : {}),
     };
 
     // Validation
@@ -115,16 +145,28 @@ router.post("/", async (req, res, next) => {
     if (!fullName || fullName.length < 2) {
       errors.fullName = "Full name is required.";
     }
-    if (email && !EMAIL_REGEX.test(email)) {
-      errors.email = "Please enter a valid email address.";
+    if (!careType || !SUPPORTED_CARE_TYPES.includes(careType)) {
+      errors.careType = "Please select a valid care service.";
     }
+
+    if (careType === "Blood Collection Service") {
+      if (!cprNumber) {
+        errors.cprNumber = "CPR Number is required for Blood Collection Service.";
+      }
+      if (!preferredTests) {
+        errors.preferredTests = "Preferred Tests is required for Blood Collection Service.";
+      }
+    } else {
+      if (email && !EMAIL_REGEX.test(email)) {
+        errors.email = "Please enter a valid email address.";
+      }
+    }
+
     const phoneDigits = phone.replace(/\D/g, "");
     if (!phone || !PHONE_REGEX.test(phone) || phoneDigits.length < 7 || phoneDigits.length > 15) {
       errors.phone = "Please enter a valid phone number.";
     }
-    if (!careType) {
-      errors.careType = "Please select a care service.";
-    }
+
     const isIsoDate = /^\d{4}-\d{2}-\d{2}$/.test(preferredDateRaw);
     const parsedDate = isIsoDate ? new Date(`${preferredDateRaw}T00:00:00.000Z`) : null;
     if (!parsedDate || Number.isNaN(parsedDate.getTime()) || parsedDate.toISOString().slice(0, 10) !== preferredDateRaw) {

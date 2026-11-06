@@ -1,20 +1,14 @@
 import { useEffect, useState, useCallback } from "react";
 import usePageMeta from "../../utils/usePageMeta";
-import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../../config/contact";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import logoMark from "../../assets/noor-al-afiya-mark.webp";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import {
   getSavedBookingReference,
   trackCareBooking,
 } from "../../utils/api";
+import { useTranslation } from "../../hooks/useTranslation";
 import "./RequestStatus.css";
-
-const trackingSteps = [
-  { number: 1, title: "Request Submitted", description: "Your care request has been submitted successfully." },
-  { number: 2, title: "Under Verification", description: "Our admin team is reviewing your request." },
-  { number: 3, title: "Verified", description: "Your request has been verified and confirmed by our team." },
-  { number: 4, title: "Completed", description: "Your care request has been completed." },
-];
 
 function getStatusIndex(status) {
   switch (status) {
@@ -26,7 +20,13 @@ function getStatusIndex(status) {
 }
 
 function RequestStatus() {
-  usePageMeta({"title":"Track Your Care Request | NOOR AL AFIYA","description":"Check the status of your NOOR AL AFIYA home nursing care request using your reference code.","path":"/request-status"});
+  usePageMeta({
+    title: "Track Your Care Request | NOOR AL AFIYA",
+    description: "Check the status of your NOOR AL AFIYA home nursing care request using your reference code.",
+    path: "/request-status"
+  });
+
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const queryRef = searchParams.get("ref") || "";
@@ -40,6 +40,13 @@ function RequestStatus() {
   const [request, setRequest] = useState(null);
   const [loading, setLoading] = useState(Boolean(queryRef || getSavedBookingReference()));
   const [error, setError] = useState("");
+
+  const trackingSteps = [
+    { number: 1, title: t("requestStatus.step1Title"), description: t("requestStatus.step1Desc") },
+    { number: 2, title: t("requestStatus.step2Title"), description: t("requestStatus.step2Desc") },
+    { number: 3, title: t("requestStatus.step3Title"), description: t("requestStatus.step3Desc") },
+    { number: 4, title: t("requestStatus.step4Title"), description: t("requestStatus.step4Desc") },
+  ];
 
   const fetchBookingStatus = useCallback(async (refToFetch, showSpinner = false) => {
     const cleanRef = String(refToFetch || "").trim().toUpperCase();
@@ -61,14 +68,14 @@ function RequestStatus() {
     } catch (err) {
       if (showSpinner) {
         setRequest(null);
-        setError(err.message || "Could not find a booking with that reference.");
+        setError(err.message || t("requestStatus.bookingNotFound"));
       }
     } finally {
       if (showSpinner) {
         setLoading(false);
       }
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const targetRef = queryRef || getSavedBookingReference();
@@ -93,7 +100,7 @@ function RequestStatus() {
     event.preventDefault();
     const clean = referenceInput.trim().toUpperCase();
     if (!clean) {
-      setError("Please enter your booking reference (e.g. REQ-12345678).");
+      setError(t("requestStatus.referenceError"));
       return;
     }
     setActiveReference(clean);
@@ -104,14 +111,15 @@ function RequestStatus() {
   if (loading) {
     return (
       <div className="request-status-page">
-        <StatusHeader />
+        <Header />
         <main className="status-main">
           <div className="status-empty-card">
-            <p className="status-eyebrow">REQUEST TRACKING</p>
-            <h1>Loading booking status...</h1>
-            <p>Retrieving live status from NOOR AL AFIYA care records.</p>
+            <p className="status-eyebrow">{t("requestStatus.eyebrow")}</p>
+            <h1>{t("requestStatus.loadingTitle")}</h1>
+            <p>{t("requestStatus.loadingDesc")}</p>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -119,15 +127,14 @@ function RequestStatus() {
   if (!request) {
     return (
       <div className="request-status-page">
-        <StatusHeader />
+        <Header />
         <main className="status-main">
           <div className="status-empty-card">
             <span className="status-empty-icon">⌁</span>
-            <p className="status-eyebrow">REQUEST TRACKING</p>
-            <h1>{error ? "Booking not found" : "Track your care request"}</h1>
+            <p className="status-eyebrow">{t("requestStatus.eyebrow")}</p>
+            <h1>{error ? t("requestStatus.bookingNotFound") : t("requestStatus.notFoundTitle")}</h1>
             <p>
-              {error ||
-                "Enter your booking reference (for example REQ-12345678) to check live status, or choose a service to submit a new request."}
+              {error || t("requestStatus.enterRefDesc")}
             </p>
             <form
               onSubmit={handleLookupSubmit}
@@ -144,7 +151,7 @@ function RequestStatus() {
                 type="text"
                 value={referenceInput}
                 onChange={(e) => setReferenceInput(e.target.value)}
-                placeholder="Enter Booking Reference (e.g. REQ-12345678)"
+                placeholder={t("requestStatus.notFoundPlaceholder")}
                 aria-label="Booking Reference"
                 style={{
                   flex: "1 1 240px",
@@ -156,17 +163,18 @@ function RequestStatus() {
                 }}
               />
               <button type="submit" className="status-primary-btn">
-                Track Request
+                {t("requestStatus.trackRequest")}
               </button>
             </form>
             <button
               className="status-secondary-btn"
               onClick={() => navigate("/services")}
             >
-              Explore Services <span>→</span>
+              {t("common.exploreServices")} <span>→</span>
             </button>
           </div>
         </main>
+        <Footer />
       </div>
     );
   }
@@ -176,13 +184,13 @@ function RequestStatus() {
 
   return (
     <div className="request-status-page">
-      <StatusHeader />
+      <Header />
 
       <section className="status-hero">
         <div className="status-container status-hero-inner">
-          <p className="status-eyebrow">REQUEST TRACKING</p>
-          <h1>Track your care request</h1>
-          <p>Follow every stage of your request from submission through completion.</p>
+          <p className="status-eyebrow">{t("requestStatus.eyebrow")}</p>
+          <h1>{t("requestStatus.trackingTitle")}</h1>
+          <p>{t("requestStatus.trackingDesc")}</p>
           <form
             onSubmit={handleLookupSubmit}
             style={{
@@ -197,7 +205,7 @@ function RequestStatus() {
               type="text"
               value={referenceInput}
               onChange={(e) => setReferenceInput(e.target.value)}
-              placeholder="Track another reference (e.g. REQ-12345678)"
+              placeholder={t("requestStatus.trackAnother")}
               aria-label="Track booking reference"
               style={{
                 flex: "1 1 240px",
@@ -210,7 +218,7 @@ function RequestStatus() {
               }}
             />
             <button type="submit" className="status-secondary-btn" style={{ height: "42px" }}>
-              Lookup
+              {t("requestStatus.lookup")}
             </button>
           </form>
         </div>
@@ -221,30 +229,41 @@ function RequestStatus() {
           <div className="status-request-card">
             <div className="status-request-head">
               <div>
-                <span className="status-small-label">REQUEST ID</span>
+                <span className="status-small-label">{t("requestStatus.requestId")}</span>
                 <h2>{request.bookingReference || request.id}</h2>
               </div>
               <span className="status-badge">{request.status}</span>
             </div>
             <div className="status-request-grid">
-              <InfoItem label="Service" value={request.service || request.careType} />
-              <InfoItem label="Full Name" value={request.name || request.fullName} />
-              <InfoItem label="Email" value={request.email} />
-              <InfoItem label="Phone" value={request.phone} />
-              <InfoItem label="Preferred Date" value={request.preferredDate ? new Date(`${request.preferredDate}T00:00:00`).toLocaleDateString() : "N/A"} />
-              <InfoItem label="Condition" value={request.condition} />
-              <InfoItem label="Shift" value={request.shift === "Other" && request.shiftOther ? request.shiftOther : request.shift} />
-              <InfoItem label="Submitted" value={request.createdAt ? new Date(request.createdAt).toLocaleString() : "N/A"} />
+              <InfoItem label={t("requestStatus.labelService")} value={request.service || request.careType} />
+              <InfoItem label={t("requestStatus.labelFullName")} value={request.name || request.fullName} />
+              {request.service === "Blood Collection Service" ? (
+                <InfoItem label={t("requestStatus.labelCprNumber")} value={request.cprNumber} />
+              ) : (
+                <InfoItem label={t("requestStatus.labelEmail")} value={request.email || t("requestStatus.notProvided")} />
+              )}
+              <InfoItem label={t("requestStatus.labelPhone")} value={request.phone} />
+              <InfoItem label={t("requestStatus.labelPreferredDate")} value={request.preferredDate ? new Date(`${request.preferredDate}T00:00:00`).toLocaleDateString() : t("requestStatus.na")} />
+              {request.service !== "Ventilator Patient Care" && request.service !== "Blood Collection Service" && (
+                <InfoItem label={t("requestStatus.labelCondition")} value={request.condition || t("requestStatus.notSpecified")} />
+              )}
+              {request.service !== "Blood Collection Service" && (
+                <InfoItem label={t("requestStatus.labelShift")} value={request.shift === "Other" && request.shiftOther ? request.shiftOther : request.shift || t("requestStatus.notSpecified")} />
+              )}
+              {request.service === "Blood Collection Service" && (
+                <InfoItem label={t("requestStatus.labelPreferredTests")} value={request.preferredTests} />
+              )}
+              <InfoItem label={t("requestStatus.labelSubmitted")} value={request.createdAt ? new Date(request.createdAt).toLocaleString() : t("requestStatus.na")} />
             </div>
           </div>
 
           <section className="status-tracking-card">
             <div className="status-section-heading">
               <div>
-                <p className="status-section-label">LIVE REQUEST JOURNEY</p>
-                <h2>Request progress</h2>
+                <p className="status-section-label">{t("requestStatus.liveJourney")}</p>
+                <h2>{t("requestStatus.requestProgress")}</h2>
               </div>
-              <span>{Math.min(currentIndex, 4)} / 4 stages</span>
+              <span>{Math.min(currentIndex, 4)} / 4 {t("requestStatus.stages")}</span>
             </div>
 
             <div className="status-progress-bar"><span style={{ width: `${(currentIndex / 4) * 100}%` }} /></div>
@@ -259,7 +278,7 @@ function RequestStatus() {
                     <div className="status-step-content">
                       <div className="status-step-title-row">
                         <h3>{step.title}</h3>
-                        {current && <span>Current</span>}
+                        {current && <span>{t("common.current")}</span>}
                       </div>
                       <p>{step.description}</p>
                     </div>
@@ -271,135 +290,47 @@ function RequestStatus() {
 
           <section className="status-details-grid">
             <div className="status-detail-card">
-              <p className="status-section-label">SERVICE ADDRESS</p>
-              <h3>Bahrain service address</h3>
+              <p className="status-section-label">{t("requestStatus.serviceAddress")}</p>
+              <h3>{t("requestStatus.bahrainAddress")}</h3>
               <div className="status-address">
-                <span>Flat No.: {address.flatNo || address.flatVilla || "—"}</span>
-                <span>Building No.: {address.buildingNo || address.buildingNumber || "—"}</span>
-                <span>Area: {address.area || "—"}</span>
-                <span>Governorate: {address.governorate || "—"}</span>
-                <span>Country: Bahrain</span>
+                <span>{t("requestStatus.blockNo")} {address.blockNo || address.flatNo || address.flatVilla || "—"}</span>
+                <span>{t("requestStatus.buildingNo")} {address.buildingNo || address.buildingNumber || "—"}</span>
+                <span>{t("requestStatus.area")} {address.area || "—"}</span>
+                <span>{t("requestStatus.governorate")} {address.governorate || "—"}</span>
+                <span>{t("requestStatus.country")}</span>
               </div>
             </div>
 
             <div className="status-detail-card">
-              <p className="status-section-label">ADDITIONAL NOTES</p>
-              <h3>Information shared with our team</h3>
-              <p className="status-next-text">{request.notes || "No additional notes were provided."}</p>
+              <p className="status-section-label">{t("requestStatus.additionalNotes")}</p>
+              <h3>{t("requestStatus.infoShared")}</h3>
+              <p className="status-next-text">{request.notes || t("requestStatus.noNotes")}</p>
             </div>
 
             <div className="status-detail-card">
-              <p className="status-section-label">NEXT STEP</p>
-              <h3>{request.status === "Completed" ? "Your request is complete" : "Keep your booking reference available"}</h3>
+              <p className="status-section-label">{t("requestStatus.nextStep")}</p>
+              <h3>{request.status === "Completed" ? t("requestStatus.requestComplete") : t("requestStatus.keepReference")}</h3>
               <p className="status-next-text">
                 {request.status === "Completed"
-                  ? "Thank you for choosing NOOR AL AFIYA Home Health Care."
-                  : `Your booking reference is ${request.bookingReference || request.id}. You can use it anytime on any device to check live status updates.`}
+                  ? t("requestStatus.thankYouComplete")
+                  : `${t("requestStatus.bookingRefNote")} ${request.bookingReference || request.id}. ${t("requestStatus.referenceNote")}`}
               </p>
             </div>
           </section>
 
           {request.status === "Completed" && (
-            <div className="status-complete-note"><span>✓</span><div><strong>Service completed</strong><p>Thank you for choosing NOOR AL AFIYA. Our team has successfully completed your requested home care service.</p></div></div>
+            <div className="status-complete-note"><span>✓</span><div><strong>{t("requestStatus.serviceCompleted")}</strong><p>{t("requestStatus.serviceCompletedDesc")}</p></div></div>
           )}
 
           <div className="status-actions">
-            <button className="status-secondary-btn" onClick={() => navigate("/services")}>Back to Services</button>
-            <button className="status-secondary-btn" onClick={() => navigate("/contact")}>Contact Us</button>
+            <button className="status-secondary-btn" onClick={() => navigate("/services")}>{t("requestStatus.backToServices")}</button>
+            <button className="status-secondary-btn" onClick={() => navigate("/contact")}>{t("common.contactUs")}</button>
           </div>
         </div>
       </main>
 
-      <footer className="status-footer">
-        <div className="status-container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px', padding: '40px 0' }}>
-          <div>
-            <Link className="home-brand" to="/" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
-              <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
-              <span>
-                <strong>NOOR AL AFIYA</strong>
-                <small>Home Health Care WLL</small>
-              </span>
-            </Link>
-            <p style={{ marginTop: '12px', fontSize: '13px', color: '#8995A7' }}>
-              Compassionate home-care services for families in Bahrain.
-            </p>
-          </div>
-          <div>
-            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Quick Links</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <Link to="/" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Home</Link>
-              <Link to="/about" style={{ color: '#9AA5B6', textDecoration: 'none' }}>About Us</Link>
-              <Link to="/services" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Our Services</Link>
-              <Link to="/why-us" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Why Choose Us</Link>
-              <Link to="/contact" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Contact Us</Link>
-              <Link to="/careers" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Job Opportunities</Link>
-            </div>
-          </div>
-          <div>
-            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Services</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <Link to="/care/patient" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Patient Care</Link>
-              <Link to="/care/elder" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Elder Care</Link>
-              <Link to="/care/newborn" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Newborn Care</Link>
-              <Link to="/care/children" style={{ color: '#9AA5B6', textDecoration: 'none' }}>Children's Care</Link>
-            </div>
-          </div>
-          <div>
-            <h4 style={{ color: '#fff', marginBottom: '15px' }}>Contact</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', color: '#9AA5B6' }}>
-              {HAS_CONTACT_PHONE && <a href={CONTACT_PHONE_HREF} style={{ color: '#9AA5B6', textDecoration: 'none' }}>{CONTACT_PHONE_DISPLAY}</a>}
-              <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: '#9AA5B6', textDecoration: 'none' }}>nooralafiyahomecare@gmail.com</a>
-              <span>Bahrain</span>
-            </div>
-          </div>
-        </div>
-        <div className="status-footer-bottom" style={{ display: 'flex', justifyContent: 'space-between', padding: '15px 0' }}>
-          <span>© 2026 NOOR AL AFIYA. All rights reserved.</span>
-          <span>Home Nursing • Bahrain</span>
-        </div>
-      </footer>
+      <Footer />
     </div>
-  );
-}
-
-function StatusHeader() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  return (
-    <>
-      <div className="status-topbar"><div className="status-container"><span>NOOR AL AFIYA</span><span>24/7 Home Care Support • Bahrain</span></div></div>
-      <header className="status-navbar">
-        <div className="status-container status-nav-inner">
-          <Link to="/" className="home-brand" onClick={() => setMenuOpen(false)}>
-            <img src={logoMark} width="256" height="256" alt="NOOR AL AFIYA" className="brand-mark-image" />
-            <span>
-              <strong>NOOR AL AFIYA</strong>
-              <small>Home Health Care WLL</small>
-            </span>
-          </Link>
-
-          <button
-            type="button"
-            className={`status-menu-toggle ${menuOpen ? "open" : ""}`}
-            onClick={() => setMenuOpen((value) => !value)}
-            aria-label="Toggle navigation"
-            aria-expanded={menuOpen}
-          >
-            <span />
-            <span />
-            <span />
-          </button>
-
-          <nav className={`status-nav-links ${menuOpen ? "show" : ""}`}>
-            <Link to="/" onClick={() => setMenuOpen(false)}>Home</Link>
-            <Link to="/about" onClick={() => setMenuOpen(false)}>About Us</Link>
-            <Link to="/services" onClick={() => setMenuOpen(false)}>Our Services</Link>
-            <Link to="/why-us" onClick={() => setMenuOpen(false)}>Why Choose Us</Link>
-            <Link to="/contact" onClick={() => setMenuOpen(false)}>Contact Us</Link>
-            <Link to="/careers" onClick={() => setMenuOpen(false)}>Job Opportunities</Link>
-          </nav>
-        </div>
-      </header>
-    </>
   );
 }
 

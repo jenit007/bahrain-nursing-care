@@ -35,7 +35,7 @@
    ========================================================= */
 
 .top-strip {
-  background: #FC3A93;
+  background: #151b2e;
   color: #ffffff;
   font-size: 12px;
 }
@@ -260,7 +260,7 @@
 
 
 /* =========================================================
-   HERO
+   HERO  –  Full-bleed slideshow, content centred within left 50%
    ========================================================= */
 
 .home-hero {
@@ -268,65 +268,66 @@
 
   display: flex;
   align-items: center;
+  justify-content: flex-start;
 
   position: relative;
 
   isolation: isolate;
 
-  background:
-    linear-gradient(
-      100deg,
-      rgba(252,253,252,0.98) 0%,
-      rgba(255, 240, 247, 0.90) 45%,
-      rgba(146,197,83,0.12) 78%
-    ),
-    url("../assets/home-hero.webp");
+  /* Fallback background while slideshow loads */
+  background: #FFF0F7;
 
-  background-size: cover;
-
-  background-position: center right;
+  overflow: hidden;
 }
 
-.home-hero::after {
-  content: "";
-
+/* ── Full-bleed slideshow background ── */
+.hero-slideshow-bg {
   position: absolute;
-
   inset: 0;
-
-  background-image:
-    linear-gradient(
-      rgba(37, 48, 71, 0.035) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      rgba(37, 48, 71, 0.035) 1px,
-      transparent 1px
-    );
-
-  background-size: 38px 38px;
-
-  z-index: -1;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: auto;
 }
 
-.hero-content {
+.home-hero .hero-content {
   position: relative;
+  z-index: 20;
 
+  /* Occupies the left 50% of the full-width hero */
+  width: 50%;
+  max-width: 50%;
+  margin: 0;
   min-height: 650px;
 
+  /* Center the content group horizontally and vertically within left 50% */
   display: flex;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
+
+  padding: 56px 40px;
+  box-sizing: border-box;
 }
 
 .hero-copy {
-  width: min(590px, 52%);
-
-  padding: 70px 0;
+  width: 100%;
+  max-width: 520px;
+  margin: 0 auto;
 
   position: relative;
-
   z-index: 2;
+
+  /* Centre every child element */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Legacy class – kept for safety; not rendered */
+.hero-slideshow-panel {
+  display: none;
 }
 
 
@@ -354,15 +355,15 @@
    ========================================================= */
 
 .hero-copy h1 {
-  font-size: clamp(42px, 5vw, 68px);
+  font-size: clamp(34px, 3.5vw, 50px);
 
-  line-height: 1.03;
+  line-height: 1.06;
 
-  letter-spacing: -2.4px;
+  letter-spacing: -2px;
 
   color: var(--navy);
 
-  margin-bottom: 22px;
+  margin-bottom: 20px;
 }
 
 .hero-copy h1 span {
@@ -376,7 +377,11 @@
 
   color: #405866;
 
-  max-width: 550px;
+  max-width: 460px;
+
+  /* Center the paragraph within the flex column */
+  margin-left: auto;
+  margin-right: auto;
 }
 
 
@@ -390,6 +395,7 @@
   gap: 13px;
 
   align-items: center;
+  justify-content: center;
 
   margin-top: 30px;
 
@@ -476,6 +482,7 @@
   display: flex;
 
   align-items: center;
+  justify-content: center;
 
   gap: 9px;
 
@@ -542,6 +549,13 @@
   line-height: 1.75;
 }
 
+.about-copy-commitment {
+  font-weight: 600;
+  color: #252525 !important;
+  font-size: 15px;
+  margin-top: 4px;
+}
+
 
 /* =========================================================
    SERVICES
@@ -577,6 +591,10 @@
     border-color 0.25s ease;
 
   min-height: 275px;
+
+  display: flex;
+
+  flex-direction: column;
 }
 
 .service-card:hover {
@@ -623,6 +641,10 @@
   color: #647984;
 
   min-height: 72px;
+
+  margin-bottom: 16px;
+
+  flex: 1;
 }
 
 
@@ -635,7 +657,9 @@
 
   justify-content: center;
 
-  margin-top: 12px;
+  margin-top: auto;
+
+  align-self: flex-start;
 
   padding: 10px 16px;
 
@@ -872,35 +896,45 @@
 
   color: #ffffff;
 
-  padding: 54px 0;
+  padding: 56px 0;
 }
 
 .stats-grid {
   display: grid;
 
   grid-template-columns: repeat(4, 1fr);
+
+  align-items: center;
 }
 
 .stats-grid > div {
   text-align: center;
 
-  padding: 8px 20px;
+  padding: 10px 24px;
 
-  border-right: 1px solid rgba(255, 255, 255, 0.18);
+  border-right: 1px solid rgba(255, 255, 255, 0.16);
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.16);
 }
 
 .stats-grid > div:last-child {
   border-right: 0;
+  border-inline-end: 0;
 }
 
 .stats-grid strong {
   display: block;
 
-  font-size: 38px;
+  font-size: clamp(34px, 3.4vw, 46px);
 
-  color: var(--sky);
+  font-weight: 800;
 
-  letter-spacing: -1px;
+  color: #96C855;
+
+  letter-spacing: -0.5px;
+
+  line-height: 1.1;
+
+  font-variant-numeric: tabular-nums;
 }
 
 .stats-grid span {
@@ -908,9 +942,15 @@
 
   color: #d8eaf0;
 
-  font-size: 12px;
+  font-size: 13px;
 
-  margin-top: 6px;
+  font-weight: 500;
+
+  line-height: 1.45;
+
+  margin-top: 8px;
+
+  letter-spacing: 0.1px;
 }
 
 
@@ -1212,18 +1252,27 @@
 
   /* HERO */
 
-  .hero-content {
-    min-height: 620px;
+  .home-hero {
+    min-height: 560px;
+    justify-content: center;
+  }
+
+  .home-hero .hero-content {
+    width: 100%;
+    max-width: 580px;
+    margin: 0 auto;
+    min-height: 560px;
+    padding: 48px 24px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
 
   .hero-copy {
-    width: 62%;
-
-    padding: 60px 0;
-  }
-
-  .home-hero {
-    background-position: 58% center;
+    width: 100%;
+    max-width: 520px;
+    padding: 0;
   }
 
 
@@ -1253,11 +1302,12 @@
   .stats-grid {
     grid-template-columns: 1fr 1fr;
 
-    row-gap: 25px;
+    row-gap: 28px;
   }
 
   .stats-grid > div:nth-child(2) {
     border-right: 0;
+    border-inline-end: 0;
   }
 
 
@@ -1330,60 +1380,63 @@
   /* MOBILE HERO */
 
   .home-hero {
-    min-height: clamp(520px, 80vh, 640px);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: 74% 28%;
-    background-image:
-      linear-gradient(
-        180deg,
-        rgba(247, 253, 255, 0.97) 0%,
-        rgba(202, 240, 248, 0.93) 48%,
-        rgba(146, 197, 83, 0.16) 100%
-      ),
-      url("../assets/home-hero.webp");
+    min-height: auto;
+    background-image: none;
+    justify-content: center;
   }
 
-  .hero-content {
-    min-height: clamp(520px, 80vh, 640px);
-    align-items: flex-start;
+  .home-hero .hero-content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    min-height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 16px 32px;
+    gap: 0;
   }
 
   .hero-copy {
     width: 100%;
-    padding: 48px 0 32px;
+    max-width: 100%;
+    padding: 0;
   }
 
   .hero-copy h1 {
-    font-size: clamp(34px, 8.5vw, 43px);
-    letter-spacing: -1.5px;
-    line-height: 1.08;
+    font-size: clamp(28px, 7.5vw, 38px);
+    letter-spacing: -1.2px;
+    line-height: 1.1;
+    margin-bottom: 16px;
   }
 
   .hero-copy > p {
-    font-size: 15px;
-    line-height: 1.65;
-    max-width: 410px;
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 100%;
   }
-
 
   /* MOBILE BUTTONS */
 
   .hero-actions {
+    margin-top: 22px;
     align-items: stretch;
-
     flex-direction: column;
+    width: 100%;
+    gap: 10px;
   }
 
   .primary-cta,
   .secondary-cta {
     text-align: center;
-
     width: 100%;
+    box-sizing: border-box;
   }
 
   .hero-trust {
     font-size: 10px;
+    margin-top: 18px;
   }
 
 
@@ -1416,6 +1469,7 @@
 
   .service-card-button {
     width: 100%;
+    align-self: stretch;
   }
 
 
@@ -1449,25 +1503,28 @@
 
   .stats-grid {
     grid-template-columns: 1fr 1fr;
+    row-gap: 24px;
   }
 
   .stats-grid strong {
-    font-size: 30px;
+    font-size: clamp(26px, 6vw, 32px);
   }
 
   .stats-grid span {
-    font-size: 10px;
+    font-size: 11px;
+    margin-top: 6px;
   }
 
   .stats-grid > div {
-    border-right:
-      1px solid rgba(255, 255, 255, 0.18);
+    border-right: 1px solid rgba(255, 255, 255, 0.16);
+    border-inline-end: 1px solid rgba(255, 255, 255, 0.16);
 
-    padding: 5px 10px;
+    padding: 6px 12px;
   }
 
   .stats-grid > div:nth-child(even) {
     border-right: 0;
+    border-inline-end: 0;
   }
 
 
@@ -1571,6 +1628,9 @@
 .service-card-content {
   position: relative;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .service-card:hover .service-card-image-background {
@@ -1624,7 +1684,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  transform: translateX(370px);
+  transform: none;
 }
 
 .hero-approval-badge {
@@ -1640,6 +1700,7 @@
   background: rgba(254, 254, 254, 0.94);
   box-shadow: 0 12px 30px rgba(37, 48, 71, 0.10);
   backdrop-filter: blur(10px);
+  margin: 0 auto;
 }
 
 .hero-approval-dot {
@@ -1761,6 +1822,7 @@
   align-items: center;
   justify-content: center;
   gap: 14px;
+  margin: 0 auto;
 
   width: min(430px, 100%);
   min-height: 78px;
@@ -1933,17 +1995,11 @@
   }
 }
 
-/* Position the NHRA approval badge in the hero image area on desktop.
-   Keep it centered on smaller screens for responsive safety. */
-@media (max-width: 1100px) {
-  .hero-approval {
-    transform: translateX(250px);
-  }
-}
-
+/* NHRA approval badge alignment */
 @media (max-width: 1023px) {
   .hero-approval {
-    transform: translateX(0);
+    justify-content: center;
+    transform: none;
   }
 }
 

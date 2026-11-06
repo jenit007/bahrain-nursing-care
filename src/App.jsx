@@ -7,6 +7,8 @@ import {
 } from "react-router-dom";
 
 import { lazy, Suspense, useEffect } from "react";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { useLanguage } from "./context/LanguageContext";
 
 // Home is loaded eagerly (first paint); every other route is code-split.
 import Home from "./pages/Home";
@@ -27,6 +29,16 @@ const AdminResetPassword = lazy(() => import("./pages/auth/AdminResetPassword"))
 
 import "./responsive.css";
 
+// Applies persisted lang/dir from context on initial render
+function LangSync() {
+  const { lang, isRTL } = useLanguage();
+  useEffect(() => {
+    document.documentElement.setAttribute("lang", lang);
+    document.documentElement.setAttribute("dir", isRTL ? "rtl" : "ltr");
+  }, [lang, isRTL]);
+  return null;
+}
+
 function ScrollToTop() {
   const { pathname } = useLocation();
 
@@ -44,50 +56,53 @@ function ScrollToTop() {
 function App() {
   return (
     <BrowserRouter>
+      <LangSync />
       <ScrollToTop />
-      <Suspense
-        fallback={
-          <div className="route-loading" role="status" aria-live="polite">
-            Loading…
-          </div>
-        }
-      >
-        <Routes>
-          {/* ================= PUBLIC PAGES ================= */}
+      <ErrorBoundary>
+        <Suspense
+          fallback={
+            <div className="route-loading" role="status" aria-live="polite">
+              Loading…
+            </div>
+          }
+        >
+          <Routes>
+            {/* ================= PUBLIC PAGES ================= */}
 
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/services" element={<Services />} />
-          <Route path="/why-us" element={<WhyUs />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/careers" element={<Careers />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/why-us" element={<WhyUs />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/careers" element={<Careers />} />
 
-          {/* ================= CARE FORMS ================= */}
+            {/* ================= CARE FORMS ================= */}
 
-          <Route path="/care/:service" element={<CareForm />} />
+            <Route path="/care/:service" element={<CareForm />} />
 
-          {/* ================= USER PAGES ================= */}
+            {/* ================= USER PAGES ================= */}
 
-          <Route path="/request-status" element={<RequestStatus />} />
+            <Route path="/request-status" element={<RequestStatus />} />
 
-          {/* ================= ADMIN ================= */}
+            {/* ================= ADMIN ================= */}
 
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route path="/admin/reset-password" element={<AdminResetPassword />} />
-          <Route
-            path="/admin/*"
-            element={
-              <AdminProtected>
-                <AdminDashboard />
-              </AdminProtected>
-            }
-          />
+            <Route path="/admin/login" element={<AdminLogin />} />
+            <Route path="/admin/reset-password" element={<AdminResetPassword />} />
+            <Route
+              path="/admin/*"
+              element={
+                <AdminProtected>
+                  <AdminDashboard />
+                </AdminProtected>
+              }
+            />
 
-          {/* ================= FALLBACK ================= */}
+            {/* ================= FALLBACK ================= */}
 
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Suspense>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </BrowserRouter>
   );
 }
