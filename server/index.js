@@ -40,7 +40,12 @@ app.use(
   cors({
     origin(origin, callback) {
       // Allow same-origin or server-to-server requests with no Origin header
-      if (!origin || allowedOrigins.includes(origin) || /^http:\/\/localhost:\d+$/.test(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        /^http:\/\/(localhost|127\.0\.0\.1):\d+$/.test(origin) ||
+        process.env.NODE_ENV !== "production"
+      ) {
         return callback(null, true);
       }
       return callback(new Error("Origin not allowed by CORS policy"));
@@ -125,7 +130,11 @@ app.use((err, _req, res, _next) => {
   });
 });
 
-if (process.env.NODE_ENV !== "test" && !process.env.VERCEL) {
+if (
+  process.env.NODE_ENV !== "test" &&
+  !process.env.VERCEL &&
+  !process.env.VITE_EMBEDDED_API
+) {
   app.listen(PORT, () => {
     console.log(`NOOR AL AFIYA Express API listening on http://localhost:${PORT}`);
   });

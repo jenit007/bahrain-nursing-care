@@ -115,17 +115,54 @@ export async function requireAdmin(req, res, next) {
       });
     }
 
-    const adminRecord = await prisma.admin.findUnique({
+    const selectFields = {
+      id: true,
+      authUserId: true,
+      name: true,
+      email: true,
+      role: true,
+      isActive: true,
+    };
+
+    let adminRecord = await prisma.admin.findUnique({
       where: { authUserId: verification.user.id },
-      select: {
-        id: true,
-        authUserId: true,
-        name: true,
-        email: true,
-        role: true,
-        isActive: true,
-      },
+      select: selectFields,
     });
+
+    const userEmail = String(verification.user.email || "").trim().toLowerCase();
+
+    if (!adminRecord && userEmail) {
+      const existingByEmail = await prisma.admin.findFirst({
+        where: { email: { equals: userEmail, mode: "insensitive" } },
+        select: selectFields,
+      });
+
+      if (existingByEmail) {
+        adminRecord = await prisma.admin.update({
+          where: { id: existingByEmail.id },
+          data: { authUserId: verification.user.id },
+          select: selectFields,
+        });
+      } else {
+        const initialAdminEmail = String(process.env.INITIAL_ADMIN_EMAIL || "")
+          .trim()
+          .toLowerCase();
+        if (initialAdminEmail && userEmail === initialAdminEmail) {
+          adminRecord = await prisma.admin.create({
+            data: {
+              authUserId: verification.user.id,
+              name: (
+                process.env.INITIAL_ADMIN_NAME || "NOOR AL AFIYA Administrator"
+              ).trim(),
+              email: userEmail,
+              role: "ADMIN",
+              isActive: true,
+            },
+            select: selectFields,
+          });
+        }
+      }
+    }
 
     if (!adminRecord || !adminRecord.isActive || adminRecord.role !== "ADMIN") {
       return res.status(403).json({
