@@ -45,6 +45,17 @@
   transition: opacity 0.2s ease;
 }
 
+.top-contact-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.top-contact-icon {
+  flex-shrink: 0;
+}
+
 .top-contact a:hover {
   opacity: 0.85;
 }
@@ -333,6 +344,21 @@
 @media (max-width: 480px) {
   .home-container {
     width: calc(100% - 24px);
+  }
+
+  .top-contact {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+
+  [dir="rtl"] .top-contact {
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .top-contact-sep {
+    display: none;
   }
 
   .home-nav {

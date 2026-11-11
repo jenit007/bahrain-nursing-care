@@ -53,6 +53,42 @@
   color: #ffffff;
 }
 
+.home-footer .footer-contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.footer-contact-icon {
+  flex-shrink: 0;
+}
+
+.home-footer .footer-contact-link span {
+  display: inline;
+  color: inherit;
+  line-height: inherit;
+}
+
+.footer-address {
+  font-style: normal;
+  margin-top: 8px;
+}
+
+.footer-address strong {
+  display: block;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin-bottom: 3px;
+}
+
+.footer-address span {
+  color: #9AA5B6;
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 18px 0;

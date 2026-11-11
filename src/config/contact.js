@@ -1,11 +1,13 @@
 /**
  * Single source of truth for public company contact details.
  *
- * The phone number is read from VITE_CONTACT_PHONE (e.g. "+973 1234 5678").
- * Until a real number is configured, no phone number is displayed and no
- * `tel:` link is rendered, so visitors are never shown a placeholder number.
+ * Uses VITE_CONTACT_PHONE if overridden in the environment, falling back to
+ * the official NOOR AL AFIYA business phone number (+973 37225221).
  */
-const rawPhone = String(import.meta.env.VITE_CONTACT_PHONE || "").trim();
+const DEFAULT_CONTACT_PHONE = "+973 37225221";
+const rawPhone = String(
+  import.meta.env.VITE_CONTACT_PHONE || DEFAULT_CONTACT_PHONE
+).trim();
 
 export const CONTACT_EMAIL = "nooralafiyahomecare@gmail.com";
 export const CONTACT_PHONE_DISPLAY = rawPhone;

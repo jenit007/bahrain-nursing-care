@@ -149,7 +149,7 @@ function Contact() {
                 <div>
                   <h3>{t("contact.phoneTitle")}</h3>
                   <p>{t("contact.phoneDesc")}</p>
-                  <a href={CONTACT_PHONE_HREF}>{CONTACT_PHONE_DISPLAY}</a>
+                  <a href={CONTACT_PHONE_HREF} dir="ltr">{CONTACT_PHONE_DISPLAY}</a>
                 </div>
               </div>
             )}
@@ -160,8 +160,8 @@ function Contact() {
               <div>
                 <h3>{t("contact.emailTitle")}</h3>
                 <p>{t("contact.emailDesc")}</p>
-                <a href={`mailto:${CONTACT_EMAIL}`}>
-                  nooralafiyahomecare@gmail.com
+                <a href={`mailto:${CONTACT_EMAIL}`} dir="ltr">
+                  {CONTACT_EMAIL}
                 </a>
               </div>
             </div>
@@ -172,7 +172,13 @@ function Contact() {
               <div>
                 <h3>{t("contact.locationTitle")}</h3>
                 <p>{t("contact.locationDesc")}</p>
-                <span>{t("common.bahrain")}</span>
+                <address className="contact-address">
+                  <strong>{t("contact.addressCompany")}</strong>
+                  <span>{t("contact.addressLine1")}</span>
+                  <span>{t("contact.addressLine2")}</span>
+                  <span>{t("contact.addressLine3")}</span>
+                  <span>{t("contact.addressLine4")}</span>
+                </address>
               </div>
             </div>
 
