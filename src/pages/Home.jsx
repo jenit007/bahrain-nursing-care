@@ -36,6 +36,27 @@ function Home() {
 
   const services = [
     {
+      id: "icu",
+      title: t("services.icu.title"),
+      text: t("services.icu.text"),
+      icon: "✚",
+      image: icuCareImage,
+    },
+    {
+      id: "ventilator",
+      title: t("services.ventilator.title"),
+      text: t("services.ventilator.text"),
+      icon: "◈",
+      image: ventilatorCareImage,
+    },
+    {
+      id: "cancer",
+      title: t("services.cancer.title"),
+      text: t("services.cancer.text"),
+      icon: "♡",
+      image: cancerCareImage,
+    },
+    {
       id: "patient",
       title: t("services.patient.title"),
       text: t("services.patient.text"),
@@ -62,27 +83,6 @@ function Home() {
       text: t("services.children.text"),
       icon: "◉",
       image: childrenCareImage,
-    },
-    {
-      id: "icu",
-      title: t("services.icu.title"),
-      text: t("services.icu.text"),
-      icon: "✚",
-      image: icuCareImage,
-    },
-    {
-      id: "cancer",
-      title: t("services.cancer.title"),
-      text: t("services.cancer.text"),
-      icon: "♡",
-      image: cancerCareImage,
-    },
-    {
-      id: "ventilator",
-      title: t("services.ventilator.title"),
-      text: t("services.ventilator.text"),
-      icon: "◈",
-      image: ventilatorCareImage,
     },
     {
       id: "blood-collection",

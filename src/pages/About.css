@@ -1079,228 +1079,150 @@
 
 
 /* =========================================================
-   TABLET
+   SMALLER LAPTOPS (1025px – 1199px)
+   Desktop 1200px+ remains completely unchanged.
    ========================================================= */
 
-@media (max-width: 950px) {
+@media (max-width: 1199px) {
+  .about-intro-grid,
+  .about-mission-grid {
+    gap: 50px;
+  }
+}
 
+/* =========================================================
+   TABLET (768px – 1024px)
+   ========================================================= */
+
+@media (max-width: 1024px) {
   .about-container {
-    width: min(
-      calc(100% - 32px),
-      760px
-    );
+    width: min(calc(100% - 32px), 920px);
   }
-
-
-  /* NAV */
-
-  .about-menu-toggle {
-    display: block;
-  }
-
-  .about-nav-links {
-    display: none;
-
-    position: absolute;
-
-    top: 84px;
-
-    left: 0;
-    right: 0;
-
-    padding: 15px;
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 4px;
-
-    background: #ffffff;
-
-    border: 1px solid #E7EEE2;
-
-    border-radius: 14px;
-
-    box-shadow:
-      0 20px 40px rgba(37, 48, 71, 0.14);
-  }
-
-  .about-nav-links.show {
-    display: flex;
-  }
-
-  .about-nav-links a,
-  .about-login-button {
-    text-align: center;
-
-    padding: 12px;
-  }
-
 
   /* INTRO */
-
   .about-intro-grid {
     grid-template-columns: 1fr;
-
-    gap: 45px;
+    gap: 40px;
   }
 
   .about-intro-image {
-    aspect-ratio: 16 / 11;
-    min-height: 320px;
-    max-height: 480px;
+    aspect-ratio: 16 / 10;
+    min-height: 280px;
+    max-height: 460px;
   }
 
   .about-intro-bg-img {
     object-position: center 25%;
   }
 
-
   /* MISSION */
-
   .about-mission-grid {
     grid-template-columns: 1fr;
-
-    gap: 45px;
+    gap: 40px;
   }
-
 
   /* CARE */
-
   .about-care-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-
   /* FOOTER */
-
   .about-footer-grid {
     grid-template-columns: 1fr 1fr;
   }
 
-
   /* CTA */
-
   .about-cta-inner {
     flex-direction: column;
-
     align-items: flex-start;
   }
 
   .about-monitoring-actions,
   .about-commitment-actions {
-    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 12px;
   }
-
 }
 
-
 /* =========================================================
-   MOBILE
+   MOBILE (<= 767px)
    ========================================================= */
 
-@media (max-width: 600px) {
-
+@media (max-width: 767px) {
   .about-container {
-    width: calc(100% - 32px);
+    width: calc(100% - 28px);
   }
-
-
-  /* TOP BAR */
-
-  .about-top-inner {
-    justify-content: center;
-
-    min-height: 32px;
-  }
-
-  .about-top-inner > span {
-    display: none;
-  }
-
-  .about-top-contact {
-    font-size: 10px;
-  }
-
-
-  /* BRAND */
-
-  .about-brand-mark {
-    width: 38px;
-    height: 38px;
-
-    font-size: 20px;
-  }
-
-  .about-brand-text strong {
-    font-size: 14px;
-  }
-
-  .about-brand-text small {
-    font-size: 8px;
-  }
-
 
   /* HERO */
-
   .about-hero {
-    min-height: 420px;
+    min-height: auto;
   }
 
   .about-hero-copy {
-    padding: 65px 0;
+    padding: 52px 0;
   }
 
   .about-hero-copy h1 {
-    font-size: 43px;
-
-    letter-spacing: -1.5px;
+    font-size: clamp(28px, 7.8vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -1px;
   }
 
   .about-hero-copy > p {
     font-size: 15px;
   }
 
-
   /* SECTIONS */
-
-  .about-section {
-    padding: 70px 0;
+  .about-section,
+  .about-mission {
+    padding: 64px 0;
   }
 
-
   /* IMAGE */
-
   .about-intro-image {
-    aspect-ratio: 16 / 12;
-    min-height: 260px;
-    max-height: 380px;
-    border-radius: 20px;
+    aspect-ratio: 16 / 11;
+    min-height: 230px;
+    max-height: 340px;
+    border-radius: 18px;
   }
 
   .about-intro-bg-img {
     object-position: center 20%;
-    border-radius: 20px;
+    border-radius: 18px;
   }
 
   .about-image-card {
-    width: 82%;
-    padding: 30px 20px;
+    width: 84%;
+    padding: 26px 18px;
   }
-
 
   /* TEXT */
-
   .about-intro-content h2,
   .about-mission-copy h2,
-  .about-section-heading h2 {
-    font-size: 32px;
+  .about-section-heading h2,
+  .about-commitment-copy h2 {
+    font-size: clamp(25px, 6.8vw, 32px);
+    letter-spacing: -0.6px;
   }
 
+  /* BUTTONS */
+  .about-monitoring-actions,
+  .about-commitment-actions {
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 12px;
+  }
+
+  .about-primary-button,
+  .about-secondary-link-button,
+  .about-cta-button {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
 
   /* CARE */
-
   .about-care-grid {
     grid-template-columns: 1fr;
   }
@@ -1309,51 +1231,49 @@
     min-height: auto;
   }
 
-
   /* CTA */
-
   .about-cta {
-    padding: 52px 0;
+    padding: 50px 0;
   }
-
-  .about-cta-button {
-    width: 100%;
-  }
-
 
   /* FOOTER */
-
   .about-footer-grid {
     grid-template-columns: 1fr;
-
     gap: 30px;
   }
 
   .about-footer-bottom {
     flex-direction: column;
   }
-
 }
 
-
 /* =========================================================
-   VERY SMALL PHONES
+   STANDARD PHONES (<= 480px)
    ========================================================= */
 
-@media (max-width: 360px) {
-
+@media (max-width: 480px) {
   .about-container {
     width: calc(100% - 24px);
   }
 
+  .about-value-card {
+    padding: 18px;
+    gap: 14px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES (320px – 375px)
+   ========================================================= */
+
+@media (max-width: 375px) {
   .about-hero-copy h1 {
-    font-size: 37px;
+    font-size: clamp(25px, 7.5vw, 31px);
   }
 
   .about-intro-image {
     aspect-ratio: 4 / 3;
-    min-height: 220px;
-    border-radius: 16px;
+    min-height: 200px;
+    border-radius: 14px;
   }
-
 }

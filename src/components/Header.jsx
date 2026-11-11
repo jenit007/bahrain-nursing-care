@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import {
   CONTACT_EMAIL,
@@ -15,12 +15,37 @@ export default function Header() {
   const { t } = useTranslation();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const navWrapRef = useRef(null);
 
   useEffect(() => {
-    const closeMenu = () => setMenuOpen(false);
-    window.addEventListener("resize", closeMenu);
-    return () => window.removeEventListener("resize", closeMenu);
+    const handleResize = () => {
+      if (window.innerWidth > 1024) {
+        setMenuOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    const handleClickOutside = (e) => {
+      if (navWrapRef.current && !navWrapRef.current.contains(e.target)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("touchstart", handleClickOutside);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [menuOpen]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -68,7 +93,7 @@ export default function Header() {
       </div>
 
       {/* ================= MAIN NAVIGATION ================= */}
-      <header className="home-nav-wrap">
+      <header className="home-nav-wrap" ref={navWrapRef}>
         <div className="home-container home-nav">
           <Link
             className="home-brand"

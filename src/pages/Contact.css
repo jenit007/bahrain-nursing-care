@@ -548,63 +548,49 @@
   font-size: 12px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================= RESPONSIVE (below 1200px; desktop unchanged) ================= */
 
-@media (max-width: 1000px) {
-
-  .contact-nav-links {
-    gap: 15px;
+@media (max-width: 1199px) {
+  .contact-form-grid {
+    gap: 44px;
   }
+}
 
-  .contact-nav-links a {
-    font-size: 13px;
+@media (max-width: 1024px) {
+  .contact-container {
+    width: min(calc(100% - 32px), 920px);
   }
 
   .contact-info-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .contact-info-card > div {
+    min-width: 0;
+  }
+
+  .contact-info-card a,
+  .contact-info-card span {
+    overflow-wrap: anywhere;
+  }
+
+  .contact-form-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
 
   .contact-footer-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-@media (max-width: 760px) {
-
-  .contact-topbar {
-    display: none;
-  }
-
-  .contact-nav-inner {
-    min-height: 90px;
-    gap: 15px;
-  }
-
-  .contact-logo {
-    min-width: auto;
-    flex: 1;
-  }
-
-  .contact-logo-main {
-    font-size: 21px;
-  }
-
-  .contact-logo-sub {
-    font-size: 7px;
-  }
-
-  .contact-nav-links {
-    display: none;
-  }
-
-  .contact-login-btn {
-    padding: 10px 17px;
-    font-size: 13px;
+@media (max-width: 767px) {
+  .contact-container {
+    width: calc(100% - 28px);
   }
 
   .contact-hero {
-    min-height: 410px;
+    min-height: auto;
   }
 
   .contact-hero-content {
@@ -612,7 +598,9 @@
   }
 
   .contact-hero h1 {
-    font-size: 40px;
+    font-size: clamp(28px, 7.8vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -1px;
   }
 
   .contact-hero-content > p:last-child {
@@ -621,16 +609,11 @@
 
   .contact-intro,
   .contact-form-section {
-    padding: 65px 0;
+    padding: 64px 0;
   }
 
   .contact-info-grid {
     grid-template-columns: 1fr;
-  }
-
-  .contact-form-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
   }
 
   .contact-form-row {
@@ -638,8 +621,25 @@
     gap: 0;
   }
 
+  .contact-field input,
+  .contact-field textarea {
+    font-size: 16px;
+  }
+
+  .contact-field input {
+    min-height: 46px;
+  }
+
+  .contact-primary-btn,
+  .contact-outline-btn,
+  .contact-submit-btn {
+    width: 100%;
+    min-height: 48px;
+    justify-content: center;
+  }
+
   .contact-service-cta {
-    padding: 60px 0;
+    padding: 52px 0;
   }
 
   .contact-service-inner {
@@ -652,22 +652,11 @@
     gap: 30px;
     padding: 50px 0;
   }
-
 }
 
 @media (max-width: 480px) {
-
   .contact-container {
-    width: 90%;
-  }
-
-  .contact-hero h1 {
-    font-size: 34px;
-  }
-
-  .contact-primary-btn,
-  .contact-outline-btn {
-    width: 100%;
+    width: calc(100% - 24px);
   }
 
   .contact-service-buttons {
@@ -675,9 +664,18 @@
   }
 
   .contact-form-card {
-    padding: 24px 20px;
+    padding: 22px 18px;
+  }
+}
+
+@media (max-width: 375px) {
+  .contact-hero h1 {
+    font-size: clamp(25px, 7.5vw, 31px);
   }
 
+  .contact-form-card {
+    padding: 18px 14px;
+  }
 }
 /* Brand logo: use the official NOOR AL AFIYA artwork instead of text branding. */
 .contact-logo {

@@ -893,10 +893,12 @@ input, select, textarea, button {
     grid-template-columns: 42px minmax(0, 1fr);
     gap: 10px;
     padding-bottom: 22px;
+    text-align: start;
   }
 
   .status-step:before {
-    left: 18px;
+    left: auto;
+    inset-inline-start: 18px;
     top: 38px;
     bottom: 0;
     width: 1px;

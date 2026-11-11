@@ -997,16 +997,41 @@
 }
 
 /* ==========================================================================
-   8. RESPONSIVE BREAKPOINTS (1024px, 768px, 430px, 390px, 360px, 320px)
+   8. RESPONSIVE BREAKPOINTS (1199px, 1024px, 768px, 480px, 375px)
+   Desktop (1200px+) remains unchanged.
    ========================================================================== */
 
+@media (max-width: 1199px) {
+  .admin-main-wrapper {
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  .admin-content {
+    padding: 20px;
+  }
+
+  .admin-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
 @media (max-width: 1024px) {
+  .admin-main-wrapper {
+    min-width: 0;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
   .admin-sidebar {
     position: fixed;
     top: 0;
-    left: 0;
+    left: auto;
+    inset-inline-start: 0;
     bottom: 0;
     height: 100vh;
+    height: 100dvh;
     z-index: 1100;
     transform: translateX(-105%);
     visibility: hidden;
@@ -1015,7 +1040,12 @@
     box-shadow: var(--adm-shadow-modal);
   }
 
-  .admin-sidebar.open {
+  [dir="rtl"] .admin-sidebar {
+    transform: translateX(105%);
+  }
+
+  .admin-sidebar.open,
+  [dir="rtl"] .admin-sidebar.open {
     transform: translateX(0);
     visibility: visible;
     pointer-events: auto;
@@ -1056,6 +1086,11 @@
     gap: 12px;
   }
 
+  .admin-topbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
   .admin-page-heading h1 {
     font-size: 22px;
   }
@@ -1076,16 +1111,39 @@
     width: 100%;
   }
 
+  .admin-filter-field input,
+  .admin-filter-field select,
+  .admin-form-field input,
+  .admin-form-field select,
+  .admin-status-select {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .admin-action-btn {
+    min-height: 40px;
+    padding: 8px 12px;
+  }
+
   .admin-filter-actions {
     width: 100%;
   }
 
   .admin-filter-actions .admin-btn {
     width: 100%;
+    min-height: 44px;
   }
 
   .admin-card-header {
     padding: 14px 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .admin-detail-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
   .admin-detail-grid {
@@ -1097,7 +1155,7 @@
   }
 
   .admin-modal {
-    max-height: calc(100vh - 24px);
+    max-height: calc(100svh - 24px);
   }
 
   .admin-modal-header,
@@ -1119,7 +1177,7 @@
   }
 
   .admin-page-heading h1 {
-    font-size: 20px;
+    font-size: 19px;
   }
 
   .admin-role-pill {
@@ -1132,6 +1190,10 @@
     padding: 12px;
   }
 
+  .admin-notice {
+    margin: 10px 12px 0;
+  }
+
   .admin-section-stack {
     gap: 16px;
   }
@@ -1142,24 +1204,45 @@
 
   .admin-card-header .admin-btn {
     width: 100%;
+    min-height: 44px;
+  }
+
+  .admin-table {
+    min-width: 660px;
+  }
+
+  .admin-modal-header,
+  .admin-modal-body {
+    padding: 14px 14px;
   }
 
   .admin-modal-footer {
+    padding: 12px 14px;
     flex-direction: column;
     align-items: stretch;
   }
 
   .admin-modal-footer .admin-btn {
     width: 100%;
+    min-height: 46px;
   }
 }
 
-@media (max-width: 360px) {
+@media (max-width: 375px) {
   .admin-role-pill {
     display: none;
   }
 
   .admin-content {
     padding: 10px;
+  }
+
+  .admin-topbar {
+    padding: 10px;
+  }
+
+  .admin-topbar-actions .admin-btn {
+    padding: 0 10px;
+    font-size: 12px;
   }
 }

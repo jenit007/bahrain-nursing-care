@@ -595,96 +595,65 @@
 
 /* ================= RESPONSIVE ================= */
 
-@media (max-width: 1000px) {
+@media (max-width: 1199px) {
+  .why-intro-grid {
+    gap: 48px;
+  }
+}
 
-  .why-nav-links {
-    gap: 15px;
+@media (max-width: 1024px) {
+  .why-container {
+    width: min(calc(100% - 32px), 920px);
   }
 
-  .why-nav-links a {
-    font-size: 13px;
+  .why-intro-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
 
-  .why-reasons-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .why-care-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
+  .why-reasons-grid,
+  .why-care-grid,
   .why-process-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .why-trust-grid {
+    grid-template-columns: 1fr;
   }
 
   .why-footer-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
 }
 
-@media (max-width: 760px) {
-
-  .why-topbar {
-    display: none;
-  }
-
-  .why-nav-inner {
-    min-height: 90px;
-    gap: 15px;
-  }
-
-  .why-logo {
-    min-width: auto;
-    flex: 1;
-  }
-
-  .why-logo-main {
-    font-size: 21px;
-  }
-
-  .why-logo-sub {
-    font-size: 7px;
-  }
-
-  .why-nav-links {
-    display: none;
-  }
-
-  .why-login-btn {
-    padding: 10px 17px;
-    font-size: 13px;
+@media (max-width: 767px) {
+  .why-container {
+    width: calc(100% - 28px);
   }
 
   .why-hero {
-    min-height: 470px;
+    min-height: auto;
   }
 
   .why-hero-content {
-    padding: 50px 0;
+    padding: 52px 0;
   }
 
   .why-hero h1 {
-    font-size: 40px;
+    font-size: clamp(28px, 7.8vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -1px;
   }
 
   .why-hero p {
     font-size: 15px;
   }
 
-  .why-intro {
-    padding: 65px 0;
-  }
-
-  .why-intro-grid {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
+  .why-intro,
   .why-reasons,
   .why-care-section,
   .why-process {
-    padding: 65px 0;
+    padding: 64px 0;
   }
 
   .why-reasons-grid,
@@ -693,13 +662,21 @@
     grid-template-columns: 1fr;
   }
 
+  .why-reason-card {
+    min-height: auto;
+  }
+
+  .why-care-card p {
+    min-height: 0;
+  }
+
   .why-process-header {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 18px;
   }
 
   .why-cta {
-    padding: 60px 0;
+    padding: 52px 0;
   }
 
   .why-cta-inner {
@@ -712,34 +689,35 @@
     gap: 30px;
     padding: 50px 0;
   }
-
 }
 
 @media (max-width: 480px) {
-
   .why-container {
-    width: 90%;
+    width: calc(100% - 24px);
   }
 
-  .why-hero h1 {
-    font-size: 34px;
+  .why-hero-buttons,
+  .why-cta-buttons {
+    flex-direction: column;
+    width: 100%;
   }
 
   .why-primary-btn,
   .why-secondary-btn,
   .why-outline-btn {
     width: 100%;
-  }
-
-  .why-hero-buttons,
-  .why-cta-buttons {
-    width: 100%;
+    min-height: 48px;
   }
 
   .why-reason-card {
-    padding: 24px;
+    padding: 22px;
   }
+}
 
+@media (max-width: 375px) {
+  .why-hero h1 {
+    font-size: clamp(25px, 7.5vw, 31px);
+  }
 }
 /* Brand logo: use the official NOOR AL AFIYA artwork instead of text branding. */
 .why-logo {
@@ -810,4 +788,265 @@
   .why-logo-mark { width: 38px; height: 38px; }
   .why-logo-text strong { font-size: 14px; }
   .why-logo-text small { font-size: 8px; }
+}
+
+/* ================= WHY CHOOSE US POINTS (INTRO) ================= */
+
+.why-intro-desc {
+  margin-top: 20px;
+  color: #55708F;
+  line-height: 1.8;
+  font-size: 16px;
+}
+
+.why-points-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.why-point-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 20px;
+  background: #FFF8FC;
+  border: 1px solid #F3DCE7;
+  border-radius: 12px;
+  transition: 0.25s;
+}
+
+.why-point-card:hover {
+  transform: translateY(-3px);
+  border-color: #FF3A94;
+  box-shadow: 0 12px 28px rgba(37, 48, 71, 0.06);
+}
+
+.why-point-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #FFF0F7;
+  color: #FF3A94;
+  border: 1px solid #F7C7DF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.why-point-card p {
+  color: #151B2E;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ================= APPROACH, MISSION & VISION ================= */
+
+.why-philosophy {
+  padding: 90px 0;
+  background: #FFF0F7;
+}
+
+.why-approach-header {
+  max-width: 780px;
+  margin-bottom: 48px;
+}
+
+.why-mv-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.why-mv-card {
+  background: #ffffff;
+  border: 1px solid #E1E8E3;
+  border-radius: 12px;
+  padding: 36px 32px;
+  transition: 0.25s;
+}
+
+.why-mv-card:hover {
+  transform: translateY(-5px);
+  border-color: #FF3A94;
+  box-shadow: 0 15px 35px rgba(37, 48, 71, 0.07);
+}
+
+.why-mv-card h3 {
+  color: #151B2E;
+  font-size: 22px;
+  line-height: 1.3;
+  margin-bottom: 14px;
+}
+
+.why-mv-card p:last-child {
+  color: #55708F;
+  font-size: 15px;
+  line-height: 1.8;
+  margin: 0;
+}
+
+/* ================= CARE YOU CAN TRUST & OUR PROMISE ================= */
+
+.why-trust-promise {
+  padding: 90px 0;
+  background: #ffffff;
+}
+
+.why-trust-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.why-trust-card {
+  background: linear-gradient(135deg, #FF3A94 0%, #E82F83 100%);
+  color: #ffffff;
+  border-radius: 16px;
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 0 18px 40px rgba(255, 58, 148, 0.18);
+}
+
+.why-trust-card .why-section-label {
+  color: #FFF0F7;
+}
+
+.why-trust-card h2 {
+  color: #ffffff;
+  font-size: clamp(28px, 3.2vw, 38px);
+  line-height: 1.18;
+  letter-spacing: -0.6px;
+  margin-bottom: 20px;
+}
+
+.why-trust-desc {
+  color: #FFF8FC;
+  font-size: 16px;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.why-promise-card {
+  background: #FFF8FC;
+  border: 1px solid #F3D5E4;
+  border-radius: 16px;
+  padding: 44px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.why-promise-card h2 {
+  color: #151B2E;
+  font-size: clamp(28px, 3.2vw, 38px);
+  line-height: 1.18;
+  letter-spacing: -0.6px;
+  margin-bottom: 24px;
+}
+
+.why-promise-card h2 span {
+  color: #96C855;
+}
+
+.why-promise-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.why-promise-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: #ffffff;
+  border: 1px solid #E7EEE2;
+  border-radius: 10px;
+}
+
+.why-promise-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #EEF7E2;
+  color: #6B9F2E;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 800;
+  flex-shrink: 0;
+}
+
+.why-promise-item p {
+  color: #151B2E;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* ================= NEW SECTIONS RESPONSIVE ================= */
+
+@media (max-width: 1024px) {
+  .why-trust-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .why-philosophy,
+  .why-trust-promise {
+    padding: 64px 0;
+  }
+
+  .why-points-grid,
+  .why-mv-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .why-mv-card,
+  .why-trust-card,
+  .why-promise-card {
+    padding: 28px 22px;
+  }
+}
+
+@media (max-width: 375px) {
+  .why-point-card,
+  .why-mv-card,
+  .why-trust-card,
+  .why-promise-card {
+    padding: 22px 18px;
+  }
+}
+
+/* ================= NEW SECTIONS RTL ================= */
+
+[dir="rtl"] .why-approach-header p {
+  text-align: center;
+}
+
+[dir="rtl"] .why-points-grid,
+[dir="rtl"] .why-mv-grid,
+[dir="rtl"] .why-trust-grid {
+  direction: rtl;
+}
+
+[dir="rtl"] .why-point-card,
+[dir="rtl"] .why-mv-card,
+[dir="rtl"] .why-trust-card,
+[dir="rtl"] .why-promise-card,
+[dir="rtl"] .why-promise-item {
+  text-align: start;
 }

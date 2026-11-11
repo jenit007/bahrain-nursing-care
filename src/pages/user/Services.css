@@ -798,67 +798,43 @@
 
 
 /* =========================================================
-   TABLET
+   SMALLER LAPTOPS (1025px – 1199px)
+   Desktop 1200px+ remains completely unchanged.
    ========================================================= */
 
-@media (max-width: 950px) {
+@media (max-width: 1199px) {
+  .services-detail-grid {
+    gap: 48px;
+  }
+}
 
+/* =========================================================
+   TABLET (768px – 1024px)
+   ========================================================= */
+
+@media (max-width: 1024px) {
   .services-container {
-    width: min(
-      calc(100% - 32px),
-      760px
-    );
+    width: min(calc(100% - 32px), 920px);
   }
 
-  /* NAV */
-
-  .services-menu-toggle {
-    display: block;
-  }
-
-  .services-nav-links {
-    display: none;
-    position: absolute;
-    top: 84px;
-    left: 0;
-    right: 0;
-    padding: 15px;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 4px;
-    background: #ffffff;
-    border: 1px solid #E7EEE2;
-    border-radius: 14px;
-    box-shadow: 0 20px 40px rgba(37, 48, 71, 0.14);
-  }
-
-  .services-nav-links.show {
-    display: flex;
-  }
-
-  .services-nav-links a,
-  .services-login-button {
-    text-align: center;
-    padding: 12px;
-  }
-
-  /* CARDS */
-
+  /* 2-column service cards on tablet */
   .services-card-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+  }
+
+  .service-feature-list {
     grid-template-columns: 1fr;
   }
 
-  /* SERVICE IMAGE */
-
   .service-card-image-wrap {
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 16 / 10;
     height: auto;
-    min-height: 240px;
-    max-height: 360px;
+    min-height: 200px;
+    max-height: 260px;
   }
 
   /* PROCESS */
-
   .process-grid {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -871,81 +847,45 @@
   }
 
   /* DETAIL */
-
   .services-detail-grid {
     grid-template-columns: 1fr;
-    gap: 45px;
+    gap: 40px;
   }
 
   /* FOOTER */
-
   .services-footer-grid {
     grid-template-columns: 1fr 1fr;
   }
 
   /* CTA */
-
   .services-cta-inner {
     flex-direction: column;
     align-items: flex-start;
   }
 }
 
-
 /* =========================================================
-   MOBILE
+   MOBILE (<= 767px)
    ========================================================= */
 
-@media (max-width: 600px) {
-
+@media (max-width: 767px) {
   .services-container {
-    width: calc(100% - 32px);
-  }
-
-  /* TOP */
-
-  .services-top-inner {
-    justify-content: center;
-    min-height: 32px;
-  }
-
-  .services-top-inner > span {
-    display: none;
-  }
-
-  .services-top-contact {
-    font-size: 10px;
-  }
-
-  /* BRAND */
-
-  .services-brand-mark {
-    width: 38px;
-    height: 38px;
-    font-size: 20px;
-  }
-
-  .services-brand-text strong {
-    font-size: 14px;
-  }
-
-  .services-brand-text small {
-    font-size: 8px;
+    width: calc(100% - 28px);
   }
 
   /* HERO */
-
   .services-hero {
-    min-height: 420px;
+    min-height: auto;
   }
 
   .services-hero-copy {
-    padding: 65px 0;
+    padding: 52px 0;
   }
 
   .services-hero-copy h1 {
-    font-size: 43px;
-    letter-spacing: -1.5px;
+    font-size: clamp(28px, 7.8vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -1px;
   }
 
   .services-hero-copy > p {
@@ -953,28 +893,35 @@
   }
 
   /* INTRO */
-
-  .services-intro {
-    padding: 70px 0;
+  .services-intro,
+  .services-process,
+  .services-detail {
+    padding: 64px 0;
   }
 
-  .services-section-heading h2 {
-    font-size: 32px;
+  .services-section-heading h2,
+  .services-detail h2 {
+    font-size: clamp(25px, 6.8vw, 32px);
+    letter-spacing: -0.6px;
   }
 
-  /* CARD */
+  /* 1-column service cards on mobile */
+  .services-card-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
 
   .new-service-card {
-    padding: 14px 14px 24px;
+    padding: 16px 16px 24px;
     border-radius: 16px;
   }
 
   .service-card-image-wrap {
     aspect-ratio: 16 / 10;
     height: auto;
-    min-height: 200px;
+    min-height: 190px;
     max-height: 280px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
     border-radius: 12px;
   }
 
@@ -984,36 +931,21 @@
 
   .service-select-button {
     width: 100%;
-  }
-
-  /* PROCESS */
-
-  .services-process {
-    padding: 70px 0;
-  }
-
-  /* DETAIL */
-
-  .services-detail {
-    padding: 70px 0;
-  }
-
-  .services-detail h2 {
-    font-size: 32px;
+    min-height: 48px;
   }
 
   /* CTA */
-
   .services-cta {
-    padding: 52px 0;
+    padding: 50px 0;
   }
 
   .services-primary-button {
     width: 100%;
+    min-height: 48px;
+    justify-content: center;
   }
 
   /* FOOTER */
-
   .services-footer-grid {
     grid-template-columns: 1fr;
     gap: 30px;
@@ -1024,25 +956,33 @@
   }
 }
 
-
 /* =========================================================
-   VERY SMALL PHONES
+   STANDARD PHONES (<= 480px)
    ========================================================= */
 
-@media (max-width: 360px) {
-
+@media (max-width: 480px) {
   .services-container {
     width: calc(100% - 24px);
   }
 
+  .new-service-card h3 {
+    font-size: 21px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES (320px – 375px)
+   ========================================================= */
+
+@media (max-width: 375px) {
   .services-hero-copy h1 {
-    font-size: 37px;
+    font-size: clamp(25px, 7.5vw, 31px);
   }
 
   .service-card-image-wrap {
     aspect-ratio: 16 / 10;
     height: auto;
-    min-height: 180px;
-    max-height: 240px;
+    min-height: 170px;
+    max-height: 230px;
   }
 }

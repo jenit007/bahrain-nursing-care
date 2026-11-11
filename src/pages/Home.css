@@ -1187,82 +1187,42 @@
 
 
 /* =========================================================
-   TABLET
+   SMALLER LAPTOPS (1025px – 1199px)
+   Desktop 1200px+ remains completely unchanged.
    ========================================================= */
 
-@media (max-width: 900px) {
+@media (max-width: 1199px) {
+  .home-hero .hero-content {
+    padding: 48px 28px;
+  }
 
+  .why-grid,
+  .about-grid {
+    gap: 48px;
+  }
+}
+
+/* =========================================================
+   TABLET (768px – 1024px)
+   ========================================================= */
+
+@media (max-width: 1024px) {
   .home-container {
-    width: min(
-      calc(100% - 32px),
-      720px
-    );
+    width: min(calc(100% - 32px), 920px);
   }
-
-
-  /* NAV */
-
-  .home-nav {
-    height: 70px;
-  }
-
-  .nav-toggle {
-    display: block;
-  }
-
-  .home-nav-links {
-    display: none;
-
-    position: absolute;
-
-    left: 16px;
-    right: 16px;
-
-    top: 82px;
-
-    background: #ffffff;
-
-    border: 1px solid #E7EEE2;
-
-    border-radius: 14px;
-
-    padding: 15px;
-
-    box-shadow:
-      0 20px 40px rgba(37, 48, 71, 0.14);
-
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 4px;
-  }
-
-  .home-nav-links.show {
-    display: flex;
-  }
-
-  .home-nav-links a,
-  .nav-login {
-    text-align: center;
-
-    padding: 12px;
-  }
-
 
   /* HERO */
-
   .home-hero {
-    min-height: 560px;
+    min-height: 540px;
     justify-content: center;
   }
 
   .home-hero .hero-content {
     width: 100%;
-    max-width: 580px;
+    max-width: 640px;
     margin: 0 auto;
-    min-height: 560px;
-    padding: 48px 24px 40px;
+    min-height: 540px;
+    padding: 52px 24px 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -1271,37 +1231,29 @@
 
   .hero-copy {
     width: 100%;
-    max-width: 520px;
+    max-width: 560px;
     padding: 0;
   }
 
-
   /* SERVICES */
-
   .service-grid {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-
   /* WHY + ABOUT */
-
   .why-grid,
   .about-grid {
     grid-template-columns: 1fr;
-
-    gap: 45px;
+    gap: 42px;
   }
 
   .why-visual {
     min-height: 350px;
   }
 
-
   /* STATS */
-
   .stats-grid {
-    grid-template-columns: 1fr 1fr;
-
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     row-gap: 28px;
   }
 
@@ -1310,75 +1262,28 @@
     border-inline-end: 0;
   }
 
-
   /* FOOTER */
-
   .footer-grid {
     grid-template-columns: 1fr 1fr;
   }
 
-
   /* CTA */
-
   .cta-inner {
     align-items: flex-start;
-
     flex-direction: column;
   }
-
 }
 
-
 /* =========================================================
-   MOBILE
+   MOBILE (<= 767px)
    ========================================================= */
 
-@media (max-width: 600px) {
-
+@media (max-width: 767px) {
   .home-container {
-    width: calc(100% - 32px);
+    width: calc(100% - 28px);
   }
-
-
-  /* TOP BAR */
-
-  .top-strip-inner {
-    justify-content: center;
-
-    min-height: 32px;
-
-    text-align: center;
-  }
-
-  .top-strip-inner > span {
-    display: none;
-  }
-
-  .top-contact {
-    font-size: 10px;
-  }
-
-
-  /* BRAND */
-
-  .home-brand strong {
-    font-size: 14px;
-  }
-
-  .home-brand small {
-    font-size: 8px;
-  }
-
-  .brand-mark {
-    width: 38px;
-    height: 38px;
-
-    font-size: 20px;
-  }
-
 
   /* MOBILE HERO */
-
   .home-hero {
     min-height: auto;
     background-image: none;
@@ -1394,7 +1299,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 36px 16px 32px;
+    padding: 36px 16px 64px;
     gap: 0;
   }
 
@@ -1405,20 +1310,19 @@
   }
 
   .hero-copy h1 {
-    font-size: clamp(28px, 7.5vw, 38px);
-    letter-spacing: -1.2px;
-    line-height: 1.1;
+    font-size: clamp(27px, 7.5vw, 38px);
+    letter-spacing: -1px;
+    line-height: 1.12;
     margin-bottom: 16px;
   }
 
   .hero-copy > p {
     font-size: 14px;
-    line-height: 1.6;
+    line-height: 1.65;
     max-width: 100%;
   }
 
   /* MOBILE BUTTONS */
-
   .hero-actions {
     margin-top: 22px;
     align-items: stretch;
@@ -1428,79 +1332,81 @@
   }
 
   .primary-cta,
-  .secondary-cta {
+  .secondary-cta,
+  .outline-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     text-align: center;
     width: 100%;
+    min-height: 48px;
     box-sizing: border-box;
   }
 
   .hero-trust {
-    font-size: 10px;
+    font-size: 11px;
     margin-top: 18px;
+    flex-wrap: wrap;
   }
 
-
   /* SECTIONS */
-
   .section-pad {
-    padding: 70px 0;
+    padding: 64px 0;
   }
 
   .section-heading {
-    margin-bottom: 34px;
+    margin-bottom: 32px;
   }
 
   .section-heading h2,
   .why-copy h2,
   .about-copy h2 {
-    font-size: 32px;
+    font-size: clamp(25px, 6.8vw, 32px);
+    letter-spacing: -0.6px;
   }
 
-
   /* SERVICES */
-
   .service-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
 
   .service-card {
     min-height: auto;
+    padding: 24px 20px;
+  }
+
+  .service-card p {
+    min-height: 0;
   }
 
   .service-card-button {
     width: 100%;
+    min-height: 46px;
     align-self: stretch;
   }
 
-
   /* BENEFITS */
-
   .benefit-grid {
     grid-template-columns: 1fr;
-
-    gap: 20px;
+    gap: 18px;
   }
 
-
   /* WHY */
-
   .why-visual {
-    min-height: 300px;
+    min-height: 290px;
   }
 
   .visual-card {
-    width: 82%;
-
-    padding: 28px;
+    width: 84%;
+    padding: 26px 20px;
   }
 
   .visual-number {
-    font-size: 52px;
+    font-size: 48px;
   }
 
-
   /* STATS */
-
   .stats-grid {
     grid-template-columns: 1fr 1fr;
     row-gap: 24px;
@@ -1518,7 +1424,6 @@
   .stats-grid > div {
     border-right: 1px solid rgba(255, 255, 255, 0.16);
     border-inline-end: 1px solid rgba(255, 255, 255, 0.16);
-
     padding: 6px 12px;
   }
 
@@ -1527,19 +1432,16 @@
     border-inline-end: 0;
   }
 
-
   /* ABOUT */
-
   .about-image-wrap img {
-    height: 300px;
+    height: auto;
+    aspect-ratio: 4 / 3;
+    max-height: 320px;
   }
 
-
   /* FOOTER */
-
   .footer-grid {
     grid-template-columns: 1fr;
-
     gap: 30px;
   }
 
@@ -1547,46 +1449,56 @@
     flex-direction: column;
   }
 
-
   /* CTA */
-
   .cta-section {
-    padding: 52px 0;
+    padding: 50px 0;
   }
 
   .cta-inner {
-    gap: 25px;
+    gap: 22px;
   }
 
   .primary-cta.light {
     width: 100%;
   }
-
 }
 
-
 /* =========================================================
-   VERY SMALL PHONES
+   STANDARD PHONES (<= 480px)
    ========================================================= */
 
-@media (max-width: 360px) {
+@media (max-width: 480px) {
+  .why-visual {
+    min-height: 260px;
+    border-radius: 22px;
+  }
 
+  .visual-card {
+    width: 88%;
+    padding: 22px 16px;
+  }
+
+  .visual-number {
+    font-size: 44px;
+  }
+
+  .stats-grid > div {
+    padding: 6px 8px;
+  }
+}
+
+/* =========================================================
+   SMALL PHONES (320px – 375px)
+   ========================================================= */
+
+@media (max-width: 375px) {
   .home-container {
     width: calc(100% - 24px);
   }
 
   .hero-copy h1 {
-    font-size: 37px;
+    font-size: clamp(25px, 7.5vw, 30px);
   }
-
-  .top-contact {
-    gap: 6px;
-  }
-
-  .top-contact a:last-child {
-    display: none;
-  }
-
 }
 /* =========================================================
    HOME SERVICE CARD BACKGROUND IMAGES

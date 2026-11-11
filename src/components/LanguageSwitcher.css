@@ -49,3 +49,17 @@
 [dir="rtl"] .lang-btn {
   font-family: 'Tajawal', Arial, sans-serif;
 }
+
+@media (max-width: 767px) {
+  .lang-switcher {
+    flex-shrink: 0;
+    margin-inline-start: 4px;
+    gap: 2px;
+  }
+
+  .lang-btn {
+    min-height: 32px;
+    padding: 4px 7px;
+    font-size: 12px;
+  }
+}

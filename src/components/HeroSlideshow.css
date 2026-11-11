@@ -245,14 +245,14 @@
 }
 
 /* ==========================================================
-   RESPONSIVE BREAKPOINTS
+   RESPONSIVE BREAKPOINTS (strictly scoped below 1025px)
    ========================================================== */
 
-/* Tablet (max 900px) */
-@media (max-width: 900px) {
+/* Tablet (max 1024px) */
+@media (max-width: 1024px) {
   .hs-arrow {
-    width: 34px;
-    height: 34px;
+    width: 36px;
+    height: 36px;
   }
 
   .hs-arrow svg {
@@ -263,39 +263,50 @@
   .hs-arrow--prev { left: 12px; }
   .hs-arrow--next { right: 12px; }
 
-  /* On tablet/mobile keep gradient strong all the way across */
+  /* On tablet keep gradient strong across centered hero copy */
   .hs-gradient {
     background:
       linear-gradient(
+        to bottom,
+        rgba(255, 240, 247, 0.90) 0%,
+        rgba(255, 240, 247, 0.80) 55%,
+        rgba(255, 240, 247, 0.58) 100%
+      ),
+      linear-gradient(
         to right,
-        rgba(255, 240, 247, 0.95) 0%,
-        rgba(255, 240, 247, 0.85) 40%,
-        rgba(255, 240, 247, 0.60) 65%,
-        rgba(255, 240, 247, 0.30) 85%,
-        rgba(255, 240, 247, 0.10) 100%
+        rgba(255, 240, 247, 0.92) 0%,
+        rgba(255, 240, 247, 0.72) 55%,
+        rgba(255, 240, 247, 0.35) 100%
       );
   }
 }
 
-/* Mobile (max 600px) */
-@media (max-width: 600px) {
+/* Mobile (max 767px) */
+@media (max-width: 767px) {
   .hs-arrow {
-    width: 30px;
-    height: 30px;
+    top: auto;
+    bottom: 12px;
+    transform: none;
+    width: 34px;
+    height: 34px;
+  }
+
+  .hs-arrow:hover {
+    transform: scale(1.06);
   }
 
   .hs-arrow svg {
-    width: 13px;
-    height: 13px;
+    width: 14px;
+    height: 14px;
   }
 
-  .hs-arrow--prev { left: 10px; }
-  .hs-arrow--next { right: 10px; }
+  .hs-arrow--prev { left: 14px; }
+  .hs-arrow--next { right: 14px; }
 
   .hs-dots {
-    bottom: 14px;
+    bottom: 15px;
     gap: 5px;
-    padding: 4px 10px;
+    padding: 5px 10px;
   }
 
   .hs-dot {
@@ -307,20 +318,32 @@
     width: 18px;
   }
 
-  /* Full gradient coverage on small portrait screens */
+  /* Full gradient coverage on small portrait screens for crisp contrast */
   .hs-gradient {
     background:
       linear-gradient(
         to bottom,
-        rgba(255, 240, 247, 0.90) 0%,
-        rgba(255, 240, 247, 0.75) 40%,
-        rgba(255, 240, 247, 0.50) 70%,
-        rgba(255, 240, 247, 0.20) 100%
-      ),
-      linear-gradient(
-        to right,
-        rgba(255, 240, 247, 0.70) 0%,
-        rgba(255, 240, 247, 0.00) 100%
+        rgba(255, 240, 247, 0.94) 0%,
+        rgba(255, 240, 247, 0.86) 55%,
+        rgba(255, 240, 247, 0.70) 100%
       );
+  }
+}
+
+/* Small Mobile (max 480px) */
+@media (max-width: 480px) {
+  .hs-arrow {
+    width: 32px;
+    height: 32px;
+    bottom: 10px;
+  }
+
+  .hs-arrow--prev { left: 10px; }
+  .hs-arrow--next { right: 10px; }
+
+  .hs-dots {
+    bottom: 13px;
+    gap: 4px;
+    padding: 4px 8px;
   }
 }

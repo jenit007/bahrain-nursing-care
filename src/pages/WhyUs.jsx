@@ -15,6 +15,22 @@ function WhyUs() {
 
   const { t } = useTranslation();
 
+  const introPoints = [
+    t("whyUs.introPoints.0"),
+    t("whyUs.introPoints.1"),
+    t("whyUs.introPoints.2"),
+    t("whyUs.introPoints.3"),
+    t("whyUs.introPoints.4"),
+    t("whyUs.introPoints.5"),
+  ];
+
+  const promisePoints = [
+    t("whyUs.promisePoints.0"),
+    t("whyUs.promisePoints.1"),
+    t("whyUs.promisePoints.2"),
+    t("whyUs.promisePoints.3"),
+  ];
+
   const reasons = [
     {
       number: "01",
@@ -103,7 +119,7 @@ function WhyUs() {
         </div>
       </section>
 
-      {/* ================= INTRO ================= */}
+      {/* ================= INTRO / WHY CHOOSE US ================= */}
       <section className="why-intro">
         <div className="why-container why-intro-grid">
           <div className="why-intro-left">
@@ -112,11 +128,48 @@ function WhyUs() {
               {t("whyUs.introHeading")}
               <span> {t("whyUs.introHeadingSpan")}</span>
             </h2>
+            <p className="why-intro-desc">{t("whyUs.introDesc")}</p>
           </div>
 
           <div className="why-intro-right">
-            <p>{t("whyUs.introP1")}</p>
-            <p>{t("whyUs.introP2")}</p>
+            <div className="why-points-grid">
+              {introPoints.map((point) => (
+                <div className="why-point-card" key={point}>
+                  <span className="why-point-check" aria-hidden="true">✓</span>
+                  <p>{point}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= APPROACH, MISSION & VISION ================= */}
+      <section className="why-philosophy">
+        <div className="why-container">
+          <div className="why-heading center why-approach-header">
+            <p className="why-section-label">{t("whyUs.approachLabel")}</p>
+            <h2>
+              {t("whyUs.approachHeading")}
+              <span> {t("whyUs.approachHeadingSpan")}</span>
+            </h2>
+            <p>{t("whyUs.approachDesc")}</p>
+          </div>
+
+          <div className="why-mv-grid">
+            <div className="why-mv-card">
+              <div className="why-care-icon" aria-hidden="true">✚</div>
+              <p className="why-section-label">{t("whyUs.missionLabel")}</p>
+              <h3>{t("whyUs.missionHeading")}</h3>
+              <p>{t("whyUs.missionDesc")}</p>
+            </div>
+
+            <div className="why-mv-card">
+              <div className="why-care-icon" aria-hidden="true">✦</div>
+              <p className="why-section-label">{t("whyUs.visionLabel")}</p>
+              <h3>{t("whyUs.visionHeading")}</h3>
+              <p>{t("whyUs.visionDesc")}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -212,6 +265,34 @@ function WhyUs() {
                 <p>{step.text}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ================= CARE YOU CAN TRUST & OUR PROMISE ================= */}
+      <section className="why-trust-promise">
+        <div className="why-container why-trust-grid">
+          <div className="why-trust-card">
+            <p className="why-section-label">{t("whyUs.trustLabel")}</p>
+            <h2>{t("whyUs.trustHeading")}</h2>
+            <p className="why-trust-desc">{t("whyUs.trustDesc")}</p>
+          </div>
+
+          <div className="why-promise-card">
+            <p className="why-section-label">{t("whyUs.promiseLabel")}</p>
+            <h2>
+              {t("whyUs.promiseHeading")}
+              <span> {t("whyUs.promiseHeadingSpan")}</span>
+            </h2>
+
+            <div className="why-promise-list">
+              {promisePoints.map((point) => (
+                <div className="why-promise-item" key={point}>
+                  <span className="why-promise-check" aria-hidden="true">✓</span>
+                  <p>{point}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
