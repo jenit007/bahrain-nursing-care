@@ -132,16 +132,16 @@ function Home() {
 
         setYearsExpCount(Math.floor(10 * easedProgress));
         setPatientsCount(Math.floor(5000 * easedProgress));
-        setCaregiversCount(Math.floor(20 * easedProgress));
-        setSatisfactionCount(Math.floor(97 * easedProgress));
+        setCaregiversCount(Math.floor(50 * easedProgress));
+        setSatisfactionCount(Math.floor(978 * easedProgress) / 10);
 
         if (progress < 1) {
           animationFrame = requestAnimationFrame(update);
         } else {
           setYearsExpCount(10);
           setPatientsCount(5000);
-          setCaregiversCount(20);
-          setSatisfactionCount(97);
+          setCaregiversCount(50);
+          setSatisfactionCount(97.8);
         }
       };
 
@@ -363,7 +363,7 @@ function Home() {
               <span>{t("home.statsNursesCaregivers")}</span>
             </div>
             <div className="stats-item" data-demo="true">
-              <strong>{satisfactionCount}%</strong>
+              <strong>{satisfactionCount === 0 ? "0" : satisfactionCount.toFixed(1)}%</strong>
               <span>{t("home.statsSatisfactionRate")}</span>
             </div>
           </div>

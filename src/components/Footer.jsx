@@ -13,13 +13,13 @@ export default function Footer() {
   const { t } = useTranslation();
 
   const servicesList = [
+    { to: "/care/icu", title: t("services.icu.title") },
+    { to: "/care/ventilator", title: t("services.ventilator.title") },
+    { to: "/care/cancer", title: t("services.cancer.title") },
     { to: "/care/patient", title: t("services.patient.title") },
     { to: "/care/elder", title: t("services.elder.title") },
     { to: "/care/newborn", title: t("services.newborn.title") },
     { to: "/care/children", title: t("services.children.title") },
-    { to: "/care/icu", title: t("services.icu.title") },
-    { to: "/care/cancer", title: t("services.cancer.title") },
-    { to: "/care/ventilator", title: t("services.ventilator.title") },
     { to: "/care/blood-collection", title: t("services.bloodCollection.title") },
   ];
 
