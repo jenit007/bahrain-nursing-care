@@ -32,6 +32,11 @@ export default function Header() {
 
   useEffect(() => {
     if (!menuOpen) return;
+    const prevBodyOverflowX = document.body.style.overflowX;
+    const prevHtmlOverflowX = document.documentElement.style.overflowX;
+    document.body.style.overflowX = "hidden";
+    document.documentElement.style.overflowX = "hidden";
+
     const handleKeyDown = (e) => {
       if (e.key === "Escape") setMenuOpen(false);
     };
@@ -44,6 +49,8 @@ export default function Header() {
     document.addEventListener("mousedown", handleClickOutside);
     document.addEventListener("touchstart", handleClickOutside);
     return () => {
+      document.body.style.overflowX = prevBodyOverflowX;
+      document.documentElement.style.overflowX = prevHtmlOverflowX;
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("touchstart", handleClickOutside);
@@ -83,8 +90,8 @@ export default function Header() {
         <div className="home-container top-strip-inner">
           <span className="top-strip-tagline">{t("topBar.tagline")}</span>
           <div className="top-contact">
-            {HAS_CONTACT_PHONE && (
-              <>
+            <div className="top-contact-phones">
+              {HAS_CONTACT_PHONE && (
                 <a
                   href={CONTACT_PHONE_HREF}
                   className="top-contact-phone"
@@ -107,11 +114,11 @@ export default function Header() {
                   </svg>
                   <span>{CONTACT_PHONE_DISPLAY}</span>
                 </a>
-                <span className="top-contact-sep" aria-hidden="true">•</span>
-              </>
-            )}
-            {HAS_CONTACT_ALT_PHONE && (
-              <>
+              )}
+              {HAS_CONTACT_PHONE && HAS_CONTACT_ALT_PHONE && (
+                <span className="top-contact-sep top-contact-phone-sep" aria-hidden="true">•</span>
+              )}
+              {HAS_CONTACT_ALT_PHONE && (
                 <a
                   href={CONTACT_ALT_PHONE_HREF}
                   className="top-contact-phone"
@@ -134,32 +141,36 @@ export default function Header() {
                   </svg>
                   <span>{CONTACT_ALT_PHONE_DISPLAY}</span>
                 </a>
-                <span className="top-contact-sep" aria-hidden="true">•</span>
-              </>
-            )}
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="top-contact-email"
-              dir="ltr"
-              title="Email NOOR AL AFIYA"
-            >
-              <svg
-                className="top-contact-icon"
-                viewBox="0 0 24 24"
-                width="13"
-                height="13"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
+              )}
+            </div>
+
+            <span className="top-contact-sep top-contact-email-sep" aria-hidden="true">•</span>
+
+            <div className="top-contact-email-wrap">
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="top-contact-email"
+                dir="ltr"
+                title="Email NOOR AL AFIYA"
               >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
-              <span>{CONTACT_EMAIL}</span>
-            </a>
+                <svg
+                  className="top-contact-icon"
+                  viewBox="0 0 24 24"
+                  width="13"
+                  height="13"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                  <polyline points="22,6 12,13 2,6" />
+                </svg>
+                <span>{CONTACT_EMAIL}</span>
+              </a>
+            </div>
           </div>
           <LanguageSwitcher />
         </div>
@@ -252,6 +263,10 @@ export default function Header() {
               >
                 {t("common.bookAppointment")} →
               </Link>
+            </div>
+
+            <div className="mobile-drawer-lang-row">
+              <LanguageSwitcher />
             </div>
 
             <div className="mobile-drawer-contact">

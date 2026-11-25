@@ -225,38 +225,7 @@
 }
 
 
-/* =========================================================
-   MOBILE NAV BUTTON
-   ========================================================= */
 
-.nav-toggle {
-  display: none;
-
-  border: 0;
-
-  background: transparent;
-
-  width: 42px;
-  height: 42px;
-
-  padding: 8px;
-
-  cursor: pointer;
-}
-
-.nav-toggle span {
-  display: block;
-
-  height: 2px;
-
-  background: #FC3A93;
-
-  margin: 6px 0;
-
-  border-radius: 4px;
-
-  transition: 0.2s ease;
-}
 
 
 /* =========================================================
