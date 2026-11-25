@@ -42,14 +42,12 @@
 }
 
 /* ── Top Strip / Info Bar ── */
-[dir="rtl"] .top-strip-inner,
 [dir="rtl"] .about-top-inner,
 [dir="rtl"] .services-top-inner,
 [dir="rtl"] .care-form-topbar-inner {
   flex-direction: row-reverse;
 }
 
-[dir="rtl"] .top-contact,
 [dir="rtl"] .about-top-contact,
 [dir="rtl"] .services-top-contact {
   flex-direction: row-reverse;
@@ -836,7 +834,6 @@
 }
 
 /* ── Lang switcher position in top bar ── */
-[dir="rtl"] .top-strip-inner .lang-switcher,
 [dir="rtl"] .about-top-inner .lang-switcher,
 [dir="rtl"] .services-top-inner .lang-switcher {
   margin-inline-end: 0;

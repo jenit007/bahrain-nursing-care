@@ -30,40 +30,7 @@
 }
 
 
-/* =========================================================
-   TOP STRIP
-   ========================================================= */
 
-.top-strip {
-  background: #151b2e;
-  color: #ffffff;
-  font-size: 12px;
-}
-
-.top-strip-inner {
-  min-height: 36px;
-
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-
-  gap: 20px;
-}
-
-.top-contact {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.top-contact a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.top-contact a:hover {
-  color: var(--sky);
-}
 
 
 /* =========================================================

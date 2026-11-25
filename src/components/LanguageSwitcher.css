@@ -1,8 +1,10 @@
-.lang-switcher {
+.lang-switcher,
+[dir="rtl"] .lang-switcher {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   margin-inline-start: 10px;
+  direction: ltr !important;
 }
 
 .lang-switcher-globe {
