@@ -1,5 +1,6 @@
 import usePageMeta from "../utils/usePageMeta";
 import { Link, useNavigate } from "react-router-dom";
+import { NHRA_REGISTRATION_NO } from "../config/contact";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import "./About.css";
@@ -56,6 +57,28 @@ function About() {
               <p>{t("about.introP1")}</p>
               <p>{t("about.introP2")}</p>
               <p>{t("about.introP3")}</p>
+
+              <div className="about-nhra-credential">
+                <svg
+                  className="about-nhra-icon"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                  <path d="m9 12 2 2 4-4" />
+                </svg>
+                <span>
+                  {t("common.nhraRegistrationLabel")}{" "}
+                  <bdi dir="ltr">{NHRA_REGISTRATION_NO}</bdi>
+                </span>
+              </div>
 
               <button
                 type="button"

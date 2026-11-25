@@ -307,6 +307,32 @@
   line-height: 1.5;
 }
 
+.contact-nhra-reg {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 5px 10px;
+  border-radius: 6px;
+  background: #F3F9EA;
+  border: 1px solid #D9ECC0;
+  color: #151B2E;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.contact-nhra-icon {
+  flex-shrink: 0;
+  color: #74A832;
+}
+
+.contact-info-card .contact-nhra-reg span {
+  color: #151B2E;
+  font-size: 12px;
+  font-weight: 700;
+}
+
 /* ================= FORM SECTION ================= */
 
 .contact-form-section {

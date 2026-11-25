@@ -6,18 +6,13 @@
 
 /* ── Root Container ── */
 .hs-root {
-  /* Fills its parent completely – parent sets exact dimensions */
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
-
-  /* No border-radius – this IS the hero background */
   border-radius: 0;
   overflow: hidden;
-
   background: #FFF0F7;   /* Fallback while images load */
-
   outline: none;
 }
 
@@ -29,7 +24,7 @@
 .hs-track {
   position: absolute;
   inset: 0;
-  overflow: hidden;   /* Clips outgoing slide as it exits left */
+  overflow: hidden;
 }
 
 /* ── Individual Slide ── */
@@ -40,38 +35,29 @@
   height: 100%;
   overflow: hidden;
   will-change: transform;
-
-  /* Flex center so the img anchors to the middle of the slide */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* ── OUTGOING slide (resting, before transition starts) ── */
+/* ── OUTGOING slide ── */
 .hs-slide--out {
   z-index: 1;
   transform: translateX(0);
 }
 
-/* ── INCOMING slide (resting, before transition starts) ── */
+/* ── INCOMING slide ── */
 .hs-slide--in {
   z-index: 2;
   transform: translateX(0);
 }
 
-/* ─────────────────────────────────────────────────────────
-   HORIZONTAL SLIDE ANIMATION  –  Right to Left
-   Outgoing: 0% → -100%  (slides away left)
-   Incoming: 100% → 0%   (enters from right)
-───────────────────────────────────────────────────────── */
-
-/* Outgoing slide animates out to the left */
+/* ── Horizontal Animations ── */
 .hs-slide--out.hs-slide--animating-out {
   animation: hsSlideOut 700ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
   z-index: 1;
 }
 
-/* Incoming slide animates in from the right */
 .hs-slide--in.hs-slide--animating-in {
   animation: hsSlideIn 700ms cubic-bezier(0.76, 0, 0.24, 1) forwards;
   z-index: 2;
@@ -89,41 +75,43 @@
 
 /* ── Slide Image ── */
 .hs-img {
-  /* Absolute fill: guarantees the image covers every pixel of the slide */
   position: absolute;
   inset: 0;
   display: block;
   width: 100%;
   height: 100%;
-
-  /* Cover + center: fills the frame, keeps the focal point centred */
   object-fit: cover;
   object-position: center center;
-
   user-select: none;
   -webkit-user-select: none;
   pointer-events: none;
 }
 
-/* ── Light Pink Gradient Overlay ──
-   Stronger on the LEFT (behind hero text), fades toward RIGHT.
-   Lives above images (z-index 10) but below any UI controls.
-   This overlay does NOT move with slides; it stays fixed on top.
-───────────────────────────────────────────────────────── */
+/* ── Light Pink Gradient Overlay ── */
 .hs-gradient {
   position: absolute;
   inset: 0;
   z-index: 10;
   pointer-events: none;
-
   background:
     linear-gradient(
       to right,
-      rgba(255, 240, 247, 0.92) 0%,
-      rgba(255, 240, 247, 0.80) 25%,
-      rgba(255, 240, 247, 0.55) 48%,
-      rgba(255, 240, 247, 0.22) 68%,
-      rgba(255, 240, 247, 0.06) 85%,
+      rgba(255, 240, 247, 0.95) 0%,
+      rgba(255, 240, 247, 0.88) 32%,
+      rgba(255, 240, 247, 0.65) 50%,
+      rgba(255, 240, 247, 0.20) 72%,
+      rgba(255, 240, 247, 0.00) 100%
+    );
+}
+
+[dir="rtl"] .hs-gradient {
+  background:
+    linear-gradient(
+      to left,
+      rgba(255, 240, 247, 0.95) 0%,
+      rgba(255, 240, 247, 0.88) 32%,
+      rgba(255, 240, 247, 0.65) 50%,
+      rgba(255, 240, 247, 0.20) 72%,
       rgba(255, 240, 247, 0.00) 100%
     );
 }
@@ -131,41 +119,29 @@
 /* ── Prev / Next Navigation Arrows ── */
 .hs-arrow {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  bottom: 24px;
   z-index: 30;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   padding: 0;
-
   border: 0;
   border-radius: 50%;
-
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #252525;
   cursor: pointer;
-
-  box-shadow: 0 4px 14px rgba(37, 48, 71, 0.18);
-
-  transition:
-    background 0.20s ease,
-    color 0.20s ease,
-    transform 0.20s ease,
-    box-shadow 0.20s ease;
+  box-shadow: 0 4px 16px rgba(37, 48, 71, 0.16);
+  transition: background 0.20s ease, color 0.20s ease, transform 0.20s ease, box-shadow 0.20s ease;
 }
 
 .hs-arrow:hover {
   background: #FF3A94;
   color: #ffffff;
-  transform: translateY(-50%) scale(1.08);
+  transform: scale(1.08);
   box-shadow: 0 6px 20px rgba(255, 58, 148, 0.38);
 }
 
@@ -175,59 +151,52 @@
 }
 
 .hs-arrow svg {
-  width: 17px;
-  height: 17px;
+  width: 18px;
+  height: 18px;
 }
 
-.hs-arrow--prev { left: 16px; }
-.hs-arrow--next { right: 16px; }
+/* Desktop layout: controls sit on the image side, bottom-right */
+.hs-arrow--prev { right: 72px; }
+.hs-arrow--next { right: 22px; }
+
+[dir="rtl"] .hs-arrow--prev { right: auto; left: 22px; }
+[dir="rtl"] .hs-arrow--next { right: auto; left: 72px; }
 
 /* ── Slide Indicator Dots ── */
 .hs-dots {
   position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
+  bottom: 24px;
+  right: 126px;
   z-index: 30;
-
   display: flex;
   align-items: center;
   gap: 6px;
-
-  padding: 6px 12px;
+  padding: 8px 14px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(37, 48, 71, 0.10);
+}
+
+[dir="rtl"] .hs-dots {
+  right: auto;
+  left: 126px;
 }
 
 .hs-dot {
   width: 7px;
   height: 7px;
   padding: 0;
-
   border: 0;
   border-radius: 50%;
-
-  background: rgba(255, 58, 148, 0.30);
+  background: rgba(37, 48, 71, 0.32);
   cursor: pointer;
-
-  transition:
-    background 0.25s ease,
-    transform 0.25s ease,
-    width 0.25s ease;
+  transition: width 0.25s ease, background 0.25s ease, border-radius 0.25s ease;
 }
 
-.hs-dot--active {
+.hs-dot:hover {
   background: #FF3A94;
-  width: 22px;
-  border-radius: 4px;
-  box-shadow: 0 0 8px rgba(255, 58, 148, 0.45);
-}
-
-.hs-dot:hover:not(.hs-dot--active) {
-  background: rgba(255, 58, 148, 0.65);
-  transform: scale(1.15);
 }
 
 .hs-dot:focus-visible {
@@ -235,24 +204,18 @@
   outline-offset: 2px;
 }
 
-/* ── Reduced Motion Accessibility ── */
-@media (prefers-reduced-motion: reduce) {
-  .hs-slide--animating-out,
-  .hs-slide--animating-in {
-    animation: none !important;
-    transform: translateX(0%) !important;
-  }
+.hs-dot--active {
+  width: 22px;
+  border-radius: 4px;
+  background: #FF3A94;
 }
-
-/* ==========================================================
-   RESPONSIVE BREAKPOINTS (strictly scoped below 1025px)
-   ========================================================== */
 
 /* Tablet (max 1024px) */
 @media (max-width: 1024px) {
   .hs-arrow {
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
+    bottom: 16px;
   }
 
   .hs-arrow svg {
@@ -260,23 +223,33 @@
     height: 15px;
   }
 
-  .hs-arrow--prev { left: 12px; }
-  .hs-arrow--next { right: 12px; }
+  .hs-arrow--prev { left: 16px; right: auto; }
+  .hs-arrow--next { right: 16px; left: auto; }
 
-  /* On tablet keep gradient strong across centered hero copy */
-  .hs-gradient {
+  [dir="rtl"] .hs-arrow--prev { left: auto; right: 16px; }
+  [dir="rtl"] .hs-arrow--next { right: auto; left: 16px; }
+
+  .hs-dots {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 16px;
+  }
+
+  [dir="rtl"] .hs-dots {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .hs-gradient,
+  [dir="rtl"] .hs-gradient {
     background:
       linear-gradient(
         to bottom,
-        rgba(255, 240, 247, 0.90) 0%,
-        rgba(255, 240, 247, 0.80) 55%,
-        rgba(255, 240, 247, 0.58) 100%
-      ),
-      linear-gradient(
-        to right,
-        rgba(255, 240, 247, 0.92) 0%,
-        rgba(255, 240, 247, 0.72) 55%,
-        rgba(255, 240, 247, 0.35) 100%
+        rgba(255, 240, 247, 0.95) 0%,
+        rgba(255, 240, 247, 0.88) 55%,
+        rgba(255, 240, 247, 0.65) 100%
       );
   }
 }
@@ -284,29 +257,21 @@
 /* Mobile (max 767px) */
 @media (max-width: 767px) {
   .hs-arrow {
-    top: auto;
+    width: 36px;
+    height: 36px;
     bottom: 12px;
-    transform: none;
-    width: 34px;
-    height: 34px;
   }
 
-  .hs-arrow:hover {
-    transform: scale(1.06);
-  }
+  .hs-arrow--prev { left: 12px; }
+  .hs-arrow--next { right: 12px; }
 
-  .hs-arrow svg {
-    width: 14px;
-    height: 14px;
-  }
-
-  .hs-arrow--prev { left: 14px; }
-  .hs-arrow--next { right: 14px; }
+  [dir="rtl"] .hs-arrow--prev { left: auto; right: 12px; }
+  [dir="rtl"] .hs-arrow--next { right: auto; left: 12px; }
 
   .hs-dots {
-    bottom: 15px;
+    bottom: 14px;
     gap: 5px;
-    padding: 5px 10px;
+    padding: 6px 10px;
   }
 
   .hs-dot {
@@ -318,14 +283,14 @@
     width: 18px;
   }
 
-  /* Full gradient coverage on small portrait screens for crisp contrast */
-  .hs-gradient {
+  .hs-gradient,
+  [dir="rtl"] .hs-gradient {
     background:
       linear-gradient(
         to bottom,
-        rgba(255, 240, 247, 0.94) 0%,
-        rgba(255, 240, 247, 0.86) 55%,
-        rgba(255, 240, 247, 0.70) 100%
+        rgba(255, 240, 247, 0.96) 0%,
+        rgba(255, 240, 247, 0.90) 55%,
+        rgba(255, 240, 247, 0.75) 100%
       );
   }
 }
@@ -338,11 +303,19 @@
     bottom: 10px;
   }
 
-  .hs-arrow--prev { left: 10px; }
-  .hs-arrow--next { right: 10px; }
+  .hs-arrow svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .hs-arrow--prev { left: 8px; }
+  .hs-arrow--next { right: 8px; }
+
+  [dir="rtl"] .hs-arrow--prev { left: auto; right: 8px; }
+  [dir="rtl"] .hs-arrow--next { right: auto; left: 8px; }
 
   .hs-dots {
-    bottom: 13px;
+    bottom: 12px;
     gap: 4px;
     padding: 4px 8px;
   }

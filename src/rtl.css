@@ -65,6 +65,24 @@
   flex-direction: row-reverse;
 }
 
+[dir="rtl"] .home-nav-desktop {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .nav-cta-btn {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .mobile-drawer-links a {
+  text-align: right;
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .mobile-drawer-contact-item {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}
+
 [dir="rtl"] .home-nav-links,
 [dir="rtl"] .about-nav-links,
 [dir="rtl"] .services-nav-links,

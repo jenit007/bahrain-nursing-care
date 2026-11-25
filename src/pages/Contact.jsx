@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { CONTACT_EMAIL, CONTACT_PHONE_DISPLAY, CONTACT_PHONE_HREF, HAS_CONTACT_PHONE } from "../config/contact";
+import {
+  CONTACT_EMAIL,
+  CONTACT_PHONE_DISPLAY,
+  CONTACT_PHONE_HREF,
+  HAS_CONTACT_PHONE,
+  CONTACT_ALT_PHONE_DISPLAY,
+  CONTACT_ALT_PHONE_HREF,
+  HAS_CONTACT_ALT_PHONE,
+  NHRA_REGISTRATION_NO,
+} from "../config/contact";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { submitContactEnquiry } from "../utils/api";
@@ -143,13 +152,20 @@ function Contact() {
 
           <div className="contact-info-grid">
             {/* PHONE */}
-            {HAS_CONTACT_PHONE && (
+            {(HAS_CONTACT_PHONE || HAS_CONTACT_ALT_PHONE) && (
               <div className="contact-info-card">
                 <div className="contact-info-icon">☎</div>
                 <div>
                   <h3>{t("contact.phoneTitle")}</h3>
                   <p>{t("contact.phoneDesc")}</p>
-                  <a href={CONTACT_PHONE_HREF} dir="ltr">{CONTACT_PHONE_DISPLAY}</a>
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                    {HAS_CONTACT_PHONE && (
+                      <a href={CONTACT_PHONE_HREF} dir="ltr">{CONTACT_PHONE_DISPLAY}</a>
+                    )}
+                    {HAS_CONTACT_ALT_PHONE && (
+                      <a href={CONTACT_ALT_PHONE_HREF} dir="ltr">{CONTACT_ALT_PHONE_DISPLAY}</a>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
@@ -179,6 +195,27 @@ function Contact() {
                   <span>{t("contact.addressLine3")}</span>
                   <span>{t("contact.addressLine4")}</span>
                 </address>
+                <div className="contact-nhra-reg">
+                  <svg
+                    className="contact-nhra-icon"
+                    viewBox="0 0 24 24"
+                    width="14"
+                    height="14"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="m9 12 2 2 4-4" />
+                  </svg>
+                  <span>
+                    {t("common.nhraRegistrationLabel")}{" "}
+                    <bdi dir="ltr">{NHRA_REGISTRATION_NO}</bdi>
+                  </span>
+                </div>
               </div>
             </div>
 

@@ -407,31 +407,18 @@
 
 .primary-cta {
   background: var(--button);
-
   color: #ffffff;
-
-  font-weight: 900;
-
-  padding: 15px 22px;
-
+  font-weight: 800;
+  padding: 14px 22px;
   border-radius: 9px;
-
-  box-shadow:
-    0 10px 24px rgba(146,197,83,0.24);
-
-  transition:
-    background 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  box-shadow: 0 8px 22px rgba(255, 58, 148, 0.25);
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .primary-cta:hover {
   background: var(--button-hover);
-
   transform: translateY(-2px);
-
-  box-shadow:
-    0 14px 28px rgba(146,197,83,0.28);
+  box-shadow: 0 12px 26px rgba(255, 58, 148, 0.35);
 }
 
 .primary-cta span,
@@ -652,29 +639,18 @@
 
 .service-card-button {
   display: inline-flex;
-
   align-items: center;
-
   justify-content: center;
-
   margin-top: auto;
-
   align-self: flex-start;
-
-  padding: 10px 16px;
-
+  padding: 10px 18px;
   min-width: 150px;
-
   border-radius: 8px;
-
   background: var(--button);
-
   color: #ffffff;
-
-  font-size: 13px;
-
-  font-weight: 800;
-
+  font-size: 13.5px;
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(255, 58, 148, 0.22);
   transition:
     background 0.2s ease,
     transform 0.2s ease,
@@ -683,11 +659,8 @@
 
 .service-card-button:hover {
   background: var(--button-hover);
-
   transform: translateY(-2px);
-
-  box-shadow:
-    0 8px 18px rgba(146,197,83,0.20);
+  box-shadow: 0 8px 20px rgba(255, 58, 148, 0.32);
 }
 
 
@@ -1644,6 +1617,15 @@
   line-height: 1.3;
 }
 
+.hero-approval-copy .hero-approval-reg {
+  color: #253047;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
 .hero-approval-badge img {
   display: block;
   width: 205px;
@@ -1805,121 +1787,10 @@
     0 0 14px rgba(146, 197, 83, 0.35);
 }
 
-.hero-approval-copy {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-
-  min-width: 118px;
-}
-
-.hero-approval-copy strong {
-  color: #FC3A93;
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  line-height: 1.2;
-}
-
-.hero-approval-copy span {
-  color: #687984;
-  font-size: 10px;
-  line-height: 1.3;
-}
-
-.hero-approval-badge img {
-  display: block;
-
-  width: 210px;
-  max-width: 48vw;
-  height: auto;
-
-  object-fit: contain;
-  border-radius: 6px;
-  background: #FEFEFE;
-}
-
-@media (max-width: 600px) {
-  .hero-approval {
-    width: 100%;
-  }
-
-  .hero-approval-badge {
-    width: min(430px, calc(100% - 10px));
-    min-height: 72px;
-    padding: 10px 12px;
-    gap: 9px;
-  }
-
-  .hero-approval-badge img {
-    width: min(190px, 48vw);
-    max-width: 48vw;
-  }
-
-  .hero-approval-copy {
-    min-width: 92px;
-  }
-
-  .hero-approval-copy strong {
-    font-size: 10px;
-  }
-
-  .hero-approval-copy span {
-    font-size: 9px;
-  }
-}
-
-@media (max-width: 380px) {
-  .hero-approval-badge {
-    width: calc(100% - 6px);
-    min-height: 66px;
-    padding: 9px;
-    gap: 7px;
-  }
-
-  .hero-approval-dot {
-    width: 8px;
-    height: 8px;
-    flex-basis: 8px;
-  }
-
-  .hero-approval-copy {
-    min-width: 78px;
-  }
-
-  .hero-approval-copy strong {
-    font-size: 9px;
-  }
-
-  .hero-approval-copy span {
-    font-size: 8px;
-  }
-
-  .hero-approval-badge img {
-    width: min(155px, 44vw);
-    max-width: 44vw;
-  }
-
-  .hero-approval-badge::before {
-    font-size: 8px;
-    padding: 3px 9px;
-    top: -10px;
-  }
-}
-
-/* NHRA approval badge alignment */
-@media (max-width: 1023px) {
-  .hero-approval {
-    justify-content: center;
-    transform: none;
-  }
-}
-
-
 /* Official header mark — matches the NOOR AL AFIYA home header */
 .brand-mark-image {
-  width: 57px;
-  height: 57px;
+  width: 50px;
+  height: 50px;
   object-fit: cover;
   object-position: center;
   border-radius: 10px;
@@ -1927,5 +1798,5 @@
   flex-shrink: 0;
 }
 @media (max-width: 700px) {
-  .brand-mark-image { width: 53px; height: 53px; }
+  .brand-mark-image { width: 44px; height: 44px; }
 }

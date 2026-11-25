@@ -9,7 +9,7 @@
     "toggleNav": "تبديل القائمة"
   },
   "topBar": {
-    "tagline": "رعاية تمريضية منزلية احترافية في البحرين",
+    "tagline": "خدمات رعاية صحية احترافية في البحرين",
     "support": "دعم الرعاية المنزلية على مدار الساعة",
     "bahrain": "البحرين"
   },
@@ -49,8 +49,12 @@
     "bahrain": "البحرين",
     "nhraApproved": "معتمد من NHRA",
     "nhraApprovalMark": "علامة الاعتماد",
-    "simpleBooking": "حجز سهل",
-    "bahrainFocused": "رعاية منزلية مخصصة للبحرين"
+    "nhraRegShort": "رقم التسجيل:",
+    "nhraRegistrationLabel": "رقم تسجيل NHRA:",
+    "simpleBooking": "أسعار مناسبة",
+    "bahrainFocused": "رعاية متقدمة",
+    "affordablePrice": "أسعار مناسبة",
+    "advancedCare": "رعاية متقدمة"
   },
   "footer": {
     "quickLinks": "روابط سريعة",

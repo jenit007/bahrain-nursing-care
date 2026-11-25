@@ -10,12 +10,13 @@ import elderCareImage from "../assets/services/elder-care.webp";
 import newbornCareImage from "../assets/services/newborn-care.webp";
 import childrenCareImage from "../assets/services/children-care.webp";
 import icuCareImage from "../assets/services/icu-patient-care.jpg";
-import cancerCareImage from "../assets/services/cancer-patient-care.jpg";
+import cancerCareImage from "../assets/services/cancer-patient-care.png";
 import ventilatorCareImage from "../assets/services/ventilator-patient-care.jpg";
 import bloodCollectionImage from "../assets/services/blood-collection-service.jpg";
 import nhraApprovedImage from "../assets/nhra-approved.webp";
 import homeCareSupportPhoto from "../assets/home-care-support-photo.webp";
 import HeroSlideshow from "../components/HeroSlideshow";
+import { NHRA_REGISTRATION_NO } from "../config/contact";
 import { useTranslation } from "../hooks/useTranslation";
 
 function Home() {
@@ -248,6 +249,10 @@ function Home() {
                   <div className="hero-approval-copy">
                     <strong>{t("common.nhraApproved")}</strong>
                     <span>{t("common.nhraApprovalMark")}</span>
+                    <span className="hero-approval-reg">
+                      {t("common.nhraRegShort")}{" "}
+                      <bdi dir="ltr">{NHRA_REGISTRATION_NO}</bdi>
+                    </span>
                   </div>
                   <img
                     src={nhraApprovedImage}
@@ -262,9 +267,9 @@ function Home() {
               <div className="hero-trust">
                 <span className="trust-icon">✓</span>
                 <span>
-                  {t("common.simpleBooking")}
+                  {t("common.affordablePrice")}
                   &nbsp;•&nbsp;
-                  {t("common.bahrainFocused")}
+                  {t("common.advancedCare")}
                 </span>
               </div>
             </div>

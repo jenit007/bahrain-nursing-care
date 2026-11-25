@@ -9,7 +9,7 @@
     "toggleNav": "Toggle navigation"
   },
   "topBar": {
-    "tagline": "Professional home nursing care in Bahrain",
+    "tagline": "Professional health care service in Bahrain",
     "support": "24/7 Home Care Support",
     "bahrain": "Bahrain"
   },
@@ -49,8 +49,12 @@
     "bahrain": "Bahrain",
     "nhraApproved": "NHRA APPROVED",
     "nhraApprovalMark": "Approval mark",
-    "simpleBooking": "Simple booking",
-    "bahrainFocused": "Bahrain-focused home care"
+    "nhraRegShort": "Reg. No.:",
+    "nhraRegistrationLabel": "NHRA Registration No.:",
+    "simpleBooking": "Affordable price",
+    "bahrainFocused": "Advanced care",
+    "affordablePrice": "Affordable price",
+    "advancedCare": "Advanced care"
   },
   "footer": {
     "quickLinks": "Quick Links",

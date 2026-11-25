@@ -561,6 +561,27 @@
   margin-bottom: 15px;
 }
 
+.about-nhra-credential {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  margin: 18px 0 8px;
+  padding: 8px 14px;
+  border-radius: 9px;
+  background: #F3F9EA;
+  border: 1px solid #D9ECC0;
+  color: var(--navy);
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.about-nhra-icon {
+  flex-shrink: 0;
+  color: #74A832;
+}
+
 
 /* BUTTON */
 

@@ -9,7 +9,7 @@ import elderCareImg       from "../assets/services/elder-care.webp";
 import newbornCareImg     from "../assets/services/newborn-care.webp";
 import childrenCareImg    from "../assets/services/children-care.webp";
 import icuCareImg         from "../assets/services/icu-patient-care.jpg";
-import cancerCareImg      from "../assets/services/cancer-patient-care.jpg";
+import cancerCareImg      from "../assets/services/cancer-patient-care.png";
 import ventilatorCareImg  from "../assets/services/ventilator-patient-care.jpg";
 import bloodCollectionImg from "../assets/services/blood-collection-service.jpg";
 

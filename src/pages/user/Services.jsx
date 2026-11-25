@@ -8,7 +8,7 @@ import elderCareImage from "../../assets/services/elder-care.webp";
 import newbornCareImage from "../../assets/services/newborn-care.webp";
 import childrenCareImage from "../../assets/services/children-care.webp";
 import icuCareImage from "../../assets/services/icu-patient-care.jpg";
-import cancerCareImage from "../../assets/services/cancer-patient-care.jpg";
+import cancerCareImage from "../../assets/services/cancer-patient-care.png";
 import ventilatorCareImage from "../../assets/services/ventilator-patient-care.jpg";
 import bloodCollectionImage from "../../assets/services/blood-collection-service.jpg";
 
