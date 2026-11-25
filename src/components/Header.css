@@ -41,10 +41,21 @@
 
 .top-contact {
   display: flex;
-  gap: 12px;
+  gap: 16px;
   align-items: center;
   color: rgba(255, 255, 255, 0.65);
   font-size: 12px;
+}
+
+.top-contact-phone-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.top-contact-email-row {
+  display: inline-flex;
+  align-items: center;
 }
 
 .top-contact a {
@@ -464,6 +475,17 @@
     text-align: left !important;
   }
 
+  .top-contact-phone-row,
+  [dir="rtl"] .top-contact-phone-row {
+    direction: ltr !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 12px !important;
+    white-space: nowrap !important;
+  }
+
   .top-contact-phone,
   [dir="rtl"] .top-contact-phone {
     direction: ltr !important;
@@ -475,9 +497,12 @@
     white-space: nowrap !important;
   }
 
-  .top-contact-sep,
-  [dir="rtl"] .top-contact-sep {
-    display: none !important;
+  .top-contact-email-row,
+  [dir="rtl"] .top-contact-email-row {
+    direction: ltr !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
   }
 
   .top-contact-email,
@@ -537,12 +562,25 @@
     text-align: left !important;
   }
 
+  /* First row: Both phone numbers side by side */
+  .top-contact-phone-row,
+  [dir="rtl"] .top-contact-phone-row {
+    direction: ltr !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 8px !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
+  }
+
   .top-contact-phone,
   [dir="rtl"] .top-contact-phone {
     direction: ltr !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 4.5px !important;
+    gap: 4px !important;
     white-space: nowrap !important;
     font-size: 11px !important;
     line-height: 1.25 !important;
@@ -552,9 +590,14 @@
     text-decoration: none !important;
   }
 
-  .top-contact-sep,
-  [dir="rtl"] .top-contact-sep {
-    display: none !important;
+  /* Second row: Email below phone numbers */
+  .top-contact-email-row,
+  [dir="rtl"] .top-contact-email-row {
+    direction: ltr !important;
+    display: flex !important;
+    align-items: center !important;
+    white-space: nowrap !important;
+    min-width: 0 !important;
   }
 
   .top-contact-email,
@@ -562,7 +605,7 @@
     direction: ltr !important;
     display: inline-flex !important;
     align-items: center !important;
-    gap: 4.5px !important;
+    gap: 4px !important;
     white-space: nowrap !important;
     font-size: 11px !important;
     line-height: 1.25 !important;
@@ -818,6 +861,11 @@
     gap: 2px !important;
   }
 
+  .top-contact-phone-row,
+  [dir="rtl"] .top-contact-phone-row {
+    gap: 6px !important;
+  }
+
   .top-contact-phone,
   [dir="rtl"] .top-contact-phone {
     font-size: 10.5px !important;
@@ -885,6 +933,11 @@
     gap: 1.5px !important;
   }
 
+  .top-contact-phone-row,
+  [dir="rtl"] .top-contact-phone-row {
+    gap: 4px !important;
+  }
+
   .top-contact-phone,
   [dir="rtl"] .top-contact-phone {
     font-size: 10px !important;
@@ -933,6 +986,11 @@
 
 /* Very Narrow Phones (max 330px) */
 @media (max-width: 330px) {
+  .top-contact-phone-row,
+  [dir="rtl"] .top-contact-phone-row {
+    gap: 3px !important;
+  }
+
   .top-contact-phone,
   [dir="rtl"] .top-contact-phone {
     font-size: 9px !important;
